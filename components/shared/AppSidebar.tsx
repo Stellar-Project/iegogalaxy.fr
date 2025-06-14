@@ -19,7 +19,7 @@ const data = {
   navMain: [
     {
       title: "Posts",
-      url: "#",
+      url: "/admin/posts",
       items: [
         {
           title: "Ajouter",
@@ -35,13 +35,15 @@ const data = {
   ],
 };
 
-export function AppSidebar({
-  user,
-  ...props
-}: {
-  user: { username: string; avatar: string; role: string };
-  props?: React.ComponentProps<typeof Sidebar>;
-}) {
+type AppSidebarProps = React.ComponentProps<typeof Sidebar> & {
+  user: {
+    username: string;
+    avatar: string;
+    role: string;
+  };
+};
+
+export function AppSidebar({ user, ...props }: AppSidebarProps) {
   return (
     <Sidebar {...props}>
       <SidebarHeader>

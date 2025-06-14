@@ -7,3 +7,13 @@ export const getAllUsers = async () => {
 
   return users;
 };
+
+export const getUserById = async (id: number) => {
+  if (id === 0) return;
+
+  const user = await db.user.findUnique({ where: { id } });
+
+  if (!user) return "User not found";
+
+  return user;
+};
