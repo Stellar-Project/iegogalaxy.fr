@@ -1,4 +1,4 @@
-import { getAllUsers } from "./actions/users";
+import { getAllUsers } from "../actions/users";
 
 export default async function Home() {
   const users = await getAllUsers();
