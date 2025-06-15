@@ -20,12 +20,19 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { signInFormSchema } from "@/lib/auth/formSchema";
+import { authClient } from "@/lib/auth/auth-client";
+import { signInFormSchema } from "@/lib/auth/authSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { z } from "zod";
 
 export default function SignIn() {
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
+
   const form = useForm<z.infer<typeof signInFormSchema>>({
     resolver: zodResolver(signInFormSchema),
     defaultValues: {
@@ -34,8 +41,30 @@ export default function SignIn() {
     },
   });
 
-  function onSubmit(values: z.infer<typeof signInFormSchema>) {
-    console.log(values);
+  async function onSubmit(values: z.infer<typeof signInFormSchema>) {
+    const { email, password } = values;
+
+    await authClient.signIn.email(
+      {
+        email,
+        password,
+        callbackURL: "/admin",
+      },
+      {
+        onRequest: () => {
+          setLoading(true);
+        },
+        onSuccess: () => {
+          toast.success("Connexion effectuée avec succès !");
+          router.push("/admin");
+        },
+        onError: () => {
+          toast.error(
+            "Une erreur est parvenue lors de la connexion au compte."
+          );
+        },
+      }
+    );
   }
 
   return (
@@ -78,7 +107,7 @@ export default function SignIn() {
                   </FormItem>
                 )}
               />
-              <Button type="submit" className="w-full">
+              <Button disabled={loading} type="submit" className="w-full">
                 Submit
               </Button>
             </form>

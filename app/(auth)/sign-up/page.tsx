@@ -21,23 +21,51 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { formSchema } from "@/lib/auth/formSchema";
+import { authClient } from "@/lib/auth/auth-client";
+import { formSchema } from "@/lib/auth/authSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { z } from "zod";
 
 export default function SignUp() {
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: "",
+      username: "",
       email: "",
       password: "",
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    const { username, email, password } = values;
+
+    await authClient.signUp.email(
+      {
+        email,
+        password,
+        name: username,
+        callbackURL: "/admin",
+      },
+      {
+        onRequest: () => {
+          setLoading(true);
+        },
+        onSuccess: () => {
+          toast.success("Compte créé avec succès !");
+          router.push("/admin");
+        },
+        onError: () => {
+          toast.error("Une erreur est parvenue lors de la création du compte.");
+        },
+      }
+    );
   }
 
   return (
@@ -54,7 +82,7 @@ export default function SignUp() {
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
               <FormField
                 control={form.control}
-                name="name"
+                name="username"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Username</FormLabel>
@@ -98,7 +126,7 @@ export default function SignUp() {
                   </FormItem>
                 )}
               />
-              <Button type="submit" className="w-full">
+              <Button disabled={loading} type="submit" className="w-full">
                 Submit
               </Button>
             </form>
