@@ -1,5 +1,5 @@
 import { getPostById } from "@/actions/posts";
-import { EditView } from "@/components/editor/EditView";
+import { EditorView } from "@/components/editor/EditView";
 import { auth } from "@/lib/auth/auth";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
@@ -24,11 +24,9 @@ export default async function Page({
     redirect("/admin");
   }
 
-  const {
-    success,
-    message,
-    data: post,
-  } = await getPostById(parseInt(id), user.id);
+  const { data: post } = await getPostById(parseInt(id), user.id);
 
-  return <EditView success={success} message={message} post={post} />;
+  if (!post) redirect("/admin");
+
+  return <EditorView post={post} />;
 }

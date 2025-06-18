@@ -1,6 +1,7 @@
 export type PostType = {
   id: number;
   title: string;
+  icon: string | null;
   content: string | null;
   published: boolean;
   authorId: string;

@@ -39,15 +39,102 @@ export const getPostById = async (postId: number, userId: string) => {
       return {
         success: false,
         message: `Aucun post trouvé avec l'ID ${postId}.`,
-        data: {},
+        data: null,
       };
     } else {
       return {
         success: false,
         message: "Erreur lors de la récupération du post : " + error,
-        data: {},
+        data: null,
       };
     }
+  }
+};
+
+export const setNewTitle = async (postId: number, title: string) => {
+  if (typeof postId !== "number" || postId <= 0) {
+    throw new Error("Invalid post ID.");
+  }
+
+  if (typeof title !== "string" || title.trim() === "") {
+    throw new Error("Title cannot be empty.");
+  }
+
+  try {
+    const updatedPost = await db.post.update({
+      where: { id: postId },
+      data: { title },
+    });
+
+    return {
+      success: true,
+      message: "Titre mise à jour avec succès.",
+      updatedPost,
+    };
+  } catch (error) {
+    console.error(
+      "Une erreur est survenue lors de la modification du titre :",
+      error
+    );
+    return {
+      success: false,
+      message: error instanceof Error ? error.message : "Unknown error",
+    };
+  }
+};
+
+export const setNewIcon = async (postId: number, newIcon: string | null) => {
+  if (typeof postId !== "number" || postId <= 0) {
+    throw new Error("Invalid post ID.");
+  }
+
+  try {
+    const updatedPost = await db.post.update({
+      where: { id: postId },
+      data: {
+        icon: newIcon,
+      },
+    });
+
+    return {
+      success: true,
+      message: "Icon mise à jour avec succès.",
+      updatedPost,
+    };
+  } catch (error) {
+    return {
+      success: false,
+      message: error instanceof Error ? error.message : "Unknown error",
+    };
+  }
+};
+
+export const setNewContent = async (
+  postId: number,
+  newContent: string | null
+) => {
+  if (typeof postId !== "number" || postId <= 0) {
+    throw new Error("Invalid post ID.");
+  }
+
+  try {
+    const updatedPost = await db.post.update({
+      where: { id: postId },
+      data: {
+        content: newContent,
+      },
+    });
+
+    return {
+      success: true,
+      message: "Contenu mise à jour avec succès.",
+      updatedPost,
+    };
+  } catch (error) {
+    return {
+      success: false,
+      message: error instanceof Error ? error.message : "Unknown error",
+    };
   }
 };
 
