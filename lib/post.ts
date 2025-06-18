@@ -3,7 +3,9 @@ export type PostType = {
   title: string;
   content: string | null;
   published: boolean;
-  authorId: number;
+  authorId: string;
+  createdAt: Date;
+  updatedAt: Date;
 };
 
 export type PostWithAuthor = PostType & {

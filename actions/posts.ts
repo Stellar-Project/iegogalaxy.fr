@@ -6,6 +6,9 @@ import db from "@/lib/prisma";
 
 export const getAllPosts = async () => {
   const posts: PostWithAuthor[] = await db.post.findMany({
+    where: {
+      published: true,
+    },
     include: {
       author: {
         select: {
