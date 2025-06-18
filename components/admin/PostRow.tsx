@@ -3,6 +3,7 @@
 import { deletePostById } from "@/actions/posts";
 import { PostWithAuthor } from "@/lib/post";
 import { EllipsisVertical } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { Dispatch, SetStateAction } from "react";
 import { toast } from "sonner";
 import {
@@ -29,6 +30,8 @@ const PostRow = ({
   author: { name: string | null };
   setPosts: Dispatch<SetStateAction<PostWithAuthor[]>>;
 }) => {
+  const router = useRouter();
+
   const handleRemove = async () => {
     const res = await deletePostById(postId);
 
@@ -38,6 +41,11 @@ const PostRow = ({
     } else {
       toast.error(res.message);
     }
+  };
+
+  const handleEdit = () => {
+    const link = `/admin/posts/edit/${postId}`;
+    router.push(link);
   };
 
   return (
@@ -56,7 +64,7 @@ const PostRow = ({
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuGroup>
               <DropdownMenuItem>Voir</DropdownMenuItem>
-              <DropdownMenuItem>Modifier</DropdownMenuItem>
+              <DropdownMenuItem onClick={handleEdit}>Modifier</DropdownMenuItem>
               <DropdownMenuItem>Changer le statut</DropdownMenuItem>
               <DropdownMenuItem>Keyboard shortcuts</DropdownMenuItem>
             </DropdownMenuGroup>

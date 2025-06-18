@@ -21,6 +21,36 @@ export const getAllPosts = async () => {
   return posts;
 };
 
+export const getPostById = async (postId: number, userId: string) => {
+  try {
+    const post = await db.post.findUnique({
+      where: { id: postId, authorId: userId },
+    });
+    return {
+      success: true,
+      data: post,
+      message: "Vous pouvez modifier ce post !",
+    };
+  } catch (error) {
+    if (
+      error instanceof Prisma.PrismaClientKnownRequestError &&
+      error.code === "P2025"
+    ) {
+      return {
+        success: false,
+        message: `Aucun post trouvé avec l'ID ${postId}.`,
+        data: {},
+      };
+    } else {
+      return {
+        success: false,
+        message: "Erreur lors de la récupération du post : " + error,
+        data: {},
+      };
+    }
+  }
+};
+
 export const getAllPostsByUserId = async () => {};
 
 export const deletePostById = async (postId: number) => {
