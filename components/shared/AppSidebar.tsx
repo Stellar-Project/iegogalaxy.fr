@@ -28,22 +28,27 @@ import { authClient } from "@/lib/auth/auth-client";
 import { useRouter } from "next/navigation";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 
-const data = {
+type NavItem = {
+  title: string;
+  url?: string;
+  isActive?: boolean;
+};
+
+type NavSection = {
+  title: string;
+  url: string;
+  items?: NavItem[];
+};
+
+type Data = {
+  navMain: NavSection[];
+};
+
+const data: Data = {
   navMain: [
     {
       title: "Posts",
       url: "/admin/posts",
-      items: [
-        {
-          title: "Ajouter",
-          url: "#",
-          isActive: true,
-        },
-        {
-          title: "Project Structure",
-          url: "#",
-        },
-      ],
     },
   ],
 };

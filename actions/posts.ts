@@ -153,7 +153,40 @@ export const setNewContent = async (
   }
 };
 
-export const getAllPostsByUserId = async () => {};
+export const createNewPost = async (authId: string) => {
+  try {
+    const newPost = await db.post.create({
+      data: {
+        title: "Untitled",
+        authorId: authId,
+      },
+    });
+    return { success: true, data: newPost, message: "Post créé avec succès !" };
+  } catch {
+    return {
+      success: false,
+      data: null,
+      message: "Erreur lors de la création du post.",
+    };
+  }
+};
+
+export const getAllPostsByUserId = async (authId: string) => {
+  const posts: PostWithAuthor[] = await db.post.findMany({
+    where: {
+      authorId: authId
+    },
+    include: {
+      author: {
+        select: {
+          name: true,
+        },
+      },
+    },
+  });
+
+  return posts;
+};
 
 export const deletePostById = async (postId: number) => {
   try {
