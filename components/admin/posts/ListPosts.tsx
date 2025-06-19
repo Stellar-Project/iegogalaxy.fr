@@ -42,16 +42,14 @@ export function ListPosts({ userId }: { userId: string }) {
 
   return (
     <div className="space-y-2">
-      <Button variant="outline" onClick={handleCreate}>
-        Créer un nouveau post
-      </Button>
+      <Button onClick={handleCreate}>Créer un nouveau post</Button>
       <Table className="max-w-7xl">
-        <TableCaption>A list of posts.</TableCaption>
+        <TableCaption>La liste des posts.</TableCaption>
         <TableHeader>
           <TableRow>
-            <TableHead className="w-[100px]">Name</TableHead>
-            <TableHead>Status</TableHead>
-            <TableHead className="text-right">AuthorId</TableHead>
+            <TableHead className="w-[100px]">Titre</TableHead>
+            <TableHead>Statut</TableHead>
+            <TableHead className="text-right">Auteur</TableHead>
             <TableHead className="text-right">Actions</TableHead>
           </TableRow>
         </TableHeader>

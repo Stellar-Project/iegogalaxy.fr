@@ -1,6 +1,6 @@
 "use client";
 
-import { deletePostById, setNewTitle } from "@/actions/posts";
+import { deletePostById, setNewTitle, setPostPublic } from "@/actions/posts";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -43,6 +43,7 @@ const PostRow = ({
   setPosts: Dispatch<SetStateAction<PostWithAuthor[]>>;
 }) => {
   const [titleValue, setTitleValue] = useState(title);
+  const [statusValue, setStatusValue] = useState(published);
   const [inputValue, setInputValue] = useState(title);
 
   const router = useRouter();
@@ -83,14 +84,25 @@ const PostRow = ({
     }
   };
 
+  const handlePublish = async () => {
+    const res = await setPostPublic(postId, !statusValue);
+
+    if (res.success) {
+      toast.success(res.message);
+      setStatusValue(!statusValue);
+    } else {
+      toast.error(res.message);
+    }
+  };
+
   return (
     <Dialog>
       <TableRow>
         <TableCell onClick={handleEdit} className="font-medium cursor-pointer">
-          {titleValue}
+          {titleValue.substring(0, 10) + (titleValue.length >= 10 ? "..." : "")}
         </TableCell>
         <TableCell onClick={handleEdit} className="cursor-pointer">
-          {published ? "Publié" : "En attente"}
+          {statusValue ? "Publié" : "Privé"}
         </TableCell>
         <TableCell onClick={handleEdit} className="text-right cursor-pointer">
           {author.name}
@@ -112,7 +124,9 @@ const PostRow = ({
                 <DropdownMenuItem onClick={handleEdit}>
                   Modifier
                 </DropdownMenuItem>
-                <DropdownMenuItem>Changer le statut</DropdownMenuItem>
+                <DropdownMenuItem onClick={handlePublish}>
+                  Changer le statut
+                </DropdownMenuItem>
                 <DropdownMenuItem>Keyboard shortcuts</DropdownMenuItem>
               </DropdownMenuGroup>
               <DropdownMenuSeparator />

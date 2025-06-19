@@ -174,7 +174,7 @@ export const createNewPost = async (authId: string) => {
 export const getAllPostsByUserId = async (authId: string) => {
   const posts: PostWithAuthor[] = await db.post.findMany({
     where: {
-      authorId: authId
+      authorId: authId,
     },
     include: {
       author: {
@@ -205,6 +205,31 @@ export const deletePostById = async (postId: number) => {
       return {
         success: false,
         message: "Erreur lors de la suppression du post",
+      };
+    }
+  }
+};
+
+export const setPostPublic = async (postId: number, status: boolean) => {
+  try {
+    await db.post.update({
+      where: { id: postId },
+      data: { published: status },
+    });
+    return { success: true, message: "Post publié avec succès !" };
+  } catch (error) {
+    if (
+      error instanceof Prisma.PrismaClientKnownRequestError &&
+      error.code === "P2025"
+    ) {
+      return {
+        success: false,
+        message: `Aucun post trouvé avec l'ID ${postId}.`,
+      };
+    } else {
+      return {
+        success: false,
+        message: "Erreur lors de la publication du post",
       };
     }
   }
