@@ -5,6 +5,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { PostType, PostWithAuthor } from "@/lib/post";
 import dynamic from "next/dynamic";
 import { useEffect, useMemo, useState } from "react";
+import { toast } from "sonner";
 import { Toolbar } from "./Toolbar";
 
 export const EditorView = ({
@@ -36,6 +37,16 @@ export const EditorView = ({
 
   useEffect(() => {
     return () => clearTimeout(debounceTimeout);
+  }, []);
+
+  useEffect(() => {
+    const justCreated = sessionStorage.getItem("postCreated");
+
+    if (justCreated) {
+      sessionStorage.removeItem("postCreated");
+      toast.dismiss();
+      toast.success("Post créé avec succès !");
+    }
   }, []);
 
   const DynamicEditor = useMemo(

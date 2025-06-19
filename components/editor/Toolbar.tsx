@@ -49,7 +49,7 @@ export function Toolbar({
 
     const timeout = setTimeout(async () => {
       if (!initialData.id) return;
-      if(initialData.title === value) return;
+      if (initialData.title === value) return;
       const res = await setNewTitle(initialData.id, value);
       if (!res.success) {
         setValue(initialData.title);
@@ -85,8 +85,6 @@ export function Toolbar({
       toast.error(res.message);
     }
   };
-
-  console.log(preview);
 
   return (
     <div

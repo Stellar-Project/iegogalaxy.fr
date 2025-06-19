@@ -14,7 +14,7 @@ import { PostWithAuthor } from "@/lib/post";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { Button } from "../ui/button";
+import { Button } from "../../ui/button";
 import PostRow from "./PostRow";
 
 export function ListPosts({ userId }: { userId: string }) {
@@ -29,31 +29,19 @@ export function ListPosts({ userId }: { userId: string }) {
 
   const handleCreate = async () => {
     const res = await createNewPost(userId);
-    if (res.success) {
-      if (res.data?.id) {
-        const myPromise = new Promise<{ name: string }>((resolve) => {
-          setTimeout(() => {
-            resolve({ name: "Patienter message" });
-          }, 1000);
-        });
+    if (res.success && res.data?.id) {
+      toast.loading("Veuillez patienter...");
 
-        router.push(`/admin/posts/edit/${res.data?.id}`);
+      sessionStorage.setItem("postCreated", "true");
 
-        toast.promise(myPromise, {
-          loading: "Veuillez patienter...",
-          success: () => {
-            return `Post créé avec succès !`;
-          },
-          error: "Error",
-        });
-      }
+      router.push(`/admin/posts/edit/${res.data.id}`);
     } else {
-      toast.error(res.message);
+      toast.error(res.message || "Une erreur est survenue.");
     }
   };
 
   return (
-    <>
+    <div className="space-y-2">
       <Button variant="outline" onClick={handleCreate}>
         Créer un nouveau post
       </Button>
@@ -80,6 +68,6 @@ export function ListPosts({ userId }: { userId: string }) {
           ))}
         </TableBody>
       </Table>
-    </>
+    </div>
   );
 }
