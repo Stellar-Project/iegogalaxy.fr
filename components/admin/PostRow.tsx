@@ -48,6 +48,11 @@ const PostRow = ({
     router.push(link);
   };
 
+  const handleSee = () => {
+    const link = `/posts/${postId}`;
+    router.push(link);
+  };
+
   return (
     <TableRow>
       <TableCell className="font-medium">{title}</TableCell>
@@ -63,7 +68,7 @@ const PostRow = ({
           <DropdownMenuContent className="w-56" align="start">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuGroup>
-              <DropdownMenuItem>Voir</DropdownMenuItem>
+              <DropdownMenuItem onClick={handleSee}>Voir</DropdownMenuItem>
               <DropdownMenuItem onClick={handleEdit}>Modifier</DropdownMenuItem>
               <DropdownMenuItem>Changer le statut</DropdownMenuItem>
               <DropdownMenuItem>Keyboard shortcuts</DropdownMenuItem>

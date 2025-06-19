@@ -1,12 +1,12 @@
 export type PostType = {
-  id: number;
+  id?: number;
   title: string;
   icon: string | null;
   content: string | null;
-  published: boolean;
-  authorId: string;
+  published?: boolean;
+  authorId?: string;
   createdAt: Date;
-  updatedAt: Date;
+  updatedAt?: Date;
 };
 
 export type PostWithAuthor = PostType & {

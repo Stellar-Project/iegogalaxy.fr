@@ -4,7 +4,7 @@ import { auth } from "@/lib/auth/auth";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
-export default async function Page({
+export default async function PostEditPage({
   params,
 }: {
   params: Promise<{ id: string }>;
@@ -28,5 +28,5 @@ export default async function Page({
 
   if (!post) redirect("/admin");
 
-  return <EditorView post={post} />;
+  return <EditorView post={post} editable={true} />;
 }

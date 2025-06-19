@@ -51,6 +51,21 @@ export const getPostById = async (postId: number, userId: string) => {
   }
 };
 
+export const getPostPreview = async (postId: number) => {
+  const post = await db.post.findUnique({
+    where: { id: postId },
+    select: {
+      content: true,
+      title: true,
+      icon: true,
+      author: true,
+      createdAt: true,
+    },
+  });
+
+  return post;
+};
+
 export const setNewTitle = async (postId: number, title: string) => {
   if (typeof postId !== "number" || postId <= 0) {
     throw new Error("Invalid post ID.");

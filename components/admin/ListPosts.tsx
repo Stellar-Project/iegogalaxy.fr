@@ -38,10 +38,10 @@ export function ListPosts() {
         <TableBody>
           {posts.map((post, index) => (
             <PostRow
-              postId={post.id}
+              postId={post.id!}
               title={post.title}
               author={post.author}
-              published={post.published}
+              published={post.published!}
               key={`Post-${index}`}
               setPosts={setPosts}
             />

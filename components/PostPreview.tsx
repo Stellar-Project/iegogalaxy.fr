@@ -8,28 +8,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-
-function timeSince(date: Date): string {
-  const seconds = Math.floor((Date.now() - date.getTime()) / 1000); // <-- CORRECT
-
-  const intervals = [
-    { label: "an", seconds: 31536000 },
-    { label: "mois", seconds: 2592000 },
-    { label: "jour", seconds: 86400 },
-    { label: "heure", seconds: 3600 },
-    { label: "minute", seconds: 60 },
-    { label: "seconde", seconds: 1 },
-  ];
-
-  for (const interval of intervals) {
-    const count = Math.floor(seconds / interval.seconds);
-    if (count > 0) {
-      return `Il y a ${count} ${interval.label}${count > 1 ? "s" : ""}`;
-    }
-  }
-
-  return "À l’instant";
-}
+import { timeSince } from "@/lib/date";
+import Link from "next/link";
 
 export const PostPreview = async () => {
   const posts = await getAllPosts();
@@ -54,32 +34,34 @@ export const PostPreview = async () => {
 
       <div className="mt-4 grid sm:grid-cols-2 lg:grid-cols-3 gap-10">
         {posts.map((post, i) => (
-          <Card key={i} className="shadow-none py-4">
-            <CardHeader className="px-4">
-              <div className="aspect-video bg-muted w-full rounded-md" />
-            </CardHeader>
-            <CardContent className="pt-4 pb-5">
-              <Badge>Technology</Badge>
+          <Link key={i} href={`/posts/${post.id}`}>
+            <Card className="shadow-none py-4">
+              <CardHeader className="px-4">
+                <div className="aspect-video bg-muted w-full rounded-md" />
+              </CardHeader>
+              <CardContent className="pt-4 pb-5">
+                <Badge>Technology</Badge>
 
-              <h3 className="mt-4 text-[1.35rem] font-semibold tracking-tight">
-                {post.title}
-              </h3>
-              <div className="mt-6 flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <div className="h-10 w-10 rounded-full bg-muted flex items-center justify-center">
-                    {post.author.name && post.author.name[0].toUpperCase()}
+                <h3 className="mt-4 text-[1.35rem] font-semibold tracking-tight">
+                  {post.title}
+                </h3>
+                <div className="mt-6 flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <div className="h-10 w-10 rounded-full bg-muted flex items-center justify-center">
+                      {post.author.name && post.author.name[0].toUpperCase()}
+                    </div>
+                    <span className="text-muted-foreground font-semibold">
+                      {post.author.name}
+                    </span>
                   </div>
-                  <span className="text-muted-foreground font-semibold">
-                    {post.author.name}
+
+                  <span className="text-muted-foreground text-sm">
+                    {timeSince(new Date(post.createdAt))}
                   </span>
                 </div>
-
-                <span className="text-muted-foreground text-sm">
-                  {timeSince(new Date(post.createdAt))}
-                </span>
-              </div>
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
+          </Link>
         ))}
       </div>
     </div>

@@ -1,7 +1,9 @@
 "use client";
 
 import { setNewIcon, setNewTitle } from "@/actions/posts";
-import { PostType } from "@/lib/post";
+import { timeSince } from "@/lib/date";
+import { PostWithAuthor } from "@/lib/post";
+import { cn } from "@/lib/utils";
 import { SmileIcon, X } from "lucide-react";
 import React, { useRef, useState } from "react";
 import TextAreaAutoSize from "react-textarea-autosize";
@@ -14,7 +16,7 @@ export function Toolbar({
   preview,
   saved = true,
 }: {
-  initialData: PostType;
+  initialData: PostWithAuthor;
   preview?: boolean;
   saved: boolean;
 }) {
@@ -46,6 +48,8 @@ export function Toolbar({
     }
 
     const timeout = setTimeout(async () => {
+      if (!initialData.id) return;
+      if(initialData.title === value) return;
       const res = await setNewTitle(initialData.id, value);
       if (!res.success) {
         setValue(initialData.title);
@@ -63,6 +67,7 @@ export function Toolbar({
   };
 
   const onIconSelect = async (icon: string) => {
+    if (!initialData.id) return;
     const res = await setNewIcon(initialData.id, icon);
     if (res.success) {
       setIconValue(icon);
@@ -72,6 +77,7 @@ export function Toolbar({
   };
 
   const onRemoveIcon = async () => {
+    if (!initialData.id) return;
     const res = await setNewIcon(initialData.id, null);
     if (res.success) {
       setIconValue(null);
@@ -80,8 +86,15 @@ export function Toolbar({
     }
   };
 
+  console.log(preview);
+
   return (
-    <div className="group relative flex flex-row justify-between items-start">
+    <div
+      className={cn(
+        "group relative flex flex-row justify-between items-start",
+        preview && "pt-36"
+      )}
+    >
       <div>
         {!!iconValue && !preview && (
           <div className="flex items-center gap-x-2 group/icon">
@@ -133,9 +146,21 @@ export function Toolbar({
           </div>
         )}
       </div>
-      <p className="text-xs text-muted-foreground bg-muted py-2 px-4 rounded-md border">
-        {saved ? "Saved" : "Unsaved"}
-      </p>
+      {!preview && (
+        <p className="text-xs text-muted-foreground bg-muted py-2 px-4 rounded-md border">
+          {saved ? "Saved" : "Unsaved"}
+        </p>
+      )}
+      {preview && (
+        <div className="flex flex-row gap-2">
+          <p className="text-xs text-muted-foreground bg-muted py-2 px-4 rounded-md border">
+            Par {initialData.author?.name}
+          </p>
+          <p className="text-xs text-muted-foreground bg-muted py-2 px-4 rounded-md border">
+            {timeSince(initialData?.createdAt)}
+          </p>
+        </div>
+      )}
     </div>
   );
 }
