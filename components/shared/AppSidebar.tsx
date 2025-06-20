@@ -47,9 +47,19 @@ type Data = {
 const data: Data = {
   navMain: [
     {
+      title: "Statistique",
+      url: "/admin/statistiques",
+      items: [
+        {
+          title: "statistique",
+          url: "/admin/statistiques",
+          isActive: true,
+        },
+      ],
+    },
+    {
       title: "Posts",
       url: "/admin/posts",
-      items: [{ title: "Statistique", url: "/admin/posts/statistiques" }],
     },
     {
       title: "Users",
