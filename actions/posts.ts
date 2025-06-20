@@ -1,8 +1,10 @@
 "use server";
 
 import { Prisma } from "@/app/generated/prisma";
+import { getISOWeek } from "@/lib/date";
 import { PostWithAuthor } from "@/lib/post";
 import db from "@/lib/prisma";
+import { subDays, subMonths, subWeeks } from "date-fns";
 
 export const getAllPosts = async () => {
   const posts: PostWithAuthor[] = await db.post.findMany({
@@ -234,3 +236,115 @@ export const setPostPublic = async (postId: number, status: boolean) => {
     }
   }
 };
+
+export async function getTotalPostCount() {
+  const count = await db.post.count();
+  return count;
+}
+
+export async function getPostCountByUser() {
+  const result = await db.user.findMany({
+    select: {
+      id: true,
+      name: true,
+      posts: {
+        select: { id: true },
+      },
+    },
+  });
+
+  return result.map((user) => ({
+    id: user.id,
+    name: user.name,
+    postCount: user.posts.length,
+  }));
+}
+
+export async function getPublishedStats() {
+  const [published, drafts] = await Promise.all([
+    db.post.count({ where: { published: true } }),
+    db.post.count({ where: { published: false } }),
+  ]);
+
+  return { published, drafts };
+}
+
+export async function getPostsGroupedBy(
+  period: "daily" | "weekly" | "monthly"
+) {
+  let fromDate: Date;
+
+  switch (period) {
+    case "daily":
+      fromDate = subDays(new Date(), 30);
+      break;
+    case "weekly":
+      fromDate = subWeeks(new Date(), 12);
+      break;
+    case "monthly":
+      fromDate = subMonths(new Date(), 12);
+      break;
+    default:
+      throw new Error("Invalid period");
+  }
+
+  const posts = await db.post.findMany({
+    where: {
+      createdAt: {
+        gte: fromDate,
+      },
+    },
+    select: {
+      createdAt: true,
+    },
+  });
+
+  const groups: Record<string, number> = {};
+
+  for (const post of posts) {
+    let key: string;
+    const date = post.createdAt;
+
+    if (period === "daily") {
+      key = date.toISOString().split("T")[0];
+    } else if (period === "weekly") {
+      const week = getISOWeek(date);
+      const year = date.getFullYear();
+      key = `S${week}-${year}`;
+    } else {
+      key = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(
+        2,
+        "0"
+      )}`;
+    }
+
+    groups[key] = (groups[key] || 0) + 1;
+  }
+
+  return groups;
+}
+
+export async function getIconPresenceStats() {
+  const [withIcon, withoutIcon] = await Promise.all([
+    db.post.count({ where: { icon: { not: null } } }),
+    db.post.count({ where: { icon: null } }),
+  ]);
+
+  return { withIcon, withoutIcon };
+}
+
+export async function getAveragePostLengths() {
+  const posts = await db.post.findMany({
+    select: {
+      title: true,
+    },
+  });
+
+  const total = posts.length;
+  const titleAvg =
+    posts.reduce((acc, post) => acc + post.title.length, 0) / total;
+
+  return {
+    avgTitleLength: Math.round(titleAvg),
+  };
+}

@@ -49,6 +49,12 @@ const data: Data = {
     {
       title: "Posts",
       url: "/admin/posts",
+      items: [{ title: "Statistique", url: "/admin/posts/statistiques" }],
+    },
+    {
+      title: "Users",
+      url: "/admin/users",
+      items: [{ title: "Statistique", url: "/admin/users/statistiques" }],
     },
   ],
 };
