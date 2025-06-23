@@ -21,34 +21,22 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import { getISOWeek, getISOWeekYear } from "date-fns";
 import { TrendingUp } from "lucide-react";
 
 function getCurrentYearMonth() {
   const now = new Date();
-  const year = now.getFullYear();
+  const year = getISOWeekYear(now);
   const month = String(now.getMonth() + 1).padStart(2, "0");
   return `${year}-${month}`;
 }
 
 function getCurrentWeekYear() {
   const now = new Date();
-  const date = new Date(
-    Date.UTC(now.getFullYear(), now.getMonth(), now.getDate())
-  );
+  const week = getISOWeek(now);
+  const year = getISOWeekYear(now);
 
-  const dayNum = date.getUTCDay() || 7;
-
-  date.setUTCDate(date.getUTCDate() + 4 - dayNum);
-
-  const yearStart = new Date(Date.UTC(date.getUTCFullYear(), 0, 1));
-
-  const weekNum = Math.ceil(
-    ((date.getDate() - yearStart.getDate()) / 86400000 + 1) / 7
-  );
-
-  const year = date.getUTCFullYear();
-
-  return `S${weekNum.toString().padStart(2, "0")}-${year}`;
+  return `S${week.toString().padStart(2, "0")}-${year}`;
 }
 
 export default async function StatistiquePage() {
@@ -86,11 +74,25 @@ export default async function StatistiquePage() {
               </Badge>
             </CardAction>
           </CardHeader>
+
           <CardContent>
             <p className="text-muted-foreground text-sm font-medium">
-              {monthlyPost[getCurrentYearMonth()] + " "}posts créé
-              {monthlyPost[getCurrentYearMonth()] > 1 ? "s" : ""} durant ce
-              mois.
+              {Object.keys(monthlyPost).length !== 0
+                ? monthlyPost[getCurrentYearMonth()] + " "
+                : "0 "}
+              post
+              {Object.keys(monthlyPost).length !== 0
+                ? monthlyPost[getCurrentYearMonth()] > 1
+                  ? "s"
+                  : ""
+                : ""}{" "}
+              créé
+              {Object.keys(monthlyPost).length !== 0
+                ? monthlyPost[getCurrentYearMonth()] > 1
+                  ? "s"
+                  : ""
+                : ""}{" "}
+              durant ce mois.
             </p>
           </CardContent>
         </Card>
@@ -131,12 +133,14 @@ export default async function StatistiquePage() {
             <CardDescription className="text-xs flex gap-1">
               La longueur moyen des titres :
               <p className="font-medium">
-                {avgPostLength["avgTitleLength"] + " caractères"}
+                {avgPostLength["avgTitleLength"]
+                  ? avgPostLength["avgTitleLength"] + " caractères"
+                  : "0 caractères"}
               </p>
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <p className="font-semibold  text-sm text-muted-foreground">
+            <p className="font-medium  text-sm text-muted-foreground">
               Avec{" "}
               {iconPresenceStats.withIcon > 0
                 ? iconPresenceStats.withIcon + " posts avec un icon"
@@ -156,14 +160,6 @@ export default async function StatistiquePage() {
               {totalUsers + " utilisateurs"}
             </CardTitle>
           </CardHeader>
-          <CardContent>
-            <p className="font-semibold  text-sm text-muted-foreground">
-              Avec{" "}
-              {iconPresenceStats.withIcon > 0
-                ? iconPresenceStats.withIcon + " posts avec un icon"
-                : iconPresenceStats.withoutIcon + " posts sans icon"}
-            </p>
-          </CardContent>
         </Card>
 
         <Card className="w-full max-w-sm">
@@ -176,14 +172,6 @@ export default async function StatistiquePage() {
                 " nouveau utilisateurs cette semaine"}
             </CardTitle>
           </CardHeader>
-          <CardContent>
-            <p className="font-semibold  text-sm text-muted-foreground">
-              Avec{" "}
-              {iconPresenceStats.withIcon > 0
-                ? iconPresenceStats.withIcon + " posts avec un icon"
-                : iconPresenceStats.withoutIcon + " posts sans icon"}
-            </p>
-          </CardContent>
         </Card>
 
         <Card className="w-full max-w-sm">

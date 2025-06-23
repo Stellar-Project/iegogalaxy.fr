@@ -1,5 +1,26 @@
 "use server";
+import nodemailer from "nodemailer";
 
-export async function signUp(formData: FormData) {
-  console.log("RAW : ", formData);
+export async function sendEmail(to: string, subject: string, text: string) {
+  const transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASS,
+    },
+  });
+
+  try {
+    await transporter.sendMail({
+      from: process.env.EMAIL_USER,
+      to,
+      subject,
+      text,
+    });
+
+    return { success: true };
+  } catch (error: any) {
+    console.error("Erreur envoi mail:", error);
+    return { success: false, error: error.message };
+  }
 }

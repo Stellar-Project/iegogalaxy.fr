@@ -52,7 +52,6 @@ export async function getNewUsersGroupedBy(
     },
   });
 
-  // Regroupement par période (tu peux adapter selon chart.js, etc.)
   const groups: Record<string, number> = {};
 
   for (const user of users) {
@@ -60,7 +59,7 @@ export async function getNewUsersGroupedBy(
     const date = user.createdAt;
 
     if (period === "daily") {
-      key = date.toISOString().split("T")[0]; // yyyy-mm-dd
+      key = date.toISOString().split("T")[0];
     } else if (period === "weekly") {
       const week = getISOWeek(date);
       const year = date.getFullYear();
