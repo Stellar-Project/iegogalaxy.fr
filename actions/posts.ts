@@ -218,7 +218,8 @@ export const setPostPublic = async (postId: number, status: boolean) => {
       where: { id: postId },
       data: { published: status },
     });
-    return { success: true, message: "Post publié avec succès !" };
+    const state = status ? " publié " : " mis en privé ";
+    return { success: true, message: "Post" + state + "avec succès !" };
   } catch (error) {
     if (
       error instanceof Prisma.PrismaClientKnownRequestError &&

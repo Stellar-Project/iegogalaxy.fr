@@ -48,23 +48,11 @@ const data: Data = {
   navMain: [
     {
       title: "Statistique",
-      url: "/admin/statistiques",
-      items: [
-        {
-          title: "statistique",
-          url: "/admin/statistiques",
-          isActive: true,
-        },
-      ],
+      url: "/admin/statistiques"
     },
     {
       title: "Posts",
       url: "/admin/posts",
-    },
-    {
-      title: "Users",
-      url: "/admin/users",
-      items: [{ title: "Statistique", url: "/admin/users/statistiques" }],
     },
   ],
 };

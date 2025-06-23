@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { PostWithAuthor } from "@/lib/post";
-import { EllipsisVertical } from "lucide-react";
+import { ArrowLeftRight, EllipsisVertical } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Dispatch, SetStateAction, useState } from "react";
 import { toast } from "sonner";
@@ -25,6 +25,7 @@ import {
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
+  DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from "../../ui/dropdown-menu";
 import { TableCell, TableRow } from "../../ui/table";
@@ -126,6 +127,9 @@ const PostRow = ({
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={handlePublish}>
                   Changer le statut
+                  <DropdownMenuShortcut>
+                    <ArrowLeftRight size={3} />
+                  </DropdownMenuShortcut>
                 </DropdownMenuItem>
                 <DropdownMenuItem>Keyboard shortcuts</DropdownMenuItem>
               </DropdownMenuGroup>

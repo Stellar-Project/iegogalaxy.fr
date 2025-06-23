@@ -1,59 +1,33 @@
 import { auth } from "@/lib/auth/auth";
 import { headers } from "next/headers";
 import Link from "next/link";
-import { buttonVariants } from "../ui/button";
+import { Button } from "../ui/button";
+import { Navigation } from "./Navigation";
 
-const NavBar = async () => {
+export const NavBar = async () => {
   const session = await auth.api.getSession({ headers: await headers() });
 
-  const user = session ? session.user : null;
-
-  const links = [
-    {
-      url: "/",
-      label: "Home",
-    },
-    {
-      url: "/about",
-      label: "About",
-    },
-    {
-      url: "/contact",
-      label: "Contact",
-    },
-  ];
-
   return (
-    <header className="w-full py-4 bg-white fixed top-0 left-0 border-b border-gray-300 z-50">
-      <nav className="container mx-auto flex justify-between items-center">
-        <div className="w-1/3">
-          <Link href={"/"} className="w-fit">
-            IE
-          </Link>
-        </div>
-
-        <ul className="flex gap-4 w-1/3 justify-center">
-          {links.map((link, index) => (
-            <li key={index}>
-              <a href={link.url}>{link.label}</a>
-            </li>
-          ))}
-        </ul>
-
-        <div className="flex w-1/3 justify-end">
-          {user ? (
-            <a className={buttonVariants()} href="/admin">
-              Dashboard
-            </a>
+    <div className="w-screen bg-white fixed top-0 left-0 py-5 z-50">
+      <div className="container mx-auto flex items-center justify-between">
+        <Link href="/">
+          <h2>IE</h2>
+        </Link>
+        <div className="flex items-center justify-end relative w-1/2">
+          <div className="absolute -translate-x-1/2 left-0">
+            <Navigation />
+          </div>
+          {session && session.user ? (
+            <Link href="/admin">
+              <Button variant="default">dashboard</Button>
+            </Link>
           ) : (
-            <a className={buttonVariants()} href="/sign-in">
-              Sign-In
-            </a>
+            <Link href="/sign-in">
+              <Button variant="outline">Se connecter</Button>
+            </Link>
           )}
         </div>
-      </nav>
-    </header>
+      </div>
+    </div>
   );
 };
-
-export default NavBar;
