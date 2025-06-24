@@ -5,7 +5,8 @@ import { BackgroundPattern } from "./background-pattern";
 
 export const Hero = () => {
   return (
-    <div className="min-h-screen flex items-center justify-center px-6">
+    <div className="h-screen flex items-center justify-center px-6 overflow-hidden z-0">
+
       <BackgroundPattern />
 
       <div className="relative z-10 text-center max-w-2xl">
@@ -20,10 +21,14 @@ export const Hero = () => {
           du jeu et des projets communautaires.
         </p>
         <div className="mt-12 flex items-center justify-center gap-4">
-          <Button size="lg" className="text-base">
+          <Button size="lg" className="text-base cursor-pointer">
             Lire le plus récent <ArrowUpRight className="h-5 w-5" />
           </Button>
-          <Button variant="outline" size="lg" className="text-base shadow-none">
+          <Button
+            variant="outline"
+            size="lg"
+            className="text-base shadow-none cursor-pointer"
+          >
             <Book className="size-5" /> Lire le Wiki
           </Button>
         </div>

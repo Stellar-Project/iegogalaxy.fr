@@ -10,7 +10,7 @@ export const BackgroundPattern = () => {
   const isLightTheme = resolvedTheme === "light";
 
   return (
-    <>
+    <div>
       <DotPattern
         width={20}
         height={20}
@@ -18,7 +18,7 @@ export const BackgroundPattern = () => {
         cy={1}
         cr={1}
         className={cn(
-          "[mask-image:radial-gradient(ellipse,rgba(0,0,0,0.3)_30%,black_50%)]",
+          "[mask-image:radial-gradient(ellipse,rgba(0,0,0,0.3)_30%,black_50%)] h-screen overflow-hidden",
           "dark:fill-slate-700"
         )}
       />
@@ -29,6 +29,6 @@ export const BackgroundPattern = () => {
         color={isLightTheme ? "#fff" : "#000"}
         refresh
       />
-    </>
+    </div>
   );
 };
