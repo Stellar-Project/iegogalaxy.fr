@@ -89,7 +89,7 @@ export function Toolbar({
   return (
     <div
       className={cn(
-        "group relative flex flex-row justify-between items-start",
+        "group relative flex flex-col md:flex-row justify-between items-start",
         preview && "pt-36"
       )}
     >

@@ -3,6 +3,7 @@
 import { setNewContent } from "@/actions/posts";
 import { Skeleton } from "@/components/ui/skeleton";
 import { PostType, PostWithAuthor } from "@/lib/post";
+import { cn } from "@/lib/utils";
 import dynamic from "next/dynamic";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
@@ -69,7 +70,12 @@ export const EditorView = ({
 
   return (
     <div className="pb-40">
-      <div className="md:max-w-3xl lg:max-w-4xl mx-auto">
+      <div
+        className={cn(
+          "md:max-w-3xl lg:max-w-4xl mx-auto px-4 md:px-0 flex flex-col gap-2",
+          editable && "ml-8"
+        )}
+      >
         <Toolbar
           initialData={post as PostWithAuthor}
           saved={saveStatus}
