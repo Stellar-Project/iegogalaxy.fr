@@ -57,8 +57,8 @@ export default async function StatistiquePage() {
 
   return (
     <div className="flex flex-col gap-8">
-      <div className="flex flex-wrap gap-4">
-        <Card className="w-full max-w-sm">
+      <div className="flex gap-4 flex-wrap items-stretch">
+        <Card className="flex-1 min-w-[300px]">
           <CardHeader>
             <CardDescription className="text-xs">
               Tous les posts créés depuis la création du Blog.
@@ -97,7 +97,7 @@ export default async function StatistiquePage() {
           </CardContent>
         </Card>
 
-        <Card className="w-full max-w-sm">
+        <Card className="flex-1 min-w-[300px]">
           <CardHeader>
             <CardDescription className="text-xs">
               Nombre de posts moyen par utilisateur.
@@ -125,7 +125,7 @@ export default async function StatistiquePage() {
           </CardContent>
         </Card>
 
-        <Card className="w-full max-w-sm">
+        <Card className="flex-1 min-w-[300px]">
           <CardHeader>
             <CardTitle className="text-2xl">
               Longueur moyen des titre.
@@ -151,7 +151,7 @@ export default async function StatistiquePage() {
       </div>
       <Separator />
       <div className="flex flex-wrap gap-4">
-        <Card className="w-full max-w-sm">
+        <Card className="flex-1 min-w-[300px]">
           <CardHeader>
             <CardDescription className="text-xs flex gap-1">
               Nombre d&apos;utilisateurs depuis la création du Blog.
@@ -162,7 +162,7 @@ export default async function StatistiquePage() {
           </CardHeader>
         </Card>
 
-        <Card className="w-full max-w-sm">
+        <Card className="flex-1 min-w-[300px]">
           <CardHeader>
             <CardDescription className="text-xs flex gap-1">
               Nouveau utilisateurs.
@@ -174,7 +174,7 @@ export default async function StatistiquePage() {
           </CardHeader>
         </Card>
 
-        <Card className="w-full max-w-sm">
+        <Card className="flex-1 min-w-[300px]">
           <CardHeader>
             <CardDescription className="text-xs flex gap-1">
               Utilisateurs actifs.
