@@ -349,3 +349,14 @@ export async function getAveragePostLengths() {
     avgTitleLength: Math.round(titleAvg),
   };
 }
+
+export async function getLatestPost() {
+  const posts = await db.post.findMany({
+    orderBy: {
+      createdAt: "desc",
+    },
+    take: 6,
+  });
+
+  return posts;
+}

@@ -4,9 +4,11 @@ import Link from "next/link";
 import { Button } from "../ui/button";
 import { Hamburger } from "./Hamburger";
 import { Navigation } from "./Navigation";
+import { getLatestPost } from "@/actions/posts";
 
 export const NavBar = async () => {
   const session = await auth.api.getSession({ headers: await headers() });
+  const posts = await getLatestPost();
 
   return (
     <>
@@ -17,7 +19,7 @@ export const NavBar = async () => {
           </Link>
           <div className="flex items-center justify-end relative w-1/2">
             <div className="-translate-x-1/2 left-0 hidden md:block absolute">
-              <Navigation />
+              <Navigation posts={posts} />
             </div>
             <div className="hidden md:block">
               {session && session.user ? (

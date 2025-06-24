@@ -12,47 +12,9 @@ import {
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
+import { PostType } from "@/lib/post";
 
-const posts: { title: string; href: string; description: string }[] = [
-  {
-    title: "1er post",
-    href: "/posts/1",
-    description:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Labore repudiandae deleniti ducimus suscipit, molestiae ullam?",
-  },
-  {
-    title: "2eme post",
-    href: "/posts/1",
-    description:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Labore repudiandae deleniti ducimus suscipit, molestiae ullam?",
-  },
-  {
-    title: "3eme post",
-    href: "/posts/1",
-    description:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Labore repudiandae deleniti ducimus suscipit, molestiae ullam?",
-  },
-  {
-    title: "4eme post",
-    href: "/posts/1",
-    description:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Labore repudiandae deleniti ducimus suscipit, molestiae ullam?",
-  },
-  {
-    title: "5eme post",
-    href: "/posts/1",
-    description:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Labore repudiandae deleniti ducimus suscipit, molestiae ullam?",
-  },
-  {
-    title: "6eme post",
-    href: "/posts/1",
-    description:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Labore repudiandae deleniti ducimus suscipit, molestiae ullam?",
-  },
-];
-
-export function Navigation() {
+export function Navigation({ posts }: { posts: PostType[] }) {
   return (
     <NavigationMenu viewport={true}>
       <NavigationMenuList>
@@ -65,9 +27,13 @@ export function Navigation() {
           <NavigationMenuTrigger>Blog</NavigationMenuTrigger>
           <NavigationMenuContent>
             <ul className="grid w-[400px] gap-2 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
-              {posts.map((post) => (
-                <ListItem key={post.title} title={post.title} href={post.href}>
-                  {post.description}
+              {posts.map((post, index) => (
+                <ListItem
+                  key={`post-${post.title}-${index}`}
+                  title={post.title}
+                  href={`/posts/${post.title}`}
+                >
+                  {post.title}
                 </ListItem>
               ))}
             </ul>
