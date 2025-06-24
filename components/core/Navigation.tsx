@@ -31,7 +31,7 @@ export function Navigation({ posts }: { posts: PostType[] }) {
                 <ListItem
                   key={`post-${post.title}-${index}`}
                   title={post.title}
-                  href={`/posts/${post.title}`}
+                  href={`/posts/${post.id}`}
                 >
                   {post.title}
                 </ListItem>
