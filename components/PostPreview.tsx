@@ -9,6 +9,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { timeSince } from "@/lib/date";
+import Image from "next/image";
 import Link from "next/link";
 
 export const PostPreview = async () => {
@@ -48,7 +49,16 @@ export const PostPreview = async () => {
                 <div className="mt-6 flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <div className="h-10 w-10 rounded-full bg-muted flex items-center justify-center">
-                      {post.author.name && post.author.name[0].toUpperCase()}
+                      {post.author.image ? (
+                        <Image
+                          src={post.author.image}
+                          alt="Avatar"
+                          width={24}
+                          height={24}
+                        />
+                      ) : (
+                        post.author.name && post.author.name[0].toUpperCase()
+                      )}
                     </div>
                     <span className="text-muted-foreground font-semibold">
                       {post.author.name}

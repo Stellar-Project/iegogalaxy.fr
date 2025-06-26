@@ -15,6 +15,7 @@ export const getAllPosts = async () => {
       author: {
         select: {
           name: true,
+          image: true,
         },
       },
     },
@@ -182,6 +183,7 @@ export const getAllPostsByUserId = async (authId: string) => {
       author: {
         select: {
           name: true,
+          image: true,
         },
       },
     },

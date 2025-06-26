@@ -12,5 +12,6 @@ export type PostType = {
 export type PostWithAuthor = PostType & {
   author: {
     name: string | null;
+    image: string | null;
   };
 };

@@ -13,7 +13,7 @@ export function timeSince(date: Date): string {
   for (const interval of intervals) {
     const count = Math.floor(seconds / interval.seconds);
     if (count > 0) {
-      return `Il y a ${count} ${interval.label}${count > 1 ? "s" : ""}`;
+      return `Il y a ${count} ${interval.label}`;
     }
   }
 

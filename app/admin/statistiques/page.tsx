@@ -103,7 +103,8 @@ export default async function StatistiquePage() {
               Nombre de posts moyen par utilisateur.
             </CardDescription>
             <CardTitle className="text-2xl">
-              {avgPostsByUser} post{avgPostsByUser > 1 ? "s" : ""}
+              {avgPostsByUser.toPrecision(3)} post
+              {avgPostsByUser > 1 ? "s" : ""}
             </CardTitle>
             <CardAction>
               <Badge
@@ -111,7 +112,7 @@ export default async function StatistiquePage() {
                 className="flex items-center gap-2 text-sm"
               >
                 <TrendingUp className="size-6" />
-                {avgPostsByUser}
+                {avgPostsByUser.toPrecision(3)}
               </Badge>
             </CardAction>
           </CardHeader>
@@ -134,7 +135,8 @@ export default async function StatistiquePage() {
               La longueur moyen des titres :
               <p className="font-medium">
                 {avgPostLength["avgTitleLength"]
-                  ? avgPostLength["avgTitleLength"] + " caractères"
+                  ? avgPostLength["avgTitleLength"].toPrecision(3) +
+                    " caractères"
                   : "0 caractères"}
               </p>
             </CardDescription>
