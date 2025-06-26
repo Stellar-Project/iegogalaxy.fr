@@ -23,6 +23,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { authClient } from "@/lib/auth/auth-client";
 import { formSchema } from "@/lib/auth/authSchema";
+import { faker } from "@faker-js/faker";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -51,6 +52,7 @@ export default function SignUp() {
         email,
         password,
         name: username,
+        image: faker.image.avatar(),
         callbackURL: "/admin",
       },
       {
