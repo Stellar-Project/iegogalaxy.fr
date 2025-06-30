@@ -1,5 +1,6 @@
 "use client";
 
+import { uploadImage } from "@/actions/files";
 import { BlockNoteEditor, PartialBlock } from "@blocknote/core";
 import "@blocknote/core/style.css";
 import { BlockNoteView } from "@blocknote/mantine";
@@ -25,6 +26,10 @@ export const Editor = ({ onChange, initialContent, editable }: EditorProps) => {
     initialContent: initialContent
       ? (JSON.parse(initialContent) as PartialBlock[])
       : undefined,
+    uploadFile: async (file: File) => {
+      await uploadImage(file);
+      return `/uploads/${file.name}`;
+    },
   });
 
   return (
