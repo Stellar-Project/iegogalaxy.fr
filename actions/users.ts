@@ -101,3 +101,34 @@ export async function getActiveInactiveUsers(daysAgo = 30) {
     inactive: inactiveCount,
   };
 }
+
+export async function setUserInfo(
+  userId: string,
+  name: string,
+  email: string,
+  image: string
+) {
+  try {
+    const updatedUser = await db.user.update({
+      where: {
+        id: userId,
+      },
+      data: {
+        name,
+        email,
+        image,
+      },
+    });
+
+    return {
+      success: true,
+      message: "Profile mise à jour avec succès.",
+      updatedUser,
+    };
+  } catch (error) {
+    return {
+      success: false,
+      message: error instanceof Error ? error.message : "Unknown error",
+    };
+  }
+}

@@ -25,6 +25,7 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar";
 import { authClient } from "@/lib/auth/auth-client";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 
@@ -48,7 +49,7 @@ const data: Data = {
   navMain: [
     {
       title: "Statistique",
-      url: "/admin/statistiques"
+      url: "/admin/statistiques",
     },
     {
       title: "Posts",
@@ -109,7 +110,11 @@ export function AppSidebar({ user, ...props }: AppSidebarProps) {
               <DropdownMenuContent className="w-56" align="start">
                 <DropdownMenuLabel>My Account</DropdownMenuLabel>
                 <DropdownMenuGroup>
-                  <DropdownMenuItem>Profile</DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <Link href="/admin/profile" className="w-full">
+                      Profile
+                    </Link>
+                  </DropdownMenuItem>
                   <DropdownMenuItem>Settings</DropdownMenuItem>
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
