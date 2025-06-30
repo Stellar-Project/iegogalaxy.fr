@@ -1,6 +1,11 @@
 import { getAllPosts } from "@/actions/posts";
 import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+} from "@/components/ui/card";
 import {
   Select,
   SelectContent,
@@ -36,15 +41,16 @@ export const PostPreview = async () => {
       <div className="mt-4 grid sm:grid-cols-2 lg:grid-cols-3 gap-10">
         {posts.map((post, i) => (
           <Link key={i} href={`/posts/${post.id}`}>
-            <Card className="shadow-none py-4">
+            <Card className="shadow-none py-4 h-[500px]">
               <CardHeader className="px-4">
                 <div className="aspect-video bg-muted w-full rounded-md" />
               </CardHeader>
-              <CardContent className="pt-4 pb-5">
+              <CardContent className="pt-4">
                 <Badge>Technology</Badge>
-
+              </CardContent>
+              <CardFooter className="pt-4 pb-5 flex flex-col items-start">
                 <h3 className="mt-4 text-[1.35rem] font-semibold tracking-tight">
-                  {post.title}
+                  {post.title.substring(0, 32) + "..."}
                 </h3>
                 <div className="mt-6 flex items-center justify-between">
                   <div className="flex items-center gap-2">
@@ -69,7 +75,7 @@ export const PostPreview = async () => {
                     {timeSince(new Date(post.createdAt))}
                   </span>
                 </div>
-              </CardContent>
+              </CardFooter>
             </Card>
           </Link>
         ))}
