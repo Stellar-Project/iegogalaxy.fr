@@ -36,6 +36,7 @@ export default function ImageForm({
   setProfilePicture: (value: string | null) => void;
 }) {
   const inputRef = useRef<HTMLInputElement>(null);
+
   return (
     <div className="cursor-pointer">
       <div className="mt-1 size-10 rounded-full">
@@ -52,10 +53,8 @@ export default function ImageForm({
             onDrop={(acceptedFiles) => {
               const file = acceptedFiles[0];
               if (file) {
-                const imageUrl = URL.createObjectURL(file);
-                setProfilePicture(imageUrl);
+                setProfilePicture(`/uploads/${file.name}`);
 
-                // Remplir l'input caché avec le fichier
                 if (inputRef.current) {
                   const dataTransfer = new DataTransfer();
                   dataTransfer.items.add(file);

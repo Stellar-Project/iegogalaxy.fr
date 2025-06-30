@@ -4,14 +4,25 @@ const nextConfig: NextConfig = {
   devIndicators: false,
   reactStrictMode: false,
   images: {
-    domains: ["cdn.jsdelivr.net"],
+    domains: ["cdn.jsdelivr.net", "picsum.photos"],
     remotePatterns: [
       {
         protocol: "https",
         hostname: "avatars.githubusercontent.com",
         port: "",
         pathname: "/u/**",
-        search: "",
+      },
+      {
+        protocol: "https",
+        hostname: "fastly.picsum.photos",
+        port: "",
+        pathname: "/id/**",
+      },
+      {
+        protocol: "https",
+        hostname: "picsum.photos",
+        port: "",
+        pathname: "/**", // autorise tout le reste
       },
     ],
   },

@@ -20,6 +20,8 @@ import Link from "next/link";
 export const PostPreview = async () => {
   const posts = await getAllPosts();
 
+  console.log(posts);
+
   return (
     <div className="max-w-screen-xl mx-auto py-16 px-6 xl:px-0">
       <div className="flex items-end justify-between">
@@ -43,7 +45,17 @@ export const PostPreview = async () => {
           <Link key={i} href={`/posts/${post.id}`}>
             <Card className="shadow-none py-4 h-[500px]">
               <CardHeader className="px-4">
-                <div className="aspect-video bg-muted w-full rounded-md" />
+                {!post.cover ? (
+                  <div className="aspect-video bg-muted w-full rounded-md" />
+                ) : (
+                  <Image
+                    src={post.cover}
+                    alt={`CoverImage-${i}`}
+                    width={600}
+                    height={500}
+                    className="w-full h-full aspect-video rounded-md object-cover"
+                  />
+                )}
               </CardHeader>
               <CardContent className="pt-4">
                 <Badge>Technology</Badge>

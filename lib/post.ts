@@ -7,6 +7,7 @@ export type PostType = {
   authorId?: string;
   createdAt: Date;
   updatedAt?: Date;
+  cover?: string | null;
 };
 
 export type PostWithAuthor = PostType & {

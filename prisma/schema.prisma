@@ -46,6 +46,7 @@ model Post {
   id        Int      @id @default(autoincrement())
   title     String
   content   String?
+  cover     String?
   published Boolean  @default(false)
   icon      String?
   createdAt DateTime @default(now())

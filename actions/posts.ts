@@ -63,6 +63,7 @@ export const getPostPreview = async (postId: number) => {
       icon: true,
       author: true,
       createdAt: true,
+      cover: true,
     },
   });
 
@@ -94,6 +95,32 @@ export const setNewTitle = async (postId: number, title: string) => {
       "Une erreur est survenue lors de la modification du titre :",
       error
     );
+    return {
+      success: false,
+      message: error instanceof Error ? error.message : "Unknown error",
+    };
+  }
+};
+
+export const setNewCover = async (postId: number, newCover: string | null) => {
+  if (typeof postId !== "number" || postId <= 0) {
+    throw new Error("Invalid post ID.");
+  }
+
+  try {
+    const updatedPost = await db.post.update({
+      where: { id: postId },
+      data: {
+        cover: newCover,
+      },
+    });
+
+    return {
+      success: true,
+      message: "Cover mise à jour avec succès.",
+      updatedPost,
+    };
+  } catch (error) {
     return {
       success: false,
       message: error instanceof Error ? error.message : "Unknown error",

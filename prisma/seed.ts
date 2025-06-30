@@ -254,6 +254,7 @@ async function main() {
         createdAt: postDate,
         updatedAt: postDate,
         authorId: user.id,
+        cover: faker.image.urlPicsumPhotos(),
       });
     }
   }
