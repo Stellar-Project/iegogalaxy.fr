@@ -19,6 +19,9 @@ export const getAllPosts = async () => {
         },
       },
     },
+    orderBy: {
+      createdAt: "desc",
+    },
   });
 
   return posts;
