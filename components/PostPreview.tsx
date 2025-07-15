@@ -19,9 +19,6 @@ import Link from "next/link";
 
 export const PostPreview = async () => {
   const posts = await getAllPosts();
-
-  console.log(posts);
-
   return (
     <div className="max-w-screen-xl mx-auto py-16 px-6 xl:px-0">
       <div className="flex items-end justify-between">

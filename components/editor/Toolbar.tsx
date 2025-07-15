@@ -93,7 +93,6 @@ export function Toolbar({
 
   const onCoverSelect = async () => {
     if (!initialData.id) return;
-    console.log(coverValue);
     const res = await setNewCover(initialData.id, coverValue);
     if (res.success) {
       toast.success(res.message);
@@ -106,7 +105,6 @@ export function Toolbar({
     onCoverSelect();
   }, [coverValue]);
 
-  console.log(initialData);
 
   return (
     <>
