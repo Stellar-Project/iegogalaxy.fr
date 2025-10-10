@@ -17,11 +17,11 @@ export default function Home() {
   const [bgImage, setBgImage] = useState("/images/block.png");
 
   const screenshots = [
-    "/images/IEGOGalaxySupernova-1.png",
-    "/images/IEGOGalaxySupernova-2.png",
-    "/images/IEGOGalaxySupernova-3.png",
-    "/images/IEGOGalaxySupernova-5.png",
-    "/images/IEGOGalaxySupernova-6.png",
+    "/images/screenshots/IEGOGalaxySupernova-1.png",
+    "/images/screenshots/IEGOGalaxySupernova-2.png",
+    "/images/screenshots/IEGOGalaxySupernova-3.png",
+    "/images/screenshots/IEGOGalaxySupernova-5.png",
+    "/images/screenshots/IEGOGalaxySupernova-6.png",
   ];
 
   useEffect(() => {
@@ -34,19 +34,19 @@ export default function Home() {
             );
             switch (index) {
               case 0:
-                setBgImage("/images/block.png");
+                setBgImage("/images/bg/block.png");
                 break;
               case 1:
-                setBgImage("/images/block2.png");
+                setBgImage("/images/bg/block2.png");
                 break;
               case 2:
-                setBgImage("/images/block2.png");
+                setBgImage("/images/bg/block2.png");
                 break;
               case 3:
-                setBgImage("/images/block.png");
+                setBgImage("/images/bg/block.png");
                 break;
               default:
-                setBgImage("/images/block.png");
+                setBgImage("/images/bg/block.png");
             }
           }
         });
@@ -73,10 +73,7 @@ export default function Home() {
         aria-hidden="true"
       />
 
-      <div
-        className="fixed inset-0 bg-black/70 z-0" // ici le /50 assombrit davantage
-        aria-hidden="true"
-      />
+      <div className="fixed inset-0 bg-black/70 z-0" aria-hidden="true" />
 
       {/* --- Section Hero --- */}
       <section
@@ -110,7 +107,7 @@ export default function Home() {
         <div className="mt-8">
           <Button
             size="lg"
-            className="bg-blue-600 hover:bg-blue-700 text-white text-lg px-8 py-6 rounded-full shadow-md transition-transform hover:scale-105"
+            className="px-6 py-3 bg-yellow-500 hover:bg-yellow-600 text-black font-bold rounded-full shadow-md transition-transform hover:scale-105"
             onClick={() => (window.location.href = "/telechargement")}
           >
             Télécharger le patch
@@ -218,7 +215,7 @@ export default function Home() {
                     <li>Kotei Project : icônes + objets</li>
                     <li>Umanse : mode histoire</li>
                     <li>MrFox4 : techniques & totems</li>
-                    <li>Stellar Project : finalisation complète 🎉</li>
+                    <li>Stellar Project : Objectif de finir le patch à 100%</li>
                   </ul>
                 </CardContent>
               </Card>

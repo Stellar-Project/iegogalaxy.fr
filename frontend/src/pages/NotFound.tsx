@@ -1,11 +1,10 @@
-import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 
 export default function NotFound() {
   return (
     <div className="relative flex flex-col items-center justify-center min-h-screen text-white overflow-hidden bg-gradient-to-b from-blue-950 via-black to-indigo-900 px-4 text-center">
       <div
-        className="absolute inset-0 bg-[url('/images/block.png')] bg-cover bg-center opacity-20 z-0"
+        className="absolute inset-0 bg-[url('/images/bg/block.png')] bg-cover bg-center opacity-20 z-0"
         aria-hidden="true"
       />
 
@@ -39,12 +38,12 @@ export default function NotFound() {
           La page que tu cherches semble avoir disparu dans une tornade Inazuma.
         </p>
 
-        <Link
-          to="/"
+        <button
+          onClick={() => window.history.back()}
           className="px-6 py-3 bg-yellow-500 hover:bg-yellow-600 text-black font-bold rounded-full shadow-md transition-transform hover:scale-105"
         >
-          Retour à l&apos;accueil
-        </Link>
+          Retour en arrière
+        </button>
       </div>
 
       <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-yellow-500/10 to-transparent blur-3xl z-0" />

@@ -5,13 +5,20 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 
 export default function Download() {
-  const version = import.meta.env.VITE_PATCH_VERSION || "dev";
+  const version = import.meta.env.VITE_PATCH_VERSION;
+  const releaseDate = import.meta.env.VITE_PATCH_DATE;
+  const patchSize = import.meta.env.VITE_PATCH_SIZE;
+  // const romSize = import.meta.env.VITE_ROM_SIZE;
+  const supernovaPatch =import.meta.env.VITE_SUPERNOVA_PATCH_LINK;
+  const bigbangPatch =import.meta.env.VITE_BIGBANG_PATCH_LINK;
+  // const supernovaRom =import.meta.env.VITE_SUPERNOVA_ROM_LINK;
+  // const bigbangRom =import.meta.env.VITE_BIGBANG_ROM_LINK;
 
   return (
     <div className="relative min-h-screen flex flex-col items-center justify-center text-white bg-gradient-to-b from-blue-950 via-black to-indigo-900 overflow-hidden px-6 py-20 text-center">
       {/* --- Background --- */}
       <div
-        className="absolute inset-0 bg-[url('/images/block.png')] bg-cover bg-center opacity-20 z-0"
+        className="absolute inset-0 bg-[url('/images/bg/block.png')] bg-cover bg-center opacity-20 z-0"
         aria-hidden="true"
       />
       <motion.div
@@ -21,8 +28,9 @@ export default function Download() {
         className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.15),transparent_70%)] z-0"
       />
 
-      {/* --- Titre principal --- */}
-      <div className="relative z-10 max-w-5xl mx-auto space-y-10">
+      {/* --- Contenu principal --- */}
+      <div className="relative z-10 max-w-5xl mx-auto space-y-12">
+        {/* --- Titre principal --- */}
         <motion.h1
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -32,6 +40,7 @@ export default function Download() {
           Télécharge dès maintenant le patch FR !
         </motion.h1>
 
+        {/* --- Description --- */}
         <motion.p
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -40,25 +49,29 @@ export default function Download() {
         >
           Choisis ta version du jeu :{" "}
           <span className="text-yellow-400 font-semibold">Supernova</span> ou{" "}
-          <span className="text-blue-400 font-semibold">Big Bang</span>. Les
-          deux contiennent la traduction complète réalisée par la{" "}
+          <span className="text-blue-400 font-semibold">Big Bang</span>. Ces
+          versions contiennent la traduction (presque) complète réalisée par la{" "}
           <span className="font-semibold text-white">Stellar Project</span>.
         </motion.p>
 
-        {/* --- Version du patch --- */}
+        {/* --- Informations de version --- */}
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5, duration: 0.8 }}
-          className="mt-4 inline-block bg-white/10 backdrop-blur-md border border-yellow-400/40 text-yellow-300 px-4 py-2 rounded-full text-sm font-medium shadow-[0_0_15px_rgba(255,255,100,0.3)]"
+          className="mx-auto w-fit bg-white/10 backdrop-blur-md border border-yellow-400/40 px-6 py-3 rounded-full text-sm md:text-base font-medium shadow-[0_0_15px_rgba(255,255,100,0.3)]"
         >
-          Il s’agit actuellement de la version{" "}
-          <span className="font-bold">{version}</span> du patch
+          <p>
+            <span className="text-gray-300">Version :</span>{" "}
+            <span className="font-bold text-yellow-300">{version}</span> —{" "}
+            <span className="text-gray-300">Publié le :</span>{" "}
+            <span className="font-bold text-yellow-300">{releaseDate}</span>
+          </p>
         </motion.div>
 
-        {/* --- Cartes --- */}
+        {/* --- Cartes de téléchargement --- */}
         <div className="grid md:grid-cols-2 gap-8 mt-12">
-          {/* --- Carte Supernova --- */}
+          {/* --- Supernova --- */}
           <motion.div
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -71,25 +84,36 @@ export default function Download() {
                   Inazuma Eleven GO Galaxy: Supernova
                 </CardTitle>
               </CardHeader>
-              <CardContent className="flex flex-col items-center space-y-5">
+
+              <CardContent className="flex flex-col items-center space-y-6">
                 <img
-                  src="/images/supernova_logo.png"
+                  src="/images/logo/supernova_logo.png"
                   alt="Supernova Logo"
                   className="h-64 object-contain"
                 />
-                <Button
-                  asChild
-                  className="bg-yellow-500 hover:bg-yellow-600 text-black font-bold rounded-full shadow-lg transition-transform hover:scale-110"
-                >
-                  <a href="/downloads/supernova-patch.zip" download>
-                    Télécharger Supernova
-                  </a>
-                </Button>
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <Button
+                    asChild
+                    className="bg-yellow-500 hover:bg-yellow-600 text-black font-bold rounded-full shadow-lg transition-transform hover:scale-110"
+                  >
+                    <a href={supernovaPatch} download>
+                      Télécharger Patch ({patchSize})
+                    </a>
+                  </Button>
+                  <Button
+                    asChild
+                    className="bg-gray-200 hover:bg-gray-300 text-black font-bold rounded-full shadow-lg transition-transform hover:scale-110"
+                  >
+                    {/* <a href={supernovaRom} download>
+                      Télécharger ROM ({romSize})
+                    </a> */}
+                  </Button>
+                </div>
               </CardContent>
             </Card>
           </motion.div>
 
-          {/* --- Carte Big Bang --- */}
+          {/* --- Big Bang --- */}
           <motion.div
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -102,27 +126,38 @@ export default function Download() {
                   Inazuma Eleven GO Galaxy: Big Bang
                 </CardTitle>
               </CardHeader>
-              <CardContent className="flex flex-col items-center space-y-5">
+
+              <CardContent className="flex flex-col items-center space-y-6">
                 <img
-                  src="/images/bigbang_logo.png"
+                  src="/images/logo/bigbang_logo.png"
                   alt="Big Bang Logo"
                   className="h-64 object-contain"
                 />
-                <Button
-                  asChild
-                  className="bg-blue-500 hover:bg-blue-600 text-black font-bold rounded-full shadow-lg transition-transform hover:scale-110"
-                >
-                  <a href="/downloads/bigbang-patch.zip" download>
-                    Télécharger Big Bang
-                  </a>
-                </Button>
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <Button
+                    asChild
+                    className="bg-blue-500 hover:bg-blue-600 text-black font-bold rounded-full shadow-lg transition-transform hover:scale-110"
+                  >
+                    <a href={bigbangPatch} download>
+                      Télécharger Patch ({patchSize})
+                    </a>
+                  </Button>
+                  <Button
+                    asChild
+                    className="bg-gray-200 hover:bg-gray-300 text-black font-bold rounded-full shadow-lg transition-transform hover:scale-110"
+                  >
+                    {/* <a href={bigbangRom} download>
+                      Télécharger ROM ({romSize})
+                    </a> */}
+                  </Button>
+                </div>
               </CardContent>
             </Card>
           </motion.div>
         </div>
       </div>
 
-      {/* --- Effet d’énergie au sol --- */}
+      {/* --- Effet lumineux au sol --- */}
       <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-yellow-500/10 to-transparent blur-3xl z-0" />
     </div>
   );

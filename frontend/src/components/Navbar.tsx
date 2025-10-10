@@ -28,7 +28,7 @@ export function NavBar() {
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         {/* Logo */}
         <Link to="/" className="flex items-center gap-2">
-          <img src="/images/logo.png" alt="Logo" className="h-16 w-auto" />
+          <img src="/images/logo/logo.png" alt="Logo" className="h-16 w-auto" />
         </Link>
 
         {/* Desktop Menu */}
@@ -48,6 +48,11 @@ export function NavBar() {
               <NavigationMenuItem>
                 <Link to="/wiki" className="hover:text-white text-gray-200">
                   Wiki
+                </Link>
+              </NavigationMenuItem>
+              <NavigationMenuItem>
+                <Link to="/tutoriel" className="hover:text-white text-gray-200">
+                  Tutoriel
                 </Link>
               </NavigationMenuItem>
               <NavigationMenuItem>
@@ -98,6 +103,13 @@ export function NavBar() {
             onClick={() => setMenuOpen(false)}
           >
             Wiki
+          </Link>
+          <Link
+            to="/tutoriel"
+            className="w-full text-gray-200 hover:text-white py-2 transition-colors"
+            onClick={() => setMenuOpen(false)}
+          >
+            Tutoriel
           </Link>
           <Link
             to="/telechargement"
