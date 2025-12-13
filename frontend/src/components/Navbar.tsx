@@ -1,125 +1,191 @@
-"use client";
+import { useState } from "react";
+import { Menu, Github, Twitter, Youtube } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 
-import * as React from "react";
-import { Link } from "react-router-dom";
-import {
-  NavigationMenu,
-  NavigationMenuItem,
-  NavigationMenuList,
-} from "@/components/ui/navigation-menu";
-import { Menu as MenuIcon, Close as CloseIcon } from "@mui/icons-material";
+type NavItem = {
+  name: string;
+  href: string;
+  imgOff: string;
+  imgOn: string;
+};
 
-export function NavBar() {
-  const [menuOpen, setMenuOpen] = React.useState(false);
-  const menuRef = React.useRef<HTMLDivElement>(null);
+const navLinks: NavItem[] = [
+  {
+    name: "Accueil",
+    href: "/",
+    imgOff: "/assets/nav/home_off.png",
+    imgOn: "/assets/nav/home_on.png",
+  },
+  {
+    name: "Wiki",
+    href: "/wiki",
+    imgOff: "/assets/nav/wiki_off.png",
+    imgOn: "/assets/nav/wiki_on.png",
+  },
+  {
+    name: "Tutoriel",
+    href: "/tutoriel",
+    imgOff: "/assets/nav/tutorial_off.png",
+    imgOn: "/assets/nav/tutorial_on.png",
+  },
+  {
+    name: "A Propos",
+    href: "/apropos",
+    imgOff: "/assets/nav/about_off.png",
+    imgOn: "/assets/nav/about_on.png",
+  },
+  {
+    name: "Téléchargement",
+    href: "/telechargement",
+    imgOff: "/assets/nav/download_off.png",
+    imgOn: "/assets/nav/download_on.png",
+  },
+];
 
-  React.useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-        setMenuOpen(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
+const NavGameButton = ({
+  item,
+  isActive,
+  onClick,
+}: {
+  item: NavItem;
+  isActive: boolean;
+  onClick: () => void;
+}) => {
+  const [isHovered, setIsHovered] = useState(false);
 
   return (
-    <header className="w-full px-6 md:px-8 py-4 border-b border-gray-700 bg-neutral-950 text-gray-100 relative z-50">
-      <div className="max-w-7xl mx-auto flex items-center justify-between">
-        {/* Logo */}
-        <Link to="/" className="flex items-center gap-2">
-          <img src="/images/logo/logo.png" alt="Logo" className="h-16 w-auto" />
-        </Link>
+    <a
+      href={item.href}
+      onClick={onClick}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      className="transition-transform active:scale-95 block"
+    >
+      <img
+        src={isActive || isHovered ? item.imgOn : item.imgOff}
+        alt={item.name}
+        className="h-12 w-auto object-contain transition-all duration-200"
+      />
+    </a>
+  );
+};
 
-        {/* Desktop Menu */}
-        <div className="hidden md:flex absolute left-1/2 transform -translate-x-1/2">
-          <NavigationMenu>
-            <NavigationMenuList className="flex gap-10 items-center text-lg font-semibold">
-              <NavigationMenuItem>
-                <Link to="/" className="hover:text-white text-gray-200">
-                  Accueil
-                </Link>
-              </NavigationMenuItem>
-              <NavigationMenuItem>
-                <Link to="/about" className="hover:text-white text-gray-200">
-                  À propos
-                </Link>
-              </NavigationMenuItem>
-              <NavigationMenuItem>
-                <Link to="/wiki" className="hover:text-white text-gray-200">
-                  Wiki
-                </Link>
-              </NavigationMenuItem>
-              <NavigationMenuItem>
-                <Link to="/tutoriel" className="hover:text-white text-gray-200">
-                  Tutoriel
-                </Link>
-              </NavigationMenuItem>
-              <NavigationMenuItem>
-                <Link
-                  to="/telechargement"
-                  className="hover:text-white text-gray-200"
-                >
-                  Téléchargement
-                </Link>
-              </NavigationMenuItem>
-            </NavigationMenuList>
-          </NavigationMenu>
+export const Navbar = () => {
+  const [currentPath, setCurrentPath] = useState("#home");
+  const [isOpen, setIsOpen] = useState(false);
+
+  const handleNavClick = (href: string) => {
+    setCurrentPath(href);
+    setIsOpen(false);
+  };
+
+  return (
+    <div className="w-full z-50 flex flex-col">
+      <div className="bg-black text-white h-10 flex items-center justify-between px-4 sm:px-6 lg:px-8 text-sm border-b border-white/10 relative z-30">
+        <div className="shrink-0">
+          <img
+            src="/assets/team_logo.png"
+            alt="Team Logo"
+            className="h-8 w-auto object-contain"
+          />
         </div>
-
-        {/* Mobile Hamburger */}
-        <button
-          className="md:hidden z-50"
-          onClick={() => setMenuOpen(!menuOpen)}
-          aria-label="Menu"
-        >
-          {menuOpen ? <CloseIcon /> : <MenuIcon />}
-        </button>
+        <div className="flex items-center gap-4">
+          <a
+            href="https://x.com/INEGGSNBBFR"
+            target="_blank"
+            rel="noreferrer"
+            className="hover:text-blue-400"
+          >
+            <Twitter size={18} />
+          </a>
+          <a
+            href="https://github.com/Stellar-Project"
+            target="_blank"
+            rel="noreferrer"
+            className="hover:text-white text-gray-400"
+          >
+            <Github size={18} />
+          </a>
+          <a
+            href="https://www.youtube.com/channel/UClqF38koy3zeCTdFDkEIXbg"
+            target="_blank"
+            rel="noreferrer"
+            className="hover:text-red-500 text-gray-400"
+          >
+            <Youtube size={18} />
+          </a>
+        </div>
       </div>
 
-      {/* Mobile Menu */}
-      {menuOpen && (
-        <div
-          ref={menuRef}
-          className="md:hidden absolute top-full left-0 w-full bg-neutral-950 flex flex-col gap-2 px-6 py-4 z-40"
-        >
-          <Link
-            to="/"
-            className="w-full text-gray-200 hover:text-white py-2 transition-colors"
-            onClick={() => setMenuOpen(false)}
-          >
-            Accueil
-          </Link>
-          <Link
-            to="/about"
-            className="w-full text-gray-200 hover:text-white py-2 transition-colors"
-            onClick={() => setMenuOpen(false)}
-          >
-            À propos
-          </Link>
-          <Link
-            to="/wiki"
-            className="w-full text-gray-200 hover:text-white py-2 transition-colors"
-            onClick={() => setMenuOpen(false)}
-          >
-            Wiki
-          </Link>
-          <Link
-            to="/tutoriel"
-            className="w-full text-gray-200 hover:text-white py-2 transition-colors"
-            onClick={() => setMenuOpen(false)}
-          >
-            Tutoriel
-          </Link>
-          <Link
-            to="/telechargement"
-            className="w-full text-gray-200 hover:text-white py-2 transition-colors"
-            onClick={() => setMenuOpen(false)}
-          >
-            Téléchargement
-          </Link>
+      <nav className="relative w-full border-b border-white/10 bg-slate-950 overflow-hidden">
+        <div className="absolute inset-0 z-0">
+          <div
+            className="absolute inset-0 opacity-50"
+            style={{
+              backgroundImage: "url('/assets/bg/bg_repeat.png')",
+              backgroundRepeat: "repeat",
+              backgroundPosition: "center top",
+            }}
+          />
+          <div className="absolute inset-0 bg-linear-to-b from-slate-950/80 via-slate-950/60 to-slate-950/90" />
         </div>
-      )}
-    </header>
+
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-24">
+            <div
+              className="shrink-0 cursor-pointer pt-2"
+              onClick={() => handleNavClick("#home")}
+            >
+              <a href="/">
+                <img
+                  src="/assets/logo/SN_BB_Logo_HD.png"
+                  alt="Inazuma Eleven Go Galaxy FR"
+                  className="h-[70px] w-auto object-contain"
+                />
+              </a>
+            </div>
+
+            <div className="hidden md:flex items-center space-x-6">
+              {navLinks.map((link) => (
+                <NavGameButton
+                  key={link.name}
+                  item={link}
+                  isActive={currentPath === link.href}
+                  onClick={() => handleNavClick(link.href)}
+                />
+              ))}
+            </div>
+
+            <div className="md:hidden">
+              <Sheet open={isOpen} onOpenChange={setIsOpen}>
+                <SheetTrigger asChild>
+                  <Button variant="ghost" size="icon" className="text-white">
+                    <Menu className="h-8 w-8" />
+                  </Button>
+                </SheetTrigger>
+                <SheetContent
+                  side="right"
+                  className="bg-slate-950 border-l border-white/10 text-white w-[300px]"
+                >
+                  <div className="flex flex-col items-center space-y-6 mt-10">
+                    {navLinks.map((link) => (
+                      <NavGameButton
+                        key={link.name}
+                        item={link}
+                        isActive={currentPath === link.href}
+                        onClick={() => handleNavClick(link.href)}
+                      />
+                    ))}
+                  </div>
+                </SheetContent>
+              </Sheet>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </div>
   );
-}
+};
+
+export default Navbar;

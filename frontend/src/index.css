@@ -4,7 +4,7 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
-  --radius-sm: calc(var(--radius) - 4px);
+  --font-sans: "M PLUS Rounded 1c", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";  --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
@@ -116,5 +116,16 @@
   }
   body {
     @apply bg-background text-foreground;
+    font-family: var(--font-sans);
+    
+    @apply font-medium tracking-tight; 
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-extrabold tracking-tighter;
+  }
+
+  b, strong {
+    @apply font-extrabold text-white;
   }
 }
