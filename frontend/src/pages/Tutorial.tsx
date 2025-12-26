@@ -108,8 +108,8 @@ export default function Tutorial() {
                 <p>
                   Sinon, afin d'éviter tout conflit,{" "}
                   <strong>
-                    désinstallez le patch et supprimez la ROM actuellement
-                    installée
+                    supprimez le patch ou désinstallez la ROM pré-patchée
+                    actuellement installée
                   </strong>{" "}
                   avant de continuer.
                 </p>
@@ -201,7 +201,7 @@ export default function Tutorial() {
                   asChild
                 >
                   <a
-                    href="https://3ds.hacks.guide/fr_FR/"
+                    href="https://3ds.hacks.guide"
                     target="_blank"
                     rel="noreferrer"
                   >
@@ -214,7 +214,7 @@ export default function Tutorial() {
                   asChild
                 >
                   <a
-                    href="https://youtu.be/DHQ0TBd5-tg?si=LW0vTUP7BzuBmuBv"
+                    href="https://www.youtube.com/watch?v=A9f1izV-QVk"
                     target="_blank"
                     rel="noreferrer"
                   >
