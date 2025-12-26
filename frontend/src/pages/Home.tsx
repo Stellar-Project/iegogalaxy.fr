@@ -1,10 +1,10 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { HeroSection } from "@/components/hero-section";
-import { AboutSection } from "@/components/about-section";
-import { ScreenshotCarousel } from "@/components/screenshot-carousel";
-import { ImageModal } from "@/components/image-modal";
+import { HeroSection } from "@/components/HeroSection";
+import { AboutSection } from "@/components/AboutSection";
+import { ScreenshotCarousel } from "@/components/ScreenshotCarousel";
+import { ImageModal } from "@/components/ImageModal";
 
 export default function Home() {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
