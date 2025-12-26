@@ -102,10 +102,6 @@ export default function Footer() {
                 </li>
                 <li>Ce projet est un fan-made à but non lucratif.</li>
                 <li>
-                  Merci d'acheter le jeu original pour soutenir les
-                  développeurs.
-                </li>
-                <li>
                   <Button
                     variant="link"
                     className="p-0 h-auto text-slate-500 hover:text-white underline decoration-slate-700 underline-offset-4"
