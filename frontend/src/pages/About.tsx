@@ -8,8 +8,15 @@ import {
   Heart,
   Rocket,
   Palette,
-  Wrench,
   Star,
+  Globe,
+  Gamepad2,
+  Code,
+  Github,
+  Twitter,
+  Youtube,
+  Instagram,
+  Wrench,
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -45,19 +52,24 @@ const members: TeamMember[] = [
 
 const timelineEvents = [
   {
-    year: "2023",
+    year: "Janvier 2024",
     title: "Lancement du Projet",
     desc: "Début de l'aventure et analyse des fichiers du jeu.",
   },
   {
-    year: "2024",
-    title: "Alpha Fermée",
-    desc: "Premiers tests de traduction des menus et des techniques.",
+    year: "Juin 2024",
+    title: "Première version du patch",
+    desc: "Sortie de la première version jouable pour tous.",
   },
   {
-    year: "2025",
-    title: "Patch Public",
-    desc: "Sortie de la première version jouable pour tous.",
+    year: "Septembre 2024",
+    title: "Pause du Projet",
+    desc: "Mise en pause du projet du a des raisons personnelles.",
+  },
+  {
+    year: "Decembre 2025",
+    title: "Reprise du Projet",
+    desc: "Reprise du projet suite à la pause.",
   },
 ];
 
@@ -67,22 +79,55 @@ const creditsData = [
     icon: Palette,
     color: "text-pink-400",
     items: [
-      { name: "Rinzler", task: "Création du site internet" },
-      { name: "Level-10 Team", task: "Partage de leur Logo" },
-      { name: "gwen9p1", task: "Assets du jeu refait pour le site" },
+      {
+        name: "Rinzler",
+        task: "Création du site internet",
+        links: [
+          { icon: Github, url: "https://github.com/" },
+          { icon: Code, url: "https://mon-portfolio.com" },
+        ],
+      },
+      {
+        name: "Level-10 Team",
+        task: "Partage de leur Logo",
+        links: [
+          { icon: Globe, url: "https://iegogalaxyeng.netlify.app/" },
+          { icon: Twitter, url: "https://twitter.com/" },
+        ],
+      },
+      {
+        name: "gwen9p1",
+        task: "Assets du jeu refait pour le site",
+        links: [
+          { icon: Twitter, url: "https://twitter.com/" },
+          { icon: Instagram, url: "https://instagram.com/" },
+        ],
+      },
     ],
   },
   {
-    category: "Outils & Technique",
+    category: "Anciens Traducteurs",
     icon: Wrench,
     color: "text-blue-400",
     items: [
-      { name: "IcySon55", task: "Créateur de Kuriimu (Outil de modding)" },
       {
-        name: "FanTranslators Inc.",
-        task: "Documentation sur le format Level-5",
+        name: "Kotei Project",
+        task: "Base technique, icônes et objets",
+        links: [
+          { icon: Globe, url: "https://site-kotei.com" },
+          { icon: Twitter, url: "https://twitter.com/kotei" },
+        ],
       },
-      { name: "OpenAI", task: "Assistance au développement web" },
+      {
+        name: "Umanse",
+        task: "Traduction du mode histoire",
+        links: [{ icon: Youtube, url: "https://youtube.com/umanse" }],
+      },
+      {
+        name: "MrFox4",
+        task: "Techniques spéciales et totems",
+        links: [{ icon: Github, url: "https://github.com/mrfox4" }],
+      },
     ],
   },
   {
@@ -90,9 +135,19 @@ const creditsData = [
     icon: Heart,
     color: "text-red-400",
     items: [
-      { name: "Level-5", task: "Pour avoir créé cette licence incroyable" },
-      { name: "La Communauté", task: "Pour votre soutien indéfectible" },
-      { name: "Les anciens traducteurs", task: "Pour votre motivation d'avoir commencé cette traduction" },
+      {
+        name: "Level-5",
+        task: "Pour avoir créé cette licence incroyable",
+        links: [
+          { icon: Gamepad2, url: "https://www.level5.co.jp/en/" },
+          { icon: Youtube, url: "https://youtube.com/level5" },
+        ],
+      },
+      {
+        name: "La Communauté",
+        task: "Pour votre soutien indéfectible",
+        links: [{ icon: Users, url: "https://discord.com" }],
+      },
     ],
   },
 ];
@@ -239,11 +294,39 @@ export default function About() {
                   <CardContent>
                     <ul className="space-y-4">
                       {section.items.map((item, i) => (
-                        <li key={i} className="text-sm">
-                          <div className="font-bold text-slate-200">
-                            {item.name}
+                        <li
+                          key={i}
+                          className="flex items-center justify-between gap-2 p-2 rounded-lg hover:bg-white/5 transition-colors group"
+                        >
+                          <div className="text-sm">
+                            <div className="font-bold text-slate-200">
+                              {item.name}
+                            </div>
+                            <div className="text-slate-500 text-xs">
+                              {item.task}
+                            </div>
                           </div>
-                          <div className="text-slate-500">{item.task}</div>
+
+                          <div className="flex gap-1 shrink-0">
+                            {item.links &&
+                              item.links.map((link, linkIndex) => (
+                                <Button
+                                  key={linkIndex}
+                                  size="icon"
+                                  variant="ghost"
+                                  className="h-8 w-8 text-slate-400 hover:text-white hover:bg-white/10 transition-colors"
+                                  asChild
+                                >
+                                  <a
+                                    href={link.url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                  >
+                                    <link.icon size={16} />
+                                  </a>
+                                </Button>
+                              ))}
+                          </div>
                         </li>
                       ))}
                     </ul>
