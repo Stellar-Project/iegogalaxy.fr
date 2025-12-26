@@ -4,14 +4,13 @@ import {
   ChevronRight,
   Users,
   Clock,
-  HelpCircle,
+  // HelpCircle,
   Heart,
   Rocket,
   Palette,
   Star,
   Globe,
   Gamepad2,
-  Code,
   Github,
   Twitter,
   Youtube,
@@ -21,12 +20,12 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
+// import {
+//   Accordion,
+//   AccordionContent,
+//   AccordionItem,
+//   AccordionTrigger,
+// } from "@/components/ui/accordion";
 import {
   DiscordMemberCard,
   type TeamMember,
@@ -83,8 +82,8 @@ const creditsData = [
         name: "Rinzler",
         task: "Création du site internet",
         links: [
-          { icon: Github, url: "https://github.com/" },
-          { icon: Code, url: "https://mon-portfolio.com" },
+          { icon: Github, url: "https://github.com/TheRinzler65" },
+          { icon: Twitter, url: "https://x.com/TheRinzlerr" },
         ],
       },
       {
@@ -92,15 +91,15 @@ const creditsData = [
         task: "Partage de leur Logo",
         links: [
           { icon: Globe, url: "https://iegogalaxyeng.netlify.app/" },
-          { icon: Twitter, url: "https://twitter.com/" },
+          { icon: Twitter, url: "https://x.com/IegogEng" },
         ],
       },
       {
         name: "gwen9p1",
         task: "Assets du jeu refait pour le site",
         links: [
-          { icon: Twitter, url: "https://twitter.com/" },
-          { icon: Instagram, url: "https://instagram.com/" },
+          { icon: Instagram, url: "https://www.instagram.com/gwen9p1/" },
+          { icon: Twitter, url: "https://x.com/Gwen9p1/" },
         ],
       },
     ],
@@ -114,19 +113,14 @@ const creditsData = [
         name: "Kotei Project",
         task: "Base technique, icônes et objets",
         links: [
-          { icon: Globe, url: "https://site-kotei.com" },
-          { icon: Twitter, url: "https://twitter.com/kotei" },
+          { icon: Globe, url: "https://koteiproject.home.blog/" },
+          { icon: Twitter, url: "https://x.com/KoteiProject" },
         ],
-      },
-      {
-        name: "Umanse",
-        task: "Traduction du mode histoire",
-        links: [{ icon: Youtube, url: "https://youtube.com/umanse" }],
       },
       {
         name: "MrFox4",
         task: "Techniques spéciales et totems",
-        links: [{ icon: Github, url: "https://github.com/mrfox4" }],
+        links: [{ icon: Youtube, url: "https://www.youtube.com/@MyMrfox4" }],
       },
     ],
   },
@@ -140,7 +134,7 @@ const creditsData = [
         task: "Pour avoir créé cette licence incroyable",
         links: [
           { icon: Gamepad2, url: "https://www.level5.co.jp/en/" },
-          { icon: Youtube, url: "https://youtube.com/level5" },
+          { icon: Youtube, url: "https://www.youtube.com/@LEVEL5ch" },
         ],
       },
       {
@@ -211,7 +205,7 @@ export default function About() {
                 <div className="space-y-2">
                   <h3 className="text-4xl font-bold text-white">15k+</h3>
                   <p className="text-slate-400 uppercase tracking-wider text-xs font-semibold">
-                    Fichiers modifiés
+                    Lignes de texte traduites
                   </p>
                 </div>
               </div>
@@ -337,7 +331,7 @@ export default function About() {
           </div>
         </div>
 
-        <div className="max-w-3xl mx-auto space-y-6">
+        {/* <div className="max-w-3xl mx-auto space-y-6">
           <div className="flex items-center gap-3 justify-center mb-6">
             <HelpCircle className="text-green-400 h-6 w-6" />
             <h2 className="text-2xl font-bold text-white">FAQ Rapide</h2>
@@ -378,7 +372,7 @@ export default function About() {
               </AccordionContent>
             </AccordionItem>
           </Accordion>
-        </div>
+        </div> */}
 
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -400,7 +394,7 @@ export default function About() {
             size="lg"
             className="bg-[#5865F2] hover:bg-[#4752C4] text-white font-semibold shadow-lg rounded-full px-8 h-12 text-base transition-all hover:scale-105"
           >
-            Rejoindre le Discord
+            <a href="https://discord.gg/mtJ2EzxMkt">Rejoindre le Discord</a>
           </Button>
         </motion.div>
       </div>
