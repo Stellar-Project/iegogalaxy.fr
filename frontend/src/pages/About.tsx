@@ -140,7 +140,7 @@ const creditsData = [
       {
         name: "La Communauté",
         task: "Pour votre soutien indéfectible",
-        links: [{ icon: Users, url: "https://discord.com" }],
+        links: [{ icon: Users, url: "" }],
       },
     ],
   },
