@@ -84,18 +84,19 @@ export const Navbar = () => {
     <div className="w-full z-50 flex flex-col">
       <div className="bg-black text-white h-10 flex items-center justify-between px-4 sm:px-6 lg:px-8 text-sm border-b border-white/10 relative z-30">
         <div className="shrink-0">
-          <img
+          <span className="text-white font-semibold">Stellar-Project</span>
+          {/* <img
             src="/assets/team_logo.png"
             alt="Team Logo"
             className="h-8 w-auto object-contain"
-          />
+          /> */}
         </div>
         <div className="flex items-center gap-4">
           <a
             href="https://x.com/INEGGSNBBFR"
             target="_blank"
             rel="noreferrer"
-            className="hover:text-blue-400"
+            className="hover:text-blue-400 text-gray-400"
           >
             <Twitter size={18} />
           </a>
