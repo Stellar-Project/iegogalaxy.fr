@@ -166,7 +166,8 @@ export default function Tutorial() {
                       Supprimez le dossier <b>RomFS</b> (le patch).
                     </li>
                     <li>
-                      Si vous avez une ancienne ROM, veuillez la supprimer.
+                      Si vous avez une ancienne ROM <strong>pré-patchée</strong>
+                      , veuillez la supprimer.
                     </li>
                   </ol>
                 </CardContent>
