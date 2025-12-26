@@ -1,6 +1,7 @@
-import { Github, Twitter, Youtube, Heart } from "lucide-react";
+import { Github, Twitter, Youtube, Heart, Code2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { Badge } from "@/components/ui/badge";
 
 interface SocialLink {
   icon: React.ElementType;
@@ -57,7 +58,7 @@ export default function Footer() {
               <img
                 src="/assets/logo/SN_BB_Logo_HD.png"
                 alt="Inazuma Eleven Go Galaxy"
-                className="h-@* w-auto object-contain opacity-90"
+                className="h-24 w-auto object-contain opacity-90"
               />
               <p className="leading-relaxed text-slate-500">
                 Le patch de traduction française complet pour Inazuma Eleven GO
@@ -156,16 +157,43 @@ export default function Footer() {
             </div>
           </div>
 
-          <div className="mt-12 pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4">
+          <div className="mt-12 pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4 text-xs md:text-sm">
             <p>© {currentYear} Stellar Project. Tous droits réservés.</p>
 
-            <div className="flex items-center gap-2 text-slate-500 h-3">
-              <span>Fait avec</span>
-              <Heart
-                size={14}
-                className="text-red-500 fill-red-500 animate-pulse"
-              />
-              <span>par la communauté.</span>
+            <div className="flex flex-col md:flex-row items-center gap-2 md:gap-6">
+              <div className="flex items-center gap-2 text-slate-500">
+                <span>Fait avec</span>
+                <Heart
+                  size={14}
+                  className="text-red-500 fill-red-500 animate-pulse"
+                />
+                <span>par la communauté.</span>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <Code2 size={14} className="text-blue-400" />
+                <span className="text-slate-500">Propulsé par</span>
+                <div className="flex gap-2">
+                  <Badge
+                    variant="outline"
+                    className="border-white/10 text-slate-400 bg-white/5 hover:bg-white/10 text-[10px]"
+                  >
+                    React
+                  </Badge>
+                  <Badge
+                    variant="outline"
+                    className="border-white/10 text-slate-400 bg-white/5 hover:bg-white/10 text-[10px]"
+                  >
+                    Tailwind
+                  </Badge>
+                  <Badge
+                    variant="outline"
+                    className="border-white/10 text-slate-400 bg-white/5 hover:bg-white/10 text-[10px]"
+                  >
+                    Vite
+                  </Badge>
+                </div>
+              </div>
             </div>
           </div>
         </div>
