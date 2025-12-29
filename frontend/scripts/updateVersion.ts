@@ -34,4 +34,4 @@ if (!found) {
 
 fs.writeFileSync(envPath, newLines.join("\n"));
 
-console.log(`✅ Updated .env with version: ${gitTag}`);
+console.log(`Updated .env with version: ${gitTag}`);
