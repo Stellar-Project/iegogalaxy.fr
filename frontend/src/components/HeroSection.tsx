@@ -2,19 +2,21 @@ import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Download, Info } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { HERO_BACKGROUNDS } from "@/lib/constants";
+import { useHeroBackgrounds } from "@/api/useData";
 
 export function HeroSection() {
+  const { data: backgrounds } = useHeroBackgrounds();
   const [currentBgIndex, setCurrentBgIndex] = useState(0);
 
   useEffect(() => {
+    if (backgrounds.length === 0) return;
     const interval = setInterval(() => {
       setCurrentBgIndex(
-        (prevIndex) => (prevIndex + 1) % HERO_BACKGROUNDS.length
+        (prevIndex) => (prevIndex + 1) % backgrounds.length
       );
     }, 4000);
     return () => clearInterval(interval);
-  }, []);
+  }, [backgrounds.length]);
 
   return (
     <section className="relative z-10 min-h-[calc(100vh-140px)] flex flex-col items-center justify-center px-4 py-20 overflow-hidden">
@@ -28,7 +30,7 @@ export function HeroSection() {
             transition={{ duration: 1.5, ease: "easeInOut" }}
             className="absolute inset-0 bg-cover bg-center"
             style={{
-              backgroundImage: `url("${HERO_BACKGROUNDS[currentBgIndex]}")`,
+              backgroundImage: `url("${backgrounds[currentBgIndex]?.imageUrl || ""}")`,
             }}
           />
         </AnimatePresence>

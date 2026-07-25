@@ -4,18 +4,24 @@ import { Badge } from "@/components/ui/badge";
 import { GameCard } from "@/components/GameCard";
 import { HistoryTimeline } from "@/components/HistoryTimeline";
 import { CurrentChangelog } from "@/components/CurrentChangelog";
+import { useConfig, usePatches } from "@/api/useData";
 
 export default function Download() {
-  const version = import.meta.env.VITE_PATCH_VERSION || "?";
-  const releaseDate = import.meta.env.VITE_PATCH_DATE || "?";
-  const patchSize = import.meta.env.VITE_PATCH_SIZE || "?";
-  // const romSize = import.meta.env.VITE_ROM_SIZE || "?";
+  const { data: config } = useConfig();
+  const { data: patches } = usePatches();
 
-  const supernovaPatch = import.meta.env.VITE_SUPERNOVA_PATCH_LINK || "#";
-  const bigbangPatch = import.meta.env.VITE_BIGBANG_PATCH_LINK || "#";
-
-  // const supernovaRom = import.meta.env.VITE_SUPERNOVA_ROM_LINK || "#";
-  // const bigbangRom = import.meta.env.VITE_BIGBANG_ROM_LINK || "#";
+  const latest = patches.find((p) => p.isLatest);
+  const version = latest?.version || config.patchVersion || "?";
+  const releaseDate = latest?.date || config.patchDate || "?";
+  const patchSize = latest?.size || config.patchSize || "?";
+  const supernovaPatch = latest?.supernovaLink || config.supernovaLink || "#";
+  const bigbangPatch = latest?.bigbangLink || config.bigbangLink || "#";
+  const supernovaRom = config.supernovaRomLink || "#";
+  const bigbangRom = config.bigbangRomLink || "#";
+  const supernovaRomSize = config.supernovaRomSize || "?";
+  const bigbangRomSize = config.bigbangRomSize || "?";
+  const showPatch = config.showPatch !== false;
+  const showRom = config.showRom === true;
 
   return (
     <div className="relative min-h-screen flex flex-col items-center justify-center text-slate-200 bg-slate-950 overflow-hidden px-4 py-20">
@@ -79,8 +85,10 @@ export default function Download() {
               color="yellow"
               patchLink={supernovaPatch}
               patchSize={patchSize}
-              // romLink={supernovaRom}
-              // romSize={romSize}
+              romLink={supernovaRom}
+              romSize={supernovaRomSize}
+              showPatch={showPatch}
+              showRom={showRom}
               delay={0}
             />
             <GameCard
@@ -89,8 +97,10 @@ export default function Download() {
               color="blue"
               patchLink={bigbangPatch}
               patchSize={patchSize}
-              // romLink={bigbangRom}
-              // romSize={romSize}
+              romLink={bigbangRom}
+              romSize={bigbangRomSize}
+              showPatch={showPatch}
+              showRom={showRom}
               delay={0.2}
             />
           </div>

@@ -1,9 +1,10 @@
 import { motion } from "framer-motion";
 import { Sparkles, CheckCircle2, AlertCircle } from "lucide-react";
-import { PATCH_HISTORY } from "@/lib/patch-data";
+import { usePatches } from "@/api/useData";
 
 export function CurrentChangelog() {
-  const currentPatch = PATCH_HISTORY[0];
+  const { data: patches } = usePatches();
+  const currentPatch = patches.find((p) => p.isLatest) || patches[0];
 
   if (!currentPatch) return null;
 

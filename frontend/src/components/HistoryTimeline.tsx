@@ -1,32 +1,23 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  History,
-  GitCommit,
-  Calendar,
-  HardDrive,
-  Archive,
-  ArrowDownCircle,
-  ChevronDown,
-  CheckCircle2,
+  History, GitCommit, Calendar, HardDrive, Archive, ArrowDownCircle,
+  ChevronDown, CheckCircle2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { PATCH_HISTORY } from "@/lib/patch-data";
+import { usePatches } from "@/api/useData";
 
 export function HistoryTimeline() {
+  const { data: patches } = usePatches();
   const [openHistoryId, setOpenHistoryId] = useState<string | null>(null);
 
-  const pastHistory = PATCH_HISTORY.slice(2);
+  const pastHistory = patches.slice(1);
 
   const toggleHistory = (ver: string) => {
     setOpenHistoryId(openHistoryId === ver ? null : ver);
   };
 
   if (pastHistory.length === 0) return null;
-
-  // Si on afficher l'historique seulement s'il y a des entrées
-  // if (PATCH_HISTORY.length === 0) return null;
-  // Ne pas oublier de retirer le slice plus haut et le map en dessous
 
   return (
     <motion.div
@@ -51,7 +42,7 @@ export function HistoryTimeline() {
         {pastHistory.map((item, index) => {
           const isOpen = openHistoryId === item.version;
           return (
-            <div key={index} className="relative pl-12">
+            <div key={item.version || index} className="relative pl-12">
               <div className="absolute left-0 top-2 h-[38px] w-[38px] rounded-full border-4 border-slate-950 bg-slate-800 text-slate-400 flex items-center justify-center z-20">
                 <GitCommit size={18} />
               </div>
@@ -80,7 +71,7 @@ export function HistoryTimeline() {
                       size="sm"
                       className="bg-yellow-950/30 text-yellow-500/80 border border-yellow-900/50 hover:bg-yellow-900/50 hover:text-yellow-400 hover:border-yellow-500 transition-all duration-300 font-semibold"
                     >
-                      <a href={item.links.supernova}>
+                      <a href={item.supernovaLink || "#"}>
                         <Archive size={16} className="mr-2" /> Supernova
                       </a>
                     </Button>
@@ -89,7 +80,7 @@ export function HistoryTimeline() {
                       size="sm"
                       className="bg-blue-950/30 text-blue-500/80 border border-blue-900/50 hover:bg-blue-900/50 hover:text-blue-400 hover:border-blue-500 transition-all duration-300 font-semibold"
                     >
-                      <a href={item.links.bigbang}>
+                      <a href={item.bigbangLink || "#"}>
                         <Archive size={16} className="mr-2" /> Big Bang
                       </a>
                     </Button>

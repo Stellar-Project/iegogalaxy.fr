@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight, ZoomIn } from "lucide-react";
-import { SCREENSHOTS } from "@/lib/constants";
+import { useScreenshots } from "@/api/useData";
 
 const slideVariants = {
   enter: (direction: number) => ({
@@ -30,8 +30,9 @@ interface ScreenshotCarouselProps {
 }
 
 export function ScreenshotCarousel({ onSelect }: ScreenshotCarouselProps) {
+  const { data: screenshots } = useScreenshots();
   const [[page, direction], setPage] = useState([0, 0]);
-  const imageIndex = Math.abs(page % SCREENSHOTS.length);
+  const imageIndex = screenshots.length > 0 ? Math.abs(page % screenshots.length) : 0;
 
   const paginate = useCallback(
     (newDirection: number) => {
@@ -58,7 +59,7 @@ export function ScreenshotCarousel({ onSelect }: ScreenshotCarouselProps) {
           <AnimatePresence initial={false} custom={direction}>
             <motion.img
               key={page}
-              src={SCREENSHOTS[imageIndex]}
+              src={screenshots[imageIndex]?.imageUrl}
               custom={direction}
               variants={slideVariants}
               initial="enter"
@@ -80,7 +81,7 @@ export function ScreenshotCarousel({ onSelect }: ScreenshotCarouselProps) {
                   paginate(-1);
                 }
               }}
-              onClick={() => onSelect(SCREENSHOTS[imageIndex])}
+              onClick={() => screenshots[imageIndex] && onSelect(screenshots[imageIndex].imageUrl)}
               className="absolute inset-0 w-full h-full object-contain cursor-grab active:cursor-grabbing"
               alt="Gameplay Screenshot"
             />
@@ -102,7 +103,7 @@ export function ScreenshotCarousel({ onSelect }: ScreenshotCarouselProps) {
           </div>
 
           <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-2 z-10">
-            {SCREENSHOTS.map((_, idx) => (
+            {screenshots.map((_, idx) => (
               <div
                 key={idx}
                 className={`h-1.5 rounded-full transition-all duration-300 ${

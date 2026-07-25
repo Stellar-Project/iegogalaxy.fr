@@ -1,0 +1,163 @@
+import { useEffect, useState } from "react";
+import { api } from "@/api/client";
+import type { AnalyticsStats } from "@/api/types";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Download, Users, BookOpen, Image, Newspaper, Database, BarChart3, Eye, TrendingUp } from "lucide-react";
+
+export default function Dashboard() {
+  const [counts, setCounts] = useState({ patches: 0, team: 0, wiki: 0, screenshots: 0, blog: 0 });
+  const [analytics, setAnalytics] = useState<AnalyticsStats | null>(null);
+
+  useEffect(() => {
+    Promise.all([
+      api.getPatches().then((r) => setCounts((s) => ({ ...s, patches: r.length }))).catch(() => {}),
+      api.getTeam().then((r) => setCounts((s) => ({ ...s, team: r.length }))).catch(() => {}),
+      api.getWikiTools().then((r) => setCounts((s) => ({ ...s, wiki: r.length }))).catch(() => {}),
+      api.getScreenshots().then((r) => setCounts((s) => ({ ...s, screenshots: r.length }))).catch(() => {}),
+      api.getPosts(true).then((r) => setCounts((s) => ({ ...s, blog: r.length }))).catch(() => {}),
+      api.getAnalytics().then(setAnalytics).catch(() => {}),
+    ]);
+  }, []);
+
+  const items = [
+    { label: "Patches", value: counts.patches, icon: Download, color: "text-yellow-400 bg-yellow-400/10" },
+    { label: "Membres", value: counts.team, icon: Users, color: "text-blue-400 bg-blue-400/10" },
+    { label: "Wiki Pages", value: counts.wiki, icon: BookOpen, color: "text-green-400 bg-green-400/10" },
+    { label: "Screenshots", value: counts.screenshots, icon: Image, color: "text-purple-400 bg-purple-400/10" },
+    { label: "Actualités", value: counts.blog, icon: Newspaper, color: "text-orange-400 bg-orange-400/10" },
+  ];
+
+  const [exporting, setExporting] = useState(false);
+
+  const doExport = async () => {
+    setExporting(true);
+    try {
+      const data = await api.exportData();
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url; a.download = `iegogalaxy-export-${new Date().toISOString().slice(0, 10)}.json`; a.click();
+      URL.revokeObjectURL(url);
+    } catch { alert("Export échoué"); }
+    setExporting(false);
+  };
+
+  const maxDayCount = Math.max(...(analytics?.viewsByDay.map((d) => d.count) || [1]), 1);
+
+  return (
+    <div className="space-y-6">
+      <h2 className="text-2xl font-bold text-white">Dashboard</h2>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+        {items.map((item) => (
+          <Card key={item.label} className="bg-slate-900 border-white/10">
+            <CardHeader className="flex flex-row items-center gap-3 pb-2">
+              <div className={`p-2 rounded-lg ${item.color}`}>
+                <item.icon size={20} />
+              </div>
+              <CardTitle className="text-sm text-slate-400">{item.label}</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-3xl font-bold text-white">{item.value}</p>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+
+      {analytics && (
+        <div className="grid md:grid-cols-3 gap-4">
+          <Card className="bg-slate-900 border-white/10">
+            <CardHeader className="flex flex-row items-center gap-3 pb-2">
+              <div className="p-2 rounded-lg bg-blue-400/10"><Eye size={20} className="text-blue-400" /></div>
+              <CardTitle className="text-sm text-slate-400">Vues aujourd'hui</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-3xl font-bold text-white">{analytics.todayViews}</p>
+            </CardContent>
+          </Card>
+          <Card className="bg-slate-900 border-white/10">
+            <CardHeader className="flex flex-row items-center gap-3 pb-2">
+              <div className="p-2 rounded-lg bg-green-400/10"><TrendingUp size={20} className="text-green-400" /></div>
+              <CardTitle className="text-sm text-slate-400">Vues totales</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-3xl font-bold text-white">{analytics.totalViews}</p>
+            </CardContent>
+          </Card>
+          <Card className="bg-slate-900 border-white/10">
+            <CardHeader className="flex flex-row items-center gap-3 pb-2">
+              <div className="p-2 rounded-lg bg-purple-400/10"><BarChart3 size={20} className="text-purple-400" /></div>
+              <CardTitle className="text-sm text-slate-400">Pages suivies</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-3xl font-bold text-white">{analytics.viewsByPage.length}</p>
+            </CardContent>
+          </Card>
+        </div>
+      )}
+
+      {analytics && analytics.viewsByDay.length > 0 && (
+        <Card className="bg-slate-900 border-white/10">
+          <CardHeader>
+            <CardTitle className="text-lg text-white">Vues 30 derniers jours</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-1">
+              {analytics.viewsByDay.map((d) => (
+                <div key={d.date} className="flex items-center gap-3 text-sm">
+                  <span className="text-slate-400 w-24 shrink-0 text-xs">{d.date.slice(5)}</span>
+                  <div className="flex-1 bg-slate-800 rounded h-5 overflow-hidden">
+                    <div className="bg-blue-600 h-full rounded transition-all" style={{ width: `${(d.count / maxDayCount) * 100}%` }} />
+                  </div>
+                  <span className="text-slate-300 w-8 text-right text-xs">{d.count}</span>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {analytics && analytics.viewsByPage.length > 0 && (
+        <Card className="bg-slate-900 border-white/10">
+          <CardHeader>
+            <CardTitle className="text-lg text-white">Pages les plus vues</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-2">
+              {analytics.viewsByPage.map((p) => (
+                <div key={p.path} className="flex items-center justify-between text-sm">
+                  <span className="text-slate-300 truncate">{p.path || "/"}</span>
+                  <span className="text-slate-500 shrink-0 ml-4">{p._count} vues</span>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      <div className="grid md:grid-cols-2 gap-4">
+        <Card className="bg-slate-900 border-white/10">
+          <CardContent className="p-4 flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <Database size={20} className="text-green-400" />
+              <span className="text-sm text-slate-300">Exporter toutes les données (JSON)</span>
+            </div>
+            <Button size="sm" onClick={doExport} disabled={exporting} className="bg-green-600 hover:bg-green-500">
+              {exporting ? "Export..." : "Exporter"}
+            </Button>
+          </CardContent>
+        </Card>
+        <Card className="bg-slate-900 border-white/10">
+          <CardContent className="p-4 flex items-center gap-3">
+            <BarChart3 size={20} className="text-blue-400" />
+            <div>
+              <p className="text-sm text-slate-300">Tracking visiteur actif</p>
+              <p className="text-xs text-slate-500">Pages trackées automatiquement (hors admin)</p>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  );
+}

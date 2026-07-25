@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import {
   Download as DownloadIcon,
-  HardDrive /* Gamepad2 */,
+  HardDrive, Gamepad2,
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -13,8 +13,10 @@ interface GameCardProps {
   color: "yellow" | "blue";
   patchLink: string;
   patchSize: string;
-  // romLink: string;
-  // romSize: string;
+  romLink: string;
+  romSize: string;
+  showPatch?: boolean;
+  showRom?: boolean;
   delay?: number;
 }
 
@@ -24,8 +26,10 @@ export function GameCard({
   color,
   patchLink,
   patchSize,
-  // romLink,
-  // romSize,
+  romLink,
+  romSize,
+  showPatch = true,
+  showRom = false,
   delay = 0,
 }: GameCardProps) {
   const isYellow = color === "yellow";
@@ -79,39 +83,47 @@ export function GameCard({
           </div>
 
           <div className="w-full space-y-3">
-            <Button
-              asChild
-              className={`w-full ${btnColorClass} text-white font-bold h-12 text-lg shadow-lg transition-all`}
-            >
-              <a href={patchLink} download>
-                <DownloadIcon className="mr-2 h-5 w-5" />
-                Télécharger Patch
-              </a>
-            </Button>
+            {showPatch && (
+              <Button
+                asChild
+                className={`w-full ${btnColorClass} text-white font-bold h-12 text-lg shadow-lg transition-all`}
+              >
+                <a href={patchLink} download>
+                  <DownloadIcon className="mr-2 h-5 w-5" />
+                  Télécharger Patch
+                </a>
+              </Button>
+            )}
 
-            {/* <Button
-              asChild
-              variant="secondary"
-              className="w-full bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold h-10 border border-white/10"
-            >
-              <a href={romLink} download>
-                <Gamepad2 className="mr-2 h-4 w-4" />
-                Télécharger ROM
-              </a>
-            </Button> */}
+            {showRom && (
+              <Button
+                asChild
+                variant="secondary"
+                className="w-full bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold h-10 border border-white/10"
+              >
+                <a href={romLink} download>
+                  <Gamepad2 className="mr-2 h-4 w-4" />
+                  Télécharger ROM
+                </a>
+              </Button>
+            )}
 
-            <Separator className="bg-white/10 my-2" />
+            {showPatch && showRom && <Separator className="bg-white/10 my-2" />}
 
             <div className="flex items-center justify-center gap-4 text-xs text-slate-500 uppercase tracking-wider font-medium">
-              <div className="flex items-center gap-1.5">
-                <HardDrive size={12} className={iconColorClass} />
-                Patch : {patchSize}
-              </div>
-              <div className="w-px bg-slate-700 h-3" />
-              {/* <div className="flex items-center gap-1.5">
-                <HardDrive size={12} className="text-slate-400" />
-                ROM : {romSize}
-              </div> */}
+              {showPatch && (
+                <div className="flex items-center gap-1.5">
+                  <HardDrive size={12} className={iconColorClass} />
+                  Patch : {patchSize}
+                </div>
+              )}
+              {showPatch && showRom && <div className="w-px bg-slate-700 h-3" />}
+              {showRom && (
+                <div className="flex items-center gap-1.5">
+                  <HardDrive size={12} className="text-slate-400" />
+                  ROM : {romSize}
+                </div>
+              )}
             </div>
           </div>
         </CardContent>
