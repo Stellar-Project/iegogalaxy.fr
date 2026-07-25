@@ -1,34 +1,17 @@
 import { FastifyRequest, FastifyReply } from "fastify";
-import jwt from "jsonwebtoken";
-
-const JWT_SECRET = process.env.JWT_SECRET || "dev-secret";
-
-export interface JwtPayload {
-  id: string;
-  email: string;
-}
+import { auth } from "../lib/auth.js";
 
 declare module "fastify" {
   interface FastifyRequest {
-    user?: JwtPayload;
+    user?: { id: string; email: string; name: string; role?: string | null };
   }
 }
 
-export function signToken(payload: JwtPayload): string {
-  return jwt.sign(payload, JWT_SECRET, { expiresIn: "7d" });
-}
-
-export async function authenticate(request: FastifyRequest, reply: FastifyReply) {
-  const header = request.headers.authorization;
-  if (!header || !header.startsWith("Bearer ")) {
-    reply.status(401).send({ error: "Missing or invalid token" });
+export async function requireAdmin(request: FastifyRequest, reply: FastifyReply) {
+  const session = await auth.api.getSession({ headers: request.headers as Record<string, string> });
+  if (!session) {
+    reply.status(401).send({ error: "Non autorisé" });
     return;
   }
-  try {
-    const token = header.split(" ")[1];
-    const decoded = jwt.verify(token, JWT_SECRET) as JwtPayload;
-    request.user = decoded;
-  } catch {
-    reply.status(401).send({ error: "Invalid token" });
-  }
+  request.user = { id: session.user.id, email: session.user.email, name: session.user.name, role: (session.user as any).role };
 }

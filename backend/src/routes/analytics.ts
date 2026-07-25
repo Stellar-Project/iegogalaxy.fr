@@ -1,5 +1,5 @@
 import { FastifyInstance } from "fastify";
-import { authenticate } from "../plugins/auth.js";
+import { requireAdmin } from "../plugins/auth.js";
 import { prisma } from "../lib/prisma.js";
 
 export default async function analyticsRoutes(fastify: FastifyInstance) {
@@ -11,7 +11,7 @@ export default async function analyticsRoutes(fastify: FastifyInstance) {
   });
 
   fastify.get("/api/analytics/stats", async (request, reply) => {
-    await authenticate(request, reply);
+    await requireAdmin(request, reply);
 
     const now = new Date();
     const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());

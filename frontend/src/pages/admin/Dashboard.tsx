@@ -3,7 +3,8 @@ import { api } from "@/api/client";
 import type { AnalyticsStats } from "@/api/types";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Download, Users, BookOpen, Image, Newspaper, Database, BarChart3, Eye, TrendingUp } from "lucide-react";
+import { Download, Users, BookOpen, Image, Newspaper, Database, BarChart3, Eye, TrendingUp, ArrowUpRight } from "lucide-react";
+import { motion } from "framer-motion";
 
 export default function Dashboard() {
   const [counts, setCounts] = useState({ patches: 0, team: 0, wiki: 0, screenshots: 0, blog: 0 });
@@ -47,27 +48,37 @@ export default function Dashboard() {
 
   return (
     <div className="space-y-6">
-      <h2 className="text-2xl font-bold text-white">Dashboard</h2>
+      <div className="relative overflow-hidden rounded-xl bg-gradient-to-br from-slate-900 to-slate-950 border border-white/10 p-6 mb-2">
+        <div className="absolute top-0 right-0 w-64 h-64 opacity-5">
+          <img src="/assets/bg/mainVisual_02.png" alt="" className="w-full h-full object-cover" />
+        </div>
+        <div className="relative z-10">
+          <h2 className="text-2xl font-bold text-white">Dashboard</h2>
+          <p className="text-slate-400 text-sm mt-1">Vue d'ensemble du site Stellar Project</p>
+        </div>
+      </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
-        {items.map((item) => (
-          <Card key={item.label} className="bg-slate-900 border-white/10">
-            <CardHeader className="flex flex-row items-center gap-3 pb-2">
-              <div className={`p-2 rounded-lg ${item.color}`}>
-                <item.icon size={20} />
-              </div>
-              <CardTitle className="text-sm text-slate-400">{item.label}</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-3xl font-bold text-white">{item.value}</p>
-            </CardContent>
-          </Card>
+        {items.map((item, i) => (
+          <motion.div key={item.label} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}>
+            <Card className="bg-slate-900/80 border-white/10 hover:border-white/20 transition-all">
+              <CardHeader className="flex flex-row items-center gap-3 pb-2">
+                <div className={`p-2 rounded-lg ${item.color}`}>
+                  <item.icon size={20} />
+                </div>
+                <CardTitle className="text-sm text-slate-400">{item.label}</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-3xl font-bold text-white">{item.value}</p>
+              </CardContent>
+            </Card>
+          </motion.div>
         ))}
       </div>
 
       {analytics && (
         <div className="grid md:grid-cols-3 gap-4">
-          <Card className="bg-slate-900 border-white/10">
+          <Card className="bg-slate-900/80 border-white/10">
             <CardHeader className="flex flex-row items-center gap-3 pb-2">
               <div className="p-2 rounded-lg bg-blue-400/10"><Eye size={20} className="text-blue-400" /></div>
               <CardTitle className="text-sm text-slate-400">Vues aujourd'hui</CardTitle>
@@ -76,7 +87,7 @@ export default function Dashboard() {
               <p className="text-3xl font-bold text-white">{analytics.todayViews}</p>
             </CardContent>
           </Card>
-          <Card className="bg-slate-900 border-white/10">
+          <Card className="bg-slate-900/80 border-white/10">
             <CardHeader className="flex flex-row items-center gap-3 pb-2">
               <div className="p-2 rounded-lg bg-green-400/10"><TrendingUp size={20} className="text-green-400" /></div>
               <CardTitle className="text-sm text-slate-400">Vues totales</CardTitle>
@@ -85,7 +96,7 @@ export default function Dashboard() {
               <p className="text-3xl font-bold text-white">{analytics.totalViews}</p>
             </CardContent>
           </Card>
-          <Card className="bg-slate-900 border-white/10">
+          <Card className="bg-slate-900/80 border-white/10">
             <CardHeader className="flex flex-row items-center gap-3 pb-2">
               <div className="p-2 rounded-lg bg-purple-400/10"><BarChart3 size={20} className="text-purple-400" /></div>
               <CardTitle className="text-sm text-slate-400">Pages suivies</CardTitle>
@@ -98,9 +109,9 @@ export default function Dashboard() {
       )}
 
       {analytics && analytics.viewsByDay.length > 0 && (
-        <Card className="bg-slate-900 border-white/10">
+        <Card className="bg-slate-900/80 border-white/10">
           <CardHeader>
-            <CardTitle className="text-lg text-white">Vues 30 derniers jours</CardTitle>
+            <CardTitle className="text-lg text-white flex items-center gap-2"><BarChart3 size={18} className="text-blue-400" /> Vues 30 derniers jours</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-1">
@@ -108,7 +119,7 @@ export default function Dashboard() {
                 <div key={d.date} className="flex items-center gap-3 text-sm">
                   <span className="text-slate-400 w-24 shrink-0 text-xs">{d.date.slice(5)}</span>
                   <div className="flex-1 bg-slate-800 rounded h-5 overflow-hidden">
-                    <div className="bg-blue-600 h-full rounded transition-all" style={{ width: `${(d.count / maxDayCount) * 100}%` }} />
+                    <div className="bg-gradient-to-r from-blue-600 to-blue-500 h-full rounded transition-all" style={{ width: `${(d.count / maxDayCount) * 100}%` }} />
                   </div>
                   <span className="text-slate-300 w-8 text-right text-xs">{d.count}</span>
                 </div>
@@ -119,14 +130,14 @@ export default function Dashboard() {
       )}
 
       {analytics && analytics.viewsByPage.length > 0 && (
-        <Card className="bg-slate-900 border-white/10">
+        <Card className="bg-slate-900/80 border-white/10">
           <CardHeader>
-            <CardTitle className="text-lg text-white">Pages les plus vues</CardTitle>
+            <CardTitle className="text-lg text-white flex items-center gap-2"><ArrowUpRight size={18} className="text-purple-400" /> Pages les plus vues</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-2">
               {analytics.viewsByPage.map((p) => (
-                <div key={p.path} className="flex items-center justify-between text-sm">
+                <div key={p.path} className="flex items-center justify-between text-sm py-1 border-b border-white/5 last:border-0">
                   <span className="text-slate-300 truncate">{p.path || "/"}</span>
                   <span className="text-slate-500 shrink-0 ml-4">{p._count} vues</span>
                 </div>
@@ -137,10 +148,10 @@ export default function Dashboard() {
       )}
 
       <div className="grid md:grid-cols-2 gap-4">
-        <Card className="bg-slate-900 border-white/10">
+        <Card className="bg-slate-900/80 border-white/10 hover:border-green-500/30 transition-all">
           <CardContent className="p-4 flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <Database size={20} className="text-green-400" />
+              <div className="p-2 rounded-lg bg-green-400/10"><Database size={20} className="text-green-400" /></div>
               <span className="text-sm text-slate-300">Exporter toutes les données (JSON)</span>
             </div>
             <Button size="sm" onClick={doExport} disabled={exporting} className="bg-green-600 hover:bg-green-500">
@@ -148,9 +159,9 @@ export default function Dashboard() {
             </Button>
           </CardContent>
         </Card>
-        <Card className="bg-slate-900 border-white/10">
+        <Card className="bg-slate-900/80 border-white/10">
           <CardContent className="p-4 flex items-center gap-3">
-            <BarChart3 size={20} className="text-blue-400" />
+            <div className="p-2 rounded-lg bg-blue-400/10"><BarChart3 size={20} className="text-blue-400" /></div>
             <div>
               <p className="text-sm text-slate-300">Tracking visiteur actif</p>
               <p className="text-xs text-slate-500">Pages trackées automatiquement (hors admin)</p>

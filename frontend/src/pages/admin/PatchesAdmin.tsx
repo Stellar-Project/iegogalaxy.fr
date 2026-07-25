@@ -43,7 +43,7 @@ export default function PatchesAdmin() {
     <div className="space-y-4">
       <div className="flex justify-between items-center">
         <h2 className="text-2xl font-bold text-white">Patches</h2>
-        <Button onClick={() => startEdit()} size="sm"><Plus size={16} className="mr-1" /> Ajouter</Button>
+        <Button onClick={() => startEdit()} size="sm" className="bg-blue-600 hover:bg-blue-500 text-white"><Plus size={16} className="mr-1" /> Ajouter</Button>
       </div>
 
       {editing && (
@@ -59,8 +59,8 @@ export default function PatchesAdmin() {
             </div>
             <textarea placeholder="Changelog (une ligne par changement)" value={form.changelog} onChange={(e) => setForm({ ...form, changelog: e.target.value })} className="w-full bg-slate-800 border border-white/10 rounded-lg p-2 text-sm text-white h-24" />
             <div className="flex gap-2">
-              <Button size="sm" onClick={save}><Check size={16} className="mr-1" /> Sauvegarder</Button>
-              <Button size="sm" variant="ghost" onClick={() => setEditing(null)}><X size={16} className="mr-1" /> Annuler</Button>
+              <Button size="sm" onClick={save} className="bg-blue-600 hover:bg-blue-500 text-white"><Check size={16} className="mr-1" /> Sauvegarder</Button>
+              <Button size="sm" variant="outline" onClick={() => setEditing(null)}><X size={16} className="mr-1" /> Annuler</Button>
             </div>
           </CardContent>
         </Card>

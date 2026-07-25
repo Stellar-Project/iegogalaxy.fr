@@ -43,7 +43,7 @@ export default function ScreenshotsAdmin() {
     <div className="space-y-4">
       <div className="flex justify-between items-center">
         <h2 className="text-2xl font-bold text-white">Screenshots</h2>
-        <Button onClick={() => startEdit()} size="sm"><Plus size={16} className="mr-1" /> Ajouter</Button>
+        <Button onClick={() => startEdit()} size="sm" className="bg-blue-600 hover:bg-blue-500 text-white"><Plus size={16} className="mr-1" /> Ajouter</Button>
       </div>
 
       {editing && (
@@ -52,15 +52,15 @@ export default function ScreenshotsAdmin() {
             <div className="flex gap-2">
               <Input placeholder="URL de l'image" value={form.imageUrl} onChange={(e) => setForm({ ...form, imageUrl: e.target.value })} className="bg-slate-800 border-white/10 text-white flex-1" />
               <label className="shrink-0 cursor-pointer">
-                <span className="inline-flex items-center gap-1 px-3 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 text-sm rounded-lg border border-white/10">{uploading ? "..." : "Upload"}</span>
+                <span className="inline-flex items-center gap-1 px-3 py-2 bg-blue-600 hover:bg-blue-500 text-white text-sm rounded-lg">{uploading ? "..." : "Uploader"}</span>
                 <input type="file" accept="image/*" className="hidden" onChange={handleUpload} disabled={uploading} />
               </label>
             </div>
             <Input type="number" placeholder="Ordre" value={form.sortOrder} onChange={(e) => setForm({ ...form, sortOrder: parseInt(e.target.value) || 0 })} className="bg-slate-800 border-white/10 text-white" />
             {form.imageUrl && <img src={form.imageUrl} alt="preview" className="h-32 object-contain rounded bg-slate-800" />}
             <div className="flex gap-2">
-              <Button size="sm" onClick={save}><Check size={16} className="mr-1" /> Sauvegarder</Button>
-              <Button size="sm" variant="ghost" onClick={() => setEditing(null)}><X size={16} className="mr-1" /> Annuler</Button>
+              <Button size="sm" onClick={save} className="bg-blue-600 hover:bg-blue-500 text-white"><Check size={16} className="mr-1" /> Sauvegarder</Button>
+              <Button size="sm" variant="outline" onClick={() => setEditing(null)}><X size={16} className="mr-1" /> Annuler</Button>
             </div>
           </CardContent>
         </Card>

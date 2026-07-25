@@ -4,14 +4,14 @@ import { createWriteStream } from "fs";
 import { join, extname, dirname } from "path";
 import { pipeline } from "stream/promises";
 import { fileURLToPath } from "url";
-import { authenticate } from "../plugins/auth.js";
+import { requireAdmin } from "../plugins/auth.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const UPLOADS_DIR = join(__dirname, "../../uploads");
 
 export default async function uploadRoutes(fastify: FastifyInstance) {
   fastify.addHook("onRequest", async (request, reply) => {
-    await authenticate(request, reply);
+    await requireAdmin(request, reply);
   });
 
   fastify.post("/api/upload", async (request, reply) => {

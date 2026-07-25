@@ -5,16 +5,10 @@ import type {
 
 const API_BASE = "/api";
 
-function getToken(): string | null {
-  return localStorage.getItem("token");
-}
-
 async function request<T>(url: string, options?: RequestInit): Promise<T> {
   const headers: Record<string, string> = { "Content-Type": "application/json" };
-  const token = getToken();
-  if (token) headers["Authorization"] = `Bearer ${token}`;
 
-  const res = await fetch(`${API_BASE}${url}`, { ...options, headers });
+  const res = await fetch(`${API_BASE}${url}`, { ...options, credentials: "include", headers });
   if (!res.ok) {
     const err = await res.json().catch(() => ({ error: res.statusText }));
     throw new Error(err.error || "Request failed");
@@ -23,12 +17,6 @@ async function request<T>(url: string, options?: RequestInit): Promise<T> {
 }
 
 export const api = {
-  // Auth
-  login: (email: string, password: string) =>
-    request<{ token: string; user: { id: string; email: string; name: string } }>(
-      "/auth/login", { method: "POST", body: JSON.stringify({ email, password }) }
-    ),
-
   // Patches
   getPatches: () => request<PatchVersion[]>("/patches"),
   getPatch: (id: string) => request<PatchVersion>(`/patches/${id}`),
@@ -87,10 +75,9 @@ export const api = {
 
   // Upload
   uploadFile: async (file: File) => {
-    const token = getToken();
     const form = new FormData();
     form.append("file", file);
-    const res = await fetch(`${API_BASE}/upload`, { method: "POST", headers: token ? { Authorization: `Bearer ${token}` } : {}, body: form });
+    const res = await fetch(`${API_BASE}/upload`, { method: "POST", credentials: "include", body: form });
     if (!res.ok) throw new Error("Upload failed");
     return res.json() as Promise<{ url: string }>;
   },

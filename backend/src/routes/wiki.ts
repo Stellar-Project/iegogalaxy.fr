@@ -1,18 +1,29 @@
 import { FastifyInstance } from "fastify";
-import { authenticate } from "../plugins/auth.js";
+import { requireAdmin } from "../plugins/auth.js";
+import { auth } from "../lib/auth.js";
 import { prisma } from "../lib/prisma.js";
 
 export default async function wikiRoutes(fastify: FastifyInstance) {
   fastify.addHook("onRequest", async (request, reply) => {
     if (["POST", "PUT", "DELETE"].includes(request.method)) {
-      await authenticate(request, reply);
+      await requireAdmin(request, reply);
     }
   });
 
-  fastify.get("/api/wiki/tools", async () => {
+  fastify.get("/api/wiki/tools", async (request) => {
+    let session = null;
+    try {
+      session = await auth.api.getSession({ headers: request.headers as Record<string, string> });
+    } catch {}
     return prisma.wikiTool.findMany({
+      where: session ? {} : { visible: true },
       orderBy: { sortOrder: "asc" },
-      include: { pages: { where: { published: true }, select: { id: true, slug: true, title: true } } },
+      include: {
+        pages: {
+          where: session ? {} : { published: true },
+          select: { id: true, slug: true, title: true },
+        },
+      },
     });
   });
 
@@ -40,8 +51,10 @@ export default async function wikiRoutes(fastify: FastifyInstance) {
 
   fastify.get("/api/wiki/pages/:slug", async (request) => {
     const { slug } = request.params as { slug: string };
+    let session = null;
+    try { session = await auth.api.getSession({ headers: request.headers as Record<string, string> }); } catch {}
     const page = await prisma.wikiPage.findFirst({ where: { slug }, include: { tool: true } });
-    if (!page || (!page.published && !request.user)) {
+    if (!page || (!page.published && !session)) {
       return { error: "Not found" };
     }
     return page;

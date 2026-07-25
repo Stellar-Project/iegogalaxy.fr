@@ -1,18 +1,36 @@
 import "dotenv/config";
-import bcrypt from "bcryptjs";
+import { randomBytes, scrypt } from "node:crypto";
 import { PrismaClient } from "../src/generated/prisma/client.js";
 import { PrismaPg } from "@prisma/adapter-pg";
 
 const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL! });
 const prisma = new PrismaClient({ adapter });
 
-async function main() {
-  const adminPassword = await bcrypt.hash("admin123", 10);
-  await prisma.adminUser.upsert({
-    where: { email: "admin@iegogalaxy.fr" },
-    update: {},
-    create: { email: "admin@iegogalaxy.fr", password: adminPassword, name: "Admin" },
+function generateKey(password: string, salt: string): Promise<Buffer> {
+  return new Promise((resolve, reject) => {
+    scrypt(password.normalize("NFKC"), salt, 64, { N: 16384, r: 16, p: 1, maxmem: 128 * 16384 * 16 * 2 }, (err, key) => {
+      if (err) reject(err); else resolve(key as Buffer);
+    });
   });
+}
+
+async function hashBetterAuth(password: string): Promise<string> {
+  const salt = randomBytes(16).toString("hex");
+  const key = await generateKey(password, salt);
+  return `${salt}:${key.toString("hex")}`;
+}
+
+async function main() {
+  const existingUser = await prisma.user.findUnique({ where: { email: "admin@iegogalaxy.fr" } });
+  if (!existingUser) {
+    const hashedPassword = await hashBetterAuth("admin123");
+    const user = await prisma.user.create({
+      data: { id: crypto.randomUUID(), email: "admin@iegogalaxy.fr", username: "admin", emailVerified: true, name: "Admin", role: "admin" },
+    });
+    await prisma.account.create({
+      data: { id: crypto.randomUUID(), accountId: user.email, providerId: "credential", userId: user.id, password: hashedPassword },
+    });
+  }
 
   await prisma.siteConfig.upsert({
     where: { id: "default" },
@@ -124,6 +142,7 @@ async function main() {
         link: "/wiki/Kuriimu1",
         tags: ["3DS", "éditeur", "texte", "bannière"],
         sortOrder: 0,
+        visible: true,
       },
     });
   }

@@ -77,6 +77,7 @@ export interface WikiTool {
   link: string | null
   tags: string[]
   sortOrder: number
+  visible: boolean
   pages?: { id: string; slug: string; title: string }[]
 }
 

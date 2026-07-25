@@ -7,7 +7,7 @@ import multipart from "@fastify/multipart";
 import { fileURLToPath } from "url";
 import { dirname, join } from "path";
 
-import authRoutes from "./routes/auth.js";
+import { auth } from "./lib/auth.js";
 import patchRoutes from "./routes/patches.js";
 import teamRoutes from "./routes/team.js";
 import timelineRoutes from "./routes/timeline.js";
@@ -24,18 +24,36 @@ import analyticsRoutes from "./routes/analytics.js";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
 const fastify = Fastify({ logger: true });
-fastify.addContentTypeParser("application/json", { parseAs: "buffer" }, (_req, body: Buffer, _done) => {
-  _done(null, body.length ? JSON.parse(body.toString()) : {});
+
+fastify.addContentTypeParser("application/json", { parseAs: "string", bodyLimit: 1048576 }, (_req, body, _done) => {
+  _done(null, body.length ? JSON.parse(body as string) : {});
 });
 
-await fastify.register(cors, { origin: true });
+await fastify.register(cors, { origin: true, credentials: true });
 await fastify.register(rateLimit, { global: false });
 await fastify.register(multipart);
 await fastify.register(staticFiles, {
   root: join(__dirname, "../uploads"),
   prefix: "/uploads/",
 });
-await fastify.register(authRoutes);
+
+fastify.all("/api/auth/*", async (req, reply) => {
+  const url = new URL(req.url, process.env.BETTER_AUTH_URL || "http://localhost:3000");
+  const raw = ["GET", "HEAD"].includes(req.method) ? undefined : JSON.stringify(req.body);
+  const headers = new Headers();
+  for (const [k, v] of Object.entries(req.headers)) {
+    if (v && !["host", "connection", "content-length"].includes(k)) headers.set(k, String(v));
+  }
+  const webRes = await auth.handler(new Request(url, { method: req.method, headers, body: raw }));
+  reply.code(webRes.status);
+  webRes.headers.forEach((value, key) => {
+    if (key.toLowerCase() === "set-cookie") reply.header(key, value);
+    else reply.header(key, value);
+  });
+  const text = await webRes.text();
+  if (text) return JSON.parse(text);
+});
+
 await fastify.register(patchRoutes);
 await fastify.register(teamRoutes);
 await fastify.register(timelineRoutes);

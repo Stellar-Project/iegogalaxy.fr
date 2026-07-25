@@ -1,11 +1,11 @@
 import { FastifyInstance } from "fastify";
-import { authenticate } from "../plugins/auth.js";
+import { requireAdmin } from "../plugins/auth.js";
 import { prisma } from "../lib/prisma.js";
 
 export default async function blogRoutes(fastify: FastifyInstance) {
   fastify.addHook("onRequest", async (request, reply) => {
     if (["POST", "PUT", "DELETE"].includes(request.method)) {
-      await authenticate(request, reply);
+      await requireAdmin(request, reply);
     }
   });
 
@@ -14,7 +14,7 @@ export default async function blogRoutes(fastify: FastifyInstance) {
   });
 
   fastify.get("/api/blog/all", async (request, reply) => {
-    await authenticate(request, reply);
+    await requireAdmin(request, reply);
     return prisma.post.findMany({ orderBy: { createdAt: "desc" } });
   });
 

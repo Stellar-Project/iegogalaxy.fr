@@ -1,38 +1,33 @@
-import { createContext, useContext, useState, useEffect, type ReactNode } from "react";
+import { createContext, useContext, useEffect, type ReactNode } from "react";
+import { useSession, signIn, signOut } from "@/lib/auth-client";
 
 interface AuthState {
   token: string | null
-  user: { id: string; email: string; name: string } | null
-  login: (token: string, user: { id: string; email: string; name: string }) => void
-  logout: () => void
+  user: { id: string; email: string; name: string; username?: string | null } | null
+  login: (username: string, password: string) => Promise<void>
+  logout: () => Promise<void>
   isAuthenticated: boolean
 }
 
 const AuthContext = createContext<AuthState | null>(null);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [token, setToken] = useState<string | null>(() => localStorage.getItem("token"));
-  const [user, setUser] = useState<{ id: string; email: string; name: string } | null>(() => {
-    const stored = localStorage.getItem("user");
-    return stored ? JSON.parse(stored) : null;
-  });
+  const { data: session, isPending } = useSession();
 
-  const login = (newToken: string, newUser: { id: string; email: string; name: string }) => {
-    localStorage.setItem("token", newToken);
-    localStorage.setItem("user", JSON.stringify(newUser));
-    setToken(newToken);
-    setUser(newUser);
+  const login = async (username: string, password: string) => {
+    const res = await signIn.username({ username, password });
+    if (res.error) throw new Error(res.error.message || "Identifiants invalides");
   };
 
-  const logout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-    setToken(null);
-    setUser(null);
+  const logout = async () => {
+    await signOut();
   };
+
+  const user = session?.user ?? null;
+  const token = null;
 
   return (
-    <AuthContext.Provider value={{ token, user, login, logout, isAuthenticated: !!token }}>
+    <AuthContext.Provider value={{ token, user, login, logout, isAuthenticated: !!session }}>
       {children}
     </AuthContext.Provider>
   );

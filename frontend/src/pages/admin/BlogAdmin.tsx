@@ -35,7 +35,7 @@ export default function BlogAdmin() {
     <div className="space-y-4">
       <div className="flex justify-between items-center">
         <h2 className="text-2xl font-bold text-white">Actualités</h2>
-        <Button onClick={() => startEdit()} size="sm"><Plus size={16} className="mr-1" /> Nouvel article</Button>
+        <Button onClick={() => startEdit()} size="sm" className="bg-blue-600 hover:bg-blue-500 text-white"><Plus size={16} className="mr-1" /> Nouvel article</Button>
       </div>
 
       {editing && (
@@ -49,8 +49,8 @@ export default function BlogAdmin() {
             <TiptapEditor content={form.content} onChange={(html) => setForm({ ...form, content: html })} placeholder="Contenu de l'article..." />
             <label className="flex items-center gap-2 text-sm text-slate-400"><input type="checkbox" checked={form.published} onChange={(e) => setForm({ ...form, published: e.target.checked })} /> Publié</label>
             <div className="flex gap-2">
-              <Button size="sm" onClick={save}><Check size={16} className="mr-1" /> Sauvegarder</Button>
-              <Button size="sm" variant="ghost" onClick={() => setEditing(null)}><X size={16} className="mr-1" /> Annuler</Button>
+              <Button size="sm" onClick={save} className="bg-blue-600 hover:bg-blue-500 text-white"><Check size={16} className="mr-1" /> Sauvegarder</Button>
+              <Button size="sm" variant="outline" onClick={() => setEditing(null)}><X size={16} className="mr-1" /> Annuler</Button>
             </div>
           </CardContent>
         </Card>

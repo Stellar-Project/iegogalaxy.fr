@@ -40,11 +40,11 @@ export default function WikiAdmin() {
 
 function ToolsSection({ tools, onRefresh }: { tools: WikiTool[]; onRefresh: () => void }) {
   const [editing, setEditing] = useState<string | null>(null);
-  const [form, setForm] = useState({ name: "", description: "", imagePath: "", link: "", tags: "", sortOrder: 0 });
+  const [form, setForm] = useState({ name: "", description: "", imagePath: "", link: "", tags: "", sortOrder: 0, visible: true });
 
   const startEdit = (t?: WikiTool) => {
-    if (t) { setEditing(t.id); setForm({ name: t.name, description: t.description, imagePath: t.imagePath || "", link: t.link || "", tags: t.tags.join(", "), sortOrder: t.sortOrder }); }
-    else { setEditing("new"); setForm({ name: "", description: "", imagePath: "", link: "", tags: "", sortOrder: tools.length }); }
+    if (t) { setEditing(t.id); setForm({ name: t.name, description: t.description, imagePath: t.imagePath || "", link: t.link || "", tags: t.tags.join(", "), sortOrder: t.sortOrder, visible: t.visible ?? true }); }
+    else { setEditing("new"); setForm({ name: "", description: "", imagePath: "", link: "", tags: "", sortOrder: tools.length, visible: true }); }
   };
 
   const save = async () => {
@@ -60,7 +60,7 @@ function ToolsSection({ tools, onRefresh }: { tools: WikiTool[]; onRefresh: () =
 
   return (
     <div className="space-y-4">
-      <Button onClick={() => startEdit()} size="sm"><Plus size={16} className="mr-1" /> Ajouter un outil</Button>
+      <Button onClick={() => startEdit()} size="sm" className="bg-blue-600 hover:bg-blue-500 text-white"><Plus size={16} className="mr-1" /> Ajouter un outil</Button>
       {editing && (
         <Card className="bg-slate-900 border-white/10">
           <CardContent className="p-4 space-y-3">
@@ -70,18 +70,21 @@ function ToolsSection({ tools, onRefresh }: { tools: WikiTool[]; onRefresh: () =
               <Input placeholder="URL de l'icône" value={form.imagePath} onChange={(e) => setForm({ ...form, imagePath: e.target.value })} className="bg-slate-800 border-white/10 text-white" />
               <Input placeholder="Lien wiki" value={form.link} onChange={(e) => setForm({ ...form, link: e.target.value })} className="bg-slate-800 border-white/10 text-white" />
               <Input placeholder="Tags (séparés par des virgules)" value={form.tags} onChange={(e) => setForm({ ...form, tags: e.target.value })} className="bg-slate-800 border-white/10 text-white" />
-              <Input type="number" placeholder="Ordre" value={form.sortOrder} onChange={(e) => setForm({ ...form, sortOrder: parseInt(e.target.value) || 0 })} className="bg-slate-800 border-white/10 text-white" />
+              <Input type="number" placeholder="Ordre d'affichage" value={form.sortOrder} onChange={(e) => setForm({ ...form, sortOrder: parseInt(e.target.value) || 0 })} className="bg-slate-800 border-white/10 text-white" />
             </div>
+            <label className="flex items-center gap-2 text-sm text-slate-400">
+              <input type="checkbox" checked={form.visible} onChange={(e) => setForm({ ...form, visible: e.target.checked })} /> Visible sur le site
+            </label>
             <div className="flex gap-2">
-              <Button size="sm" onClick={save}><Check size={16} className="mr-1" /> Sauvegarder</Button>
-              <Button size="sm" variant="ghost" onClick={() => setEditing(null)}><X size={16} className="mr-1" /> Annuler</Button>
+              <Button size="sm" onClick={save} className="bg-blue-600 hover:bg-blue-500 text-white"><Check size={16} className="mr-1" /> Sauvegarder</Button>
+              <Button size="sm" variant="outline" onClick={() => setEditing(null)}><X size={16} className="mr-1" /> Annuler</Button>
             </div>
           </CardContent>
         </Card>
       )}
       <div className="grid md:grid-cols-2 gap-4">
         {tools.map((t) => (
-          <Card key={t.id} className="bg-slate-900/50 border-white/10">
+          <Card key={t.id} className={`bg-slate-900/50 border-white/10 ${!t.visible ? "opacity-50" : ""}`}>
             <CardContent className="p-4 flex items-center justify-between">
               <div className="flex items-center gap-3">
                 {t.imagePath && <img src={t.imagePath} alt="" className="w-8 h-8 object-contain" />}
@@ -112,8 +115,9 @@ function PagesSection({ pages, tools, onRefresh }: { pages: WikiPage[]; tools: W
   };
 
   const save = async () => {
-    if (editing === "new") await api.createWikiPage(form);
-    else if (editing) await api.updateWikiPage(editing, form);
+    const data = { ...form, toolId: form.toolId || null };
+    if (editing === "new") await api.createWikiPage(data);
+    else if (editing) await api.updateWikiPage(editing, data);
     setEditing(null); onRefresh();
   };
 
@@ -123,7 +127,7 @@ function PagesSection({ pages, tools, onRefresh }: { pages: WikiPage[]; tools: W
 
   return (
     <div className="space-y-4">
-      <Button onClick={() => startEdit()} size="sm"><Plus size={16} className="mr-1" /> Ajouter une page</Button>
+      <Button onClick={() => startEdit()} size="sm" className="bg-blue-600 hover:bg-blue-500 text-white"><Plus size={16} className="mr-1" /> Ajouter une page</Button>
       {editing && (
         <Card className="bg-slate-900 border-white/10">
           <CardContent className="p-4 space-y-3">
@@ -138,8 +142,8 @@ function PagesSection({ pages, tools, onRefresh }: { pages: WikiPage[]; tools: W
             </div>
             <TiptapEditor content={form.content} onChange={(html) => setForm({ ...form, content: html })} placeholder="Contenu de la page..." />
             <div className="flex gap-2">
-              <Button size="sm" onClick={save}><Check size={16} className="mr-1" /> Sauvegarder</Button>
-              <Button size="sm" variant="ghost" onClick={() => setEditing(null)}><X size={16} className="mr-1" /> Annuler</Button>
+              <Button size="sm" onClick={save} className="bg-blue-600 hover:bg-blue-500 text-white"><Check size={16} className="mr-1" /> Sauvegarder</Button>
+              <Button size="sm" variant="outline" onClick={() => setEditing(null)}><X size={16} className="mr-1" /> Annuler</Button>
             </div>
           </CardContent>
         </Card>
