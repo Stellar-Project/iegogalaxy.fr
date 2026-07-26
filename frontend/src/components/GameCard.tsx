@@ -7,6 +7,14 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 
+const trackDownload = (file: string) => {
+  fetch("/api/analytics/track-download", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ file, userAgent: navigator.userAgent }),
+  }).catch(() => {});
+};
+
 interface GameCardProps {
   title: string;
   logo: string;
@@ -88,7 +96,7 @@ export function GameCard({
                 asChild
                 className={`w-full ${btnColorClass} text-white font-bold h-12 text-lg shadow-lg transition-all`}
               >
-                <a href={patchLink} download>
+                <a href={patchLink} download onClick={() => trackDownload(patchLink)}>
                   <DownloadIcon className="mr-2 h-5 w-5" />
                   Télécharger Patch
                 </a>
@@ -101,7 +109,7 @@ export function GameCard({
                 variant="secondary"
                 className="w-full bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold h-10 border border-white/10"
               >
-                <a href={romLink} download>
+                <a href={romLink} download onClick={() => trackDownload(romLink)}>
                   <Gamepad2 className="mr-2 h-4 w-4" />
                   Télécharger ROM
                 </a>

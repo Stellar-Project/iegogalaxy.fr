@@ -77,7 +77,6 @@ export interface WikiTool {
   link: string | null
   tags: string[]
   sortOrder: number
-  visible: boolean
   pages?: { id: string; slug: string; title: string }[]
 }
 
@@ -112,6 +111,11 @@ export interface AnalyticsStats {
   todayViews: number;
   viewsByPage: { path: string; _count: number }[];
   viewsByDay: { date: string; count: number }[];
+  totalDownloads: number;
+  downloadsByFile: { file: string; _count: number }[];
+  downloadsByDay: { date: string; count: number }[];
+  uniqueVisitors: number;
+  topReferrers: { referrer: string; _count: number }[];
 }
 
 export interface AdminUser {

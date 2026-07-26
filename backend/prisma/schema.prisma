@@ -136,7 +136,6 @@ model WikiTool {
   link        String?
   tags        String[]
   sortOrder   Int        @default(0)
-  visible     Boolean    @default(true)
   pages       WikiPage[]
 }
 
@@ -174,8 +173,18 @@ model PageView {
   path      String
   date      DateTime @default(now())
   userAgent String?
+  referrer  String?
 
   @@index([date, path])
+}
+
+model DownloadEvent {
+  id      String   @id @default(cuid())
+  file    String
+  date    DateTime @default(now())
+  userAgent String?
+
+  @@index([date, file])
 }
 
 model Post {

@@ -12,7 +12,7 @@ export default function Tracker() {
     fetch(`${API_BASE}/analytics/track`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ path: location.pathname, userAgent: navigator.userAgent }),
+      body: JSON.stringify({ path: location.pathname, userAgent: navigator.userAgent, referrer: document.referrer || null }),
     }).catch(() => {});
   }, [location.pathname]);
 

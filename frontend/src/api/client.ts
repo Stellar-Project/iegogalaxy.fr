@@ -92,7 +92,7 @@ export const api = {
     request<{ success: boolean }>(`/hero/${id}`, { method: "DELETE" }),
 
   // Wiki
-  getWikiTools: () => request<WikiTool[]>("/wiki/tools"),
+  getWikiTools: (all?: boolean) => request<WikiTool[]>(`/wiki/tools${all ? "?all=true" : ""}`),
   createWikiTool: (data: Partial<WikiTool>) =>
     request<WikiTool>("/wiki/tools", { method: "POST", body: JSON.stringify(data) }),
   updateWikiTool: (id: string, data: Partial<WikiTool>) =>
@@ -110,6 +110,8 @@ export const api = {
 
   // Analytics
   getAnalytics: () => request<AnalyticsStats>("/analytics/stats"),
+  resetAnalytics: (scope?: "views" | "downloads") =>
+    request<{ ok: boolean }>("/analytics/reset", { method: "POST", body: JSON.stringify({ scope }) }),
 
   // Config
   getConfig: () => request<SiteConfig>("/config"),
