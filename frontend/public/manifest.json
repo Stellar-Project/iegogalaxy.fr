@@ -1,0 +1,21 @@
+{
+  "name": "Stellar Project — Inazuma Eleven GO Galaxy FR",
+  "short_name": "Stellar Project",
+  "description": "Projet de traduction française des jeux Inazuma Eleven GO Galaxy",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#020617",
+  "theme_color": "#020617",
+  "icons": [
+    {
+      "src": "/assets/pages/home/SN_BB_Logo_HD.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/assets/pages/home/SN_BB_Logo_HD.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
