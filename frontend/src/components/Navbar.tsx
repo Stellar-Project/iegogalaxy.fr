@@ -185,7 +185,6 @@ export const Navbar = () => {
           </div>
         </div>
       </nav>
-      <SearchDialog open={searchOpen} onClose={() => setSearchOpen(false)} />
     </div>
   );
 };
