@@ -1,6 +1,6 @@
 import type {
   PatchVersion, TeamMember, TimelineEvent, Credit,
-  Screenshot, Post, PostInput, HeroBackground, WikiTool, WikiPage, SiteConfig, AnalyticsStats,
+  Screenshot, Post, PostInput, HeroBackground, WikiTool, WikiPage, SiteConfig, AnalyticsStats, SearchResults,
 } from "./types";
 
 const API_BASE = "/api";
@@ -117,4 +117,7 @@ export const api = {
   getConfig: () => request<SiteConfig>("/config"),
   updateConfig: (data: Partial<SiteConfig>) =>
     request<SiteConfig>("/config", { method: "PUT", body: JSON.stringify(data) }),
+
+  // Search
+  search: (q: string) => request<SearchResults>(`/search?q=${encodeURIComponent(q)}`),
 };

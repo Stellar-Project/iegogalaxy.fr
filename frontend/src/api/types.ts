@@ -118,7 +118,11 @@ export interface AnalyticsStats {
   topReferrers: { referrer: string; _count: number }[];
 }
 
-export interface AdminUser {
+export interface SearchResults {
+  pages: { id: string; slug: string; title: string; tool: { name: string } | null }[];
+  tools: { id: string; name: string; description: string; imagePath: string | null }[];
+  posts: { id: string; slug: string; title: string; excerpt: string | null }[];
+}
   id: string
   email: string
   name: string

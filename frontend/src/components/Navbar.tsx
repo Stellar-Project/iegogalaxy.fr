@@ -1,7 +1,8 @@
-import { useState } from "react";
-import { Menu, Github, Twitter, Youtube } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Menu, Github, Twitter, Youtube, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import SearchDialog from "@/components/SearchDialog";
 
 type NavItem = {
   name: string;
@@ -74,6 +75,15 @@ const NavGameButton = ({
 export const Navbar = () => {
   const [currentPath, setCurrentPath] = useState("#home");
   const [isOpen, setIsOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
+
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === "k") { e.preventDefault(); setSearchOpen(true); }
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, []);
 
   const handleNavClick = (href: string) => {
     setCurrentPath(href);
@@ -92,6 +102,9 @@ export const Navbar = () => {
           /> */}
         </div>
         <div className="flex items-center gap-4">
+          <button onClick={() => setSearchOpen(true)} className="text-gray-400 hover:text-white transition-colors" title="Rechercher (Ctrl+K)">
+            <Search size={18} />
+          </button>
           <a
             href="https://x.com/INEGGSNBBFR"
             target="_blank"
@@ -185,6 +198,7 @@ export const Navbar = () => {
           </div>
         </div>
       </nav>
+      <SearchDialog open={searchOpen} onClose={() => setSearchOpen(false)} />
     </div>
   );
 };
