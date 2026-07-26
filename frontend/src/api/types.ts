@@ -134,6 +134,9 @@ export interface Game {
   imageUrl: string | null;
   status: string;
   releaseDate: string | null;
+  downloadUrl: string | null;
+  filePath: string | null;
+  fileSize: string | null;
   sortOrder: number;
   published: boolean;
   createdAt: string;

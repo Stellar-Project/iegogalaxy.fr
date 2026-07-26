@@ -1,6 +1,12 @@
 import { FastifyInstance } from "fastify";
 import { requireAdmin } from "../plugins/auth.js";
 import { prisma } from "../lib/prisma.js";
+import { createReadStream } from "fs";
+import { join } from "path";
+import { fileURLToPath } from "url";
+import { dirname } from "path";
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 export default async function gameRoutes(fastify: FastifyInstance) {
   fastify.addHook("onRequest", async (request, reply) => {
@@ -22,6 +28,21 @@ export default async function gameRoutes(fastify: FastifyInstance) {
     const game = await prisma.game.findUnique({ where: { slug } });
     if (!game || !game.published) return reply.status(404).send({ error: "Jeu introuvable" });
     return game;
+  });
+
+  fastify.get("/api/games/:slug/download", async (request, reply) => {
+    const { slug } = request.params as { slug: string };
+    const game = await prisma.game.findUnique({ where: { slug } });
+    if (!game || !game.published) return reply.status(404).send({ error: "Jeu introuvable" });
+
+    if (game.downloadUrl) return reply.redirect(game.downloadUrl);
+
+    if (game.filePath) {
+      const filePath = join(__dirname, "../../uploads", game.filePath);
+      return reply.type("application/octet-stream").send(createReadStream(filePath));
+    }
+
+    return reply.status(404).send({ error: "Aucun fichier disponible" });
   });
 
   fastify.post("/api/games", async (request, reply) => {

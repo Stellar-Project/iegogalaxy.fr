@@ -207,6 +207,9 @@ model Game {
   imageUrl    String?
   status      String   @default("0%")
   releaseDate String?
+  downloadUrl String?
+  filePath    String?
+  fileSize    String?
   sortOrder   Int      @default(0)
   published   Boolean  @default(false)
   createdAt   DateTime @default(now())
