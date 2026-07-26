@@ -10,10 +10,14 @@ import { BookOpen, ChevronRight, ExternalLink, Tag } from "lucide-react";
 export default function Wiki() {
   const [tools, setTools] = useState<WikiTool[]>([]);
   const [loading, setLoading] = useState(true);
+  const [activeTag, setActiveTag] = useState<string | null>(null);
 
   useEffect(() => {
     api.getWikiTools().then(setTools).catch(() => {}).finally(() => setLoading(false));
   }, []);
+
+  const allTags = [...new Set(tools.flatMap((t) => t.tags))].sort();
+  const filtered = activeTag ? tools.filter((t) => t.tags.includes(activeTag)) : tools;
 
   return (
     <div className="relative min-h-screen flex flex-col items-center text-slate-200 bg-slate-950 px-4 py-20">
@@ -37,16 +41,24 @@ export default function Wiki() {
           </p>
         </motion.div>
 
+        {allTags.length > 0 && (
+          <div className="flex flex-wrap items-center justify-center gap-2">
+            <button onClick={() => setActiveTag(null)} className={`text-xs px-3 py-1.5 rounded-full transition-colors ${!activeTag ? "bg-yellow-500/20 text-yellow-400 border border-yellow-500/30" : "bg-white/5 text-slate-400 border border-white/10 hover:border-white/20"}`}>Tous</button>
+            {allTags.map((tag) => (
+              <button key={tag} onClick={() => setActiveTag(activeTag === tag ? null : tag)} className={`text-xs px-3 py-1.5 rounded-full transition-colors ${activeTag === tag ? "bg-yellow-500/20 text-yellow-400 border border-yellow-500/30" : "bg-white/5 text-slate-400 border border-white/10 hover:border-white/20"}`}>{tag}</button>
+            ))}
+          </div>
+        )}
+
         {loading ? (
           <Loading />
-        ) : tools.length === 0 ? (
+        ) : filtered.length === 0 ? (
           <div className="text-center text-slate-500 space-y-4">
-            <BookOpen size={48} className="mx-auto opacity-30" />
-            <p>Aucun outil disponible pour le moment.</p>
+            {activeTag ? <><p>Aucun outil avec le tag "<span className="text-slate-400">{activeTag}</span>".</p><button onClick={() => setActiveTag(null)} className="text-sm text-yellow-400 hover:underline">Voir tous les outils</button></> : <><BookOpen size={48} className="mx-auto opacity-30" /><p>Aucun outil disponible pour le moment.</p></>}
           </div>
         ) : (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {tools.map((tool, i) => (
+            {filtered.map((tool, i) => (
               <motion.div key={tool.id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1 }}>
                 <Card className="bg-slate-900/50 border-white/10 hover:border-yellow-500/30 transition-all h-full group">
                   <CardContent className="p-6 flex flex-col h-full">
