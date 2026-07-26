@@ -35,6 +35,9 @@ dist-ssr
 # Backend uploads
 backend/uploads/
 
+# Exported database
+backend/exported-data.json
+
 # Prisma
 backend/prisma/migrations/
 backend/src/generated/prisma/
