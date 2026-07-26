@@ -74,7 +74,7 @@ export default function Footer() {
               <p className="text-right text-slate-500 hidden md:block">Suivez-nous sur nos réseaux</p>
               <div className="flex gap-3">
                 {socialLinks.map((social, index) => (
-                  <Button key={index} variant="outline" size="icon" className={`bg-slate-900 border-white/5 transition-all duration-300 hover:scale-110 hover:border-white/10 ${social.colorClass}`} asChild>
+                  <Button key={index} variant="outline" size="icon" className={`bg-slate-900 border-white/5 text-slate-300 transition-all duration-300 hover:scale-110 hover:border-white/10 ${social.colorClass}`} asChild>
                     <a href={social.href} target="_blank" rel="noreferrer" aria-label={social.label}>
                       <social.icon className="h-5 w-5" />
                     </a>
