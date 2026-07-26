@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import TiptapEditor from "@/components/admin/TiptapEditor";
-import { Plus, Pencil, Trash2, Check, X, FileText, Eye, Edit3 } from "lucide-react";
+import { Plus, Pencil, Trash2, Check, X, FileText, Eye, Edit3, ChevronUp, ChevronDown } from "lucide-react";
 
 export default function WikiAdmin() {
   const [tools, setTools] = useState<WikiTool[]>([]);
@@ -104,6 +104,19 @@ function MergedView({ tools, pages, onRefreshTools, onRefreshPages }: { tools: W
   };
 
   const pagesByTool = (toolId: string) => pages.filter((p) => p.toolId === toolId);
+
+  const moveTool = async (id: string, direction: "up" | "down") => {
+    const sorted = [...tools].sort((a, b) => a.sortOrder - b.sortOrder);
+    const idx = sorted.findIndex((t) => t.id === id);
+    if (idx === -1) return;
+    const swapIdx = direction === "up" ? idx - 1 : idx + 1;
+    if (swapIdx < 0 || swapIdx >= sorted.length) return;
+    const current = sorted[idx];
+    const other = sorted[swapIdx];
+    await api.updateWikiTool(current.id, { sortOrder: other.sortOrder });
+    await api.updateWikiTool(other.id, { sortOrder: current.sortOrder });
+    onRefreshTools();
+  };
   return (
     <div className="space-y-4">
       <Button onClick={openCreate} size="sm" className="bg-blue-600 hover:bg-blue-500 text-white"><Plus size={16} className="mr-1" /> Ajouter un wiki</Button>
@@ -209,6 +222,8 @@ function MergedView({ tools, pages, onRefreshTools, onRefreshPages }: { tools: W
                   </div>
                   <div className="flex gap-2 shrink-0">
                     <Button size="sm" variant="ghost" className="text-blue-400" onClick={() => openAddPage(t.id)}><Plus size={14} className="mr-1" /> Page</Button>
+                    <Button size="icon" variant="ghost" className="text-slate-500" onClick={() => moveTool(t.id, "up")}><ChevronUp size={16} /></Button>
+                    <Button size="icon" variant="ghost" className="text-slate-500" onClick={() => moveTool(t.id, "down")}><ChevronDown size={16} /></Button>
                     <Button size="icon" variant="ghost" className="text-slate-300" onClick={() => editTool(t)}><Pencil size={16} /></Button>
                     <Button size="icon" variant="ghost" className="text-red-400" onClick={() => removeTool(t.id)}><Trash2 size={16} /></Button>
                   </div>
