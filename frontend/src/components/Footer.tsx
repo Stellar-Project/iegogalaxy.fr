@@ -24,7 +24,7 @@ export default function Footer() {
 
       <div className="relative z-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
             <div className="space-y-4">
               <img src="/assets/pages/home/SN_BB_Logo_HD.png" alt="Inazuma Eleven Go Galaxy" className="h-24 w-auto object-contain opacity-90" />
               <p className="leading-relaxed text-slate-500">
@@ -44,6 +44,7 @@ export default function Footer() {
                   { label: "Tutoriel", href: "/tutoriel" },
                   { label: "A Propos", href: "/apropos" },
                   { label: "Téléchargement", href: "/telechargement" },
+                  { label: "Mentions légales", href: "/mentions-legales" },
                 ].map((link) => (
                   <li key={link.href}>
                     <Button variant="link" className="p-0 h-auto text-slate-400 hover:text-yellow-400 transition-colors" asChild>
@@ -51,27 +52,6 @@ export default function Footer() {
                     </Button>
                   </li>
                 ))}
-              </ul>
-            </div>
-
-            <div>
-              <h3 className="text-white font-semibold text-lg mb-4">Liens utiles</h3>
-              <ul className="space-y-2">
-                <li>
-                  <Button variant="link" className="p-0 h-auto text-slate-400 hover:text-yellow-400 transition-colors" asChild>
-                    <a href="/faq">FAQ</a>
-                  </Button>
-                </li>
-                <li>
-                  <Button variant="link" className="p-0 h-auto text-slate-400 hover:text-yellow-400 transition-colors" asChild>
-                    <a href="/wiki">Wiki complet</a>
-                  </Button>
-                </li>
-                <li>
-                  <Button variant="link" className="p-0 h-auto text-slate-500 hover:text-white underline decoration-slate-700 underline-offset-4" asChild>
-                    <a href="/mentions-legales">Mentions légales</a>
-                  </Button>
-                </li>
               </ul>
             </div>
 
