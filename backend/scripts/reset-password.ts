@@ -1,6 +1,6 @@
 import "dotenv/config";
 import { prisma } from "../src/lib/prisma.js";
-import bcrypt from "bcryptjs";
+import { hashPassword } from "@better-auth/utils/password";
 
 async function main() {
   const email = process.argv[2];
@@ -21,7 +21,7 @@ async function main() {
     process.exit(1);
   }
 
-  const hash = await bcrypt.hash(newPassword, 10);
+  const hash = await hashPassword(newPassword);
   await prisma.account.update({
     where: { id: account.id },
     data: { password: hash },
