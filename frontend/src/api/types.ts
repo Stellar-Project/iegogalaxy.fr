@@ -50,6 +50,7 @@ export interface Post {
   slug: string;
   excerpt: string | null;
   content: string;
+  category: string;
   published: boolean;
   createdAt: string;
   updatedAt: string;
@@ -60,6 +61,7 @@ export interface PostInput {
   slug: string;
   excerpt?: string;
   content: string;
+  category?: string;
   published?: boolean;
 }
 
@@ -118,8 +120,42 @@ export interface AnalyticsStats {
   topReferrers: { referrer: string; _count: number }[];
 }
 
+export interface SearchResults {
+  pages: { id: string; slug: string; title: string; tool: { name: string } | null }[];
+  tools: { id: string; name: string; description: string; imagePath: string | null }[];
+  posts: { id: string; slug: string; title: string; excerpt: string | null }[];
+}
+
+export interface Game {
+  id: string;
+  slug: string;
+  name: string;
+  description: string;
+  imageUrl: string | null;
+  status: string;
+  releaseDate: string | null;
+  downloadUrl: string | null;
+  filePath: string | null;
+  fileSize: string | null;
+  sortOrder: number;
+  published: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface FaqItem {
+  id: string;
+  question: string;
+  answer: string;
+  category: string;
+  sortOrder: number;
+  published: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface AdminUser {
-  id: string
-  email: string
-  name: string
+  id: string;
+  email: string;
+  name: string;
 }

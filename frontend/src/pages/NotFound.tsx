@@ -65,7 +65,7 @@ export default function NotFound() {
           <Button
             onClick={() => { if (window.history.length > 1) navigate(-1); else navigate("/"); }}
             variant="outline"
-            className="text-slate-200 border-white/10 hover:bg-white/5 h-12 px-8 text-base"
+            className="text-white border-yellow-500/30 hover:bg-yellow-500/10 h-12 px-8 text-base"
           >
             <ArrowLeft className="mr-2 h-4 w-4" />
             Retour en arrière

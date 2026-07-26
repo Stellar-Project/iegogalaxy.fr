@@ -6,6 +6,7 @@ import staticFiles from "@fastify/static";
 import multipart from "@fastify/multipart";
 import { fileURLToPath } from "url";
 import { dirname, join } from "path";
+import { existsSync, mkdirSync } from "fs";
 
 import { auth } from "./lib/auth.js";
 import patchRoutes from "./routes/patches.js";
@@ -20,6 +21,10 @@ import blogRoutes from "./routes/blog.js";
 import exportRoutes from "./routes/export.js";
 import uploadRoutes from "./routes/upload.js";
 import analyticsRoutes from "./routes/analytics.js";
+import searchRoutes from "./routes/search.js";
+import seoRoutes from "./routes/seo.js";
+import gameRoutes from "./routes/games.js";
+import faqRoutes from "./routes/faq.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -32,9 +37,14 @@ fastify.addContentTypeParser("application/json", { parseAs: "string", bodyLimit:
 await fastify.register(cors, { origin: true, credentials: true });
 await fastify.register(rateLimit, { global: false });
 await fastify.register(multipart);
+const uploadsDir = join(__dirname, "../uploads");
+if (!existsSync(uploadsDir)) mkdirSync(uploadsDir, { recursive: true, mode: 0o755 });
+
 await fastify.register(staticFiles, {
-  root: join(__dirname, "../uploads"),
+  root: uploadsDir,
   prefix: "/uploads/",
+  cacheControl: true,
+  maxAge: "7d",
 });
 
 fastify.all("/api/auth/*", async (req, reply) => {
@@ -66,6 +76,10 @@ await fastify.register(blogRoutes);
 await fastify.register(exportRoutes);
 await fastify.register(uploadRoutes);
 await fastify.register(analyticsRoutes);
+await fastify.register(searchRoutes);
+await fastify.register(seoRoutes);
+await fastify.register(gameRoutes);
+await fastify.register(faqRoutes);
 
 const port = parseInt(process.env.PORT || "3000");
 try {

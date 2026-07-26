@@ -1,6 +1,6 @@
 import type {
   PatchVersion, TeamMember, TimelineEvent, Credit,
-  Screenshot, Post, PostInput, HeroBackground, WikiTool, WikiPage, SiteConfig, AnalyticsStats,
+  Screenshot, Post, PostInput, HeroBackground, WikiTool, WikiPage, SiteConfig, AnalyticsStats, SearchResults, Game, FaqItem,
 } from "./types";
 
 const API_BASE = "/api";
@@ -117,4 +117,22 @@ export const api = {
   getConfig: () => request<SiteConfig>("/config"),
   updateConfig: (data: Partial<SiteConfig>) =>
     request<SiteConfig>("/config", { method: "PUT", body: JSON.stringify(data) }),
+
+  // Search
+  search: (q: string) => request<SearchResults>(`/search?q=${encodeURIComponent(q)}`),
+
+  // Games
+  getGames: () => request<Game[]>("/games"),
+  getPublishedGames: () => request<Game[]>("/games/published"),
+  getGame: (slug: string) => request<Game>(`/games/${slug}`),
+  createGame: (data: Partial<Game>) => request<Game>("/games", { method: "POST", body: JSON.stringify(data) }),
+  updateGame: (id: string, data: Partial<Game>) => request<Game>(`/games/${id}`, { method: "PUT", body: JSON.stringify(data) }),
+  deleteGame: (id: string) => request<{ success: boolean }>(`/games/${id}`, { method: "DELETE" }),
+
+  // FAQ
+  getFaq: () => request<FaqItem[]>("/faq"),
+  getFaqAll: () => request<FaqItem[]>("/faq/all"),
+  createFaq: (data: Partial<FaqItem>) => request<FaqItem>("/faq", { method: "POST", body: JSON.stringify(data) }),
+  updateFaq: (id: string, data: Partial<FaqItem>) => request<FaqItem>(`/faq/${id}`, { method: "PUT", body: JSON.stringify(data) }),
+  deleteFaq: (id: string) => request<{ success: boolean }>(`/faq/${id}`, { method: "DELETE" }),
 };

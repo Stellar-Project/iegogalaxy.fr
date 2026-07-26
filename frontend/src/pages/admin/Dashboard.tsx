@@ -30,6 +30,7 @@ export default function Dashboard() {
   ];
 
   const [exporting, setExporting] = useState(false);
+  const [csvExporting, setCsvExporting] = useState(false);
 
   const doExport = async () => {
     setExporting(true);
@@ -42,6 +43,36 @@ export default function Dashboard() {
       URL.revokeObjectURL(url);
     } catch { alert("Export échoué"); }
     setExporting(false);
+  };
+
+  const exportCSV = () => {
+    if (!analytics) return;
+    setCsvExporting(true);
+    const rows = [["Métrique", "Valeur"]];
+    rows.push(["Vues totales", String(analytics.totalViews)]);
+    rows.push(["Vues aujourd'hui", String(analytics.todayViews)]);
+    rows.push(["Visiteurs uniques", String(analytics.uniqueVisitors)]);
+    rows.push(["Téléchargements totaux", String(analytics.totalDownloads)]);
+    rows.push([""]);
+    rows.push(["Pages les plus vues", "Vues"]);
+    analytics.viewsByPage.forEach((p) => rows.push([p.path, String(p._count)]));
+    rows.push([""]);
+    rows.push(["Fichiers téléchargés", "Téléchargements"]);
+    analytics.downloadsByFile.forEach((d) => rows.push([d.file, String(d._count)]));
+    rows.push([""]);
+    rows.push(["Vues par jour", "Compte"]);
+    analytics.viewsByDay.forEach((d) => rows.push([d.date, String(d.count)]));
+    rows.push([""]);
+    rows.push(["Téléchargements par jour", "Compte"]);
+    analytics.downloadsByDay.forEach((d) => rows.push([d.date, String(d.count)]));
+
+    const csv = rows.map((r) => r.map((c) => `"${c.replace(/"/g, '""')}"`).join(",")).join("\n");
+    const blob = new Blob(["\uFEFF" + csv], { type: "text/csv;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url; a.download = `iegogalaxy-analytics-${new Date().toISOString().slice(0, 10)}.csv`; a.click();
+    URL.revokeObjectURL(url);
+    setCsvExporting(false);
   };
 
   const maxViewDay = Math.max(...(analytics?.viewsByDay.map((d) => d.count) || [1]), 1);
@@ -207,6 +238,17 @@ export default function Dashboard() {
             </div>
             <Button size="sm" onClick={doExport} disabled={exporting} className="bg-green-600 hover:bg-green-500">
               {exporting ? "Export..." : "Exporter"}
+            </Button>
+          </CardContent>
+        </Card>
+        <Card className="bg-slate-900/80 border-white/10 hover:border-blue-500/30 transition-all">
+          <CardContent className="p-4 flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="p-2 rounded-lg bg-blue-400/10"><Database size={20} className="text-blue-400" /></div>
+              <span className="text-sm text-slate-300">Exporter les statistiques (CSV)</span>
+            </div>
+            <Button size="sm" onClick={exportCSV} disabled={csvExporting || !analytics} className="bg-blue-600 hover:bg-blue-500">
+              {csvExporting ? "Export..." : "CSV"}
             </Button>
           </CardContent>
         </Card>

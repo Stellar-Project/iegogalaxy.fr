@@ -193,6 +193,35 @@ model Post {
   slug      String   @unique
   excerpt   String?
   content   String
+  category  String   @default("non-classé")
+  published Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Game {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  name        String
+  description String
+  imageUrl    String?
+  status      String   @default("0%")
+  releaseDate String?
+  downloadUrl String?
+  filePath    String?
+  fileSize    String?
+  sortOrder   Int      @default(0)
+  published   Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model FaqItem {
+  id        String   @id @default(cuid())
+  question  String
+  answer    String
+  category  String   @default("general")
+  sortOrder Int      @default(0)
   published Boolean  @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

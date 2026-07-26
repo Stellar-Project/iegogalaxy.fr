@@ -4,6 +4,7 @@ import Layout from "./components/Layout";
 import AdminLayout from "./components/admin/Layout";
 import ProtectedRoute from "./components/admin/ProtectedRoute";
 import Tracker from "./components/Tracker";
+import { useMeta } from "@/lib/useMeta";
 import Home from "./pages/Home";
 import Tutorial from "./pages/Tutorial";
 import About from "./pages/About";
@@ -13,6 +14,8 @@ import WikiPageView from "./pages/wiki/WikiPageView";
 import BlogPost from "./pages/BlogPost";
 import NotFound from "./pages/NotFound";
 import Wiki from "./pages/Wiki";
+import Faq from "./pages/Faq";
+import GamePageView from "./pages/games/GamePageView";
 import Login from "./pages/admin/Login";
 import Dashboard from "./pages/admin/Dashboard";
 import PatchesAdmin from "./pages/admin/PatchesAdmin";
@@ -22,10 +25,13 @@ import CreditsAdmin from "./pages/admin/CreditsAdmin";
 import ScreenshotsAdmin from "./pages/admin/ScreenshotsAdmin";
 import HeroAdmin from "./pages/admin/HeroAdmin";
 import WikiAdmin from "./pages/admin/WikiAdmin";
+import GameAdmin from "./pages/admin/GameAdmin";
+import FaqAdmin from "./pages/admin/FaqAdmin";
 import BlogAdmin from "./pages/admin/BlogAdmin";
 import ConfigAdmin from "./pages/admin/ConfigAdmin";
 
 export default function App() {
+  useMeta({});
   return (
     <AuthProvider>
       <Tracker />
@@ -38,7 +44,9 @@ export default function App() {
           <Route path="/telechargement" element={<Download />} />
           <Route path="/wiki" element={<Wiki />} />
           <Route path="/wiki/:slug" element={<WikiPageView />} />
+          <Route path="/jeux/:slug" element={<GamePageView />} />
           <Route path="/actualites/:slug" element={<BlogPost />} />
+          <Route path="/faq" element={<Faq />} />
           <Route path="/mentions-legales" element={<MentionsLegales />} />
         </Route>
 
@@ -59,6 +67,8 @@ export default function App() {
           <Route path="screenshots" element={<ScreenshotsAdmin />} />
           <Route path="hero" element={<HeroAdmin />} />
           <Route path="wiki" element={<WikiAdmin />} />
+          <Route path="jeux" element={<GameAdmin />} />
+          <Route path="faq" element={<FaqAdmin />} />
           <Route path="blog" element={<BlogAdmin />} />
           <Route path="config" element={<ConfigAdmin />} />
         </Route>

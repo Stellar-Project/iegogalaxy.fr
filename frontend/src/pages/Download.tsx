@@ -3,10 +3,12 @@ import { Calendar } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { GameCard } from "@/components/GameCard";
 import { HistoryTimeline } from "@/components/HistoryTimeline";
+import { useMeta } from "@/lib/useMeta";
 import { CurrentChangelog } from "@/components/CurrentChangelog";
 import { useConfig, usePatches } from "@/api/useData";
 
 export default function Download() {
+  useMeta({ title: "Téléchargement", description: "Télécharge les patches de traduction française pour Inazuma Eleven GO Galaxy Supernova et Big Bang." });
   const { data: config } = useConfig();
   const { data: patches } = usePatches();
 

@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
+import { useMeta } from "@/lib/useMeta";
 import {
   Info,
   AlertTriangle,
@@ -22,10 +23,23 @@ import {
 } from "@/components/ui/accordion";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 
+function Step({ num, color, children }: { num: number; color: "yellow" | "blue"; children: React.ReactNode }) {
+  const colors = {
+    yellow: "bg-yellow-500/20 border-yellow-500/30 text-yellow-400",
+    blue: "bg-blue-500/20 border-blue-500/30 text-blue-400",
+  };
+  return (
+    <div className="flex items-start gap-3">
+      <div className={`w-6 h-6 rounded-full ${colors[color]} text-xs font-bold flex items-center justify-center shrink-0 mt-0.5`}>{num}</div>
+      <span className="text-slate-400 text-sm leading-relaxed pt-0.5">{children}</span>
+    </div>
+  );
+}
+
 export default function Tutorial() {
+  useMeta({ title: "Tutoriel", description: "Guide complet pour patcher Inazuma Eleven GO Galaxy Supernova et Big Bang avec les outils Stellar Project." });
   return (
     <div className="relative min-h-screen flex flex-col items-center text-slate-200 bg-slate-950 overflow-hidden px-4 py-20">
       <div className="absolute inset-0 z-0">
@@ -56,6 +70,20 @@ export default function Tutorial() {
           </div>
         </motion.div>
 
+        <div className="flex justify-center gap-4 md:gap-8 text-xs">
+          {[
+            { num: "1", label: "Prérequis", color: "text-yellow-400 border-yellow-500/30" },
+            { num: "2", label: "Nettoyage", color: "text-red-400 border-red-500/30" },
+            { num: "3", label: "Installation", color: "text-green-400 border-green-500/30" },
+          ].map((step, i) => (
+            <div key={step.num} className="flex items-center gap-2">
+              <div className={`w-7 h-7 rounded-full border ${step.color} bg-white/5 flex items-center justify-center text-xs font-bold`}>{step.num}</div>
+              <span className="text-slate-400 hidden sm:inline">{step.label}</span>
+              {i < 2 && <div className="hidden sm:block w-8 h-px bg-white/10" />}
+            </div>
+          ))}
+        </div>
+
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -83,7 +111,6 @@ export default function Tutorial() {
               Vérifier votre équipement
             </h2>
           </div>
-          <Separator className="bg-white/10" />
 
           <Alert className="bg-slate-900/50 border-yellow-500/20 text-slate-300">
             <AlertTriangle className="h-4 w-4 text-yellow-400" />
@@ -212,7 +239,6 @@ export default function Tutorial() {
               Nettoyage des fichiers
             </h2>
           </div>
-          <Separator className="bg-white/10" />
 
           <Alert
             variant="destructive"
@@ -239,27 +265,16 @@ export default function Tutorial() {
                   Sur 3DS
                 </CardTitle>
               </CardHeader>
-              <CardContent className="text-slate-400 text-sm space-y-3">
-                <ol className="list-decimal list-inside space-y-2 marker:text-yellow-500/50">
-                  <li>
-                    Allez dans <b>Luma → titles</b> sur votre carte SD.
-                  </li>
-                  <li>
-                    Supprimez les dossiers suivants s'ils existent :
-                    <div className="mt-2 mb-2 space-y-1 pl-4 border-l-2 border-white/10">
-                      <code className="bg-black/40 px-1.5 py-0.5 rounded text-slate-200 block w-fit font-mono text-xs">
-                        000400000010BB00 (Supernova)
-                      </code>
-                      <code className="bg-black/40 px-1.5 py-0.5 rounded text-slate-200 block w-fit font-mono text-xs">
-                        000400000010BA00 (Big Bang)
-                      </code>
-                    </div>
-                  </li>
-                  <li>
-                    Si vous aviez installé un <b>.CIA</b> pré-patché, supprimez
-                    le jeu via <b>FBI</b> (Titles &gt; Delete Title And Ticket).
-                  </li>
-                </ol>
+              <CardContent className="text-slate-400 text-sm space-y-4">
+                <Step num={1} color="yellow">Allez dans <b>Luma → titles</b> sur votre carte SD.</Step>
+                <Step num={2} color="yellow">
+                  Supprimez les dossiers suivants s'ils existent :
+                  <div className="mt-2 space-y-1 pl-4 border-l-2 border-white/10">
+                    <code className="bg-black/40 px-1.5 py-0.5 rounded text-slate-200 block w-fit font-mono text-xs">000400000010BB00 (Supernova)</code>
+                    <code className="bg-black/40 px-1.5 py-0.5 rounded text-slate-200 block w-fit font-mono text-xs">000400000010BA00 (Big Bang)</code>
+                  </div>
+                </Step>
+                <Step num={3} color="yellow">Si vous aviez installé un <b>.CIA</b> pré-patché, supprimez le jeu via <b>FBI</b> (Titles &gt; Delete Title And Ticket).</Step>
               </CardContent>
             </Card>
 
@@ -270,22 +285,11 @@ export default function Tutorial() {
                   Sur Émulateur
                 </CardTitle>
               </CardHeader>
-              <CardContent className="text-slate-400 text-sm space-y-3">
-                <ol className="list-decimal list-inside space-y-2 marker:text-blue-500/50">
-                  <li>
-                    Dans l'émulateur, faites <b>Clic-droit</b> sur le jeu.
-                  </li>
-                  <li>
-                    Choisissez <b>Ouvrir l'emplacement des mods</b>.
-                  </li>
-                  <li>
-                    Supprimez intégralement le dossier <b>RomFS</b> présent.
-                  </li>
-                  <li>
-                    Si vous utilisiez une ROM pré-patchée (.3ds/.cia), supprimez
-                    le fichier de votre ordinateur.
-                  </li>
-                </ol>
+              <CardContent className="text-slate-400 text-sm space-y-4">
+                <Step num={1} color="blue">Dans l'émulateur, faites <b>Clic-droit</b> sur le jeu.</Step>
+                <Step num={2} color="blue">Choisissez <b>Ouvrir l'emplacement des mods</b>.</Step>
+                <Step num={3} color="blue">Supprimez intégralement le dossier <b>RomFS</b> présent.</Step>
+                <Step num={4} color="blue">Si vous utilisiez une ROM pré-patchée (.3ds/.cia), supprimez le fichier de votre ordinateur.</Step>
               </CardContent>
             </Card>
           </div>
@@ -300,7 +304,6 @@ export default function Tutorial() {
               Installation du Patch
             </h2>
           </div>
-          <Separator className="bg-white/10" />
 
           <Accordion type="single" collapsible className="w-full space-y-4">
             <AccordionItem
@@ -322,35 +325,22 @@ export default function Tutorial() {
                       variant="outline"
                       className="text-yellow-400 border-yellow-400/30 bg-yellow-400/10"
                     >
-                      Option A
+                      LayeredFS (Recommandé)
                     </Badge>
                     <h4 className="text-white font-medium flex items-center gap-2">
                       <FileArchive size={16} /> Via Patch LayeredFS (.zip)
                     </h4>
                   </div>
-                  <ol className="list-decimal list-inside space-y-2 marker:text-yellow-500/50 pl-2">
-                    <li>
-                      Ouvrez l'archive <b>.zip</b> téléchargée.
-                    </li>
-                    <li>
-                      Glissez le dossier <b>luma</b> à la racine de votre carte
-                      SD.
-                    </li>
-                    <li>
-                      Remettez la SD dans la console et allumez-la en maintenant{" "}
-                      <b>SELECT</b>.
-                    </li>
-                    <li>
-                      Dans le menu Luma, cochez l'option{" "}
-                      <b>(x) Enable game patching</b>.
-                    </li>
-                    <li>
-                      Appuyez sur <b>START</b> pour redémarrer. C'est prêt !
-                    </li>
-                  </ol>
+                  <div className="space-y-3">
+                    <Step num={1} color="yellow">Ouvrez l'archive <b>.zip</b> téléchargée.</Step>
+                    <Step num={2} color="yellow">Glissez le dossier <b>luma</b> à la racine de votre carte SD.</Step>
+                    <Step num={3} color="yellow">Remettez la SD dans la console et allumez-la en maintenant <b>SELECT</b>.</Step>
+                    <Step num={4} color="yellow">Dans le menu Luma, cochez l'option <b>(x) Enable game patching</b>.</Step>
+                    <Step num={5} color="yellow">Appuyez sur <b>START</b> pour redémarrer. C'est prêt !</Step>
+                  </div>
                 </div>
 
-                <Separator className="bg-white/10" />
+                <div className="h-px bg-white/5" />
 
                 <div className="space-y-3">
                   <div className="flex items-center gap-2">
@@ -358,28 +348,18 @@ export default function Tutorial() {
                       variant="outline"
                       className="text-blue-400 border-blue-400/30 bg-blue-400/10"
                     >
-                      Option B
+                      ROM pré-patchée (Alternatif)
                     </Badge>
                     <h4 className="text-white font-medium flex items-center gap-2">
                       <HardDrive size={16} /> Via ROM pré-patchée (.cia)
                     </h4>
                   </div>
-                  <ol className="list-decimal list-inside space-y-2 marker:text-blue-500/50 pl-2">
-                    <li>
-                      Copiez le fichier <b>.cia</b> dans le dossier <b>cias</b>{" "}
-                      de la carte SD.
-                    </li>
-                    <li>
-                      Lancez l'application <b>FBI</b> sur la 3DS.
-                    </li>
-                    <li>
-                      Allez dans <b>SD &gt; cias</b>.
-                    </li>
-                    <li>
-                      Sélectionnez le jeu et choisissez{" "}
-                      <b>Install and delete CIAs</b>.
-                    </li>
-                  </ol>
+                  <div className="space-y-3">
+                    <Step num={1} color="blue">Copiez le fichier <b>.cia</b> dans le dossier <b>cias</b> de la carte SD.</Step>
+                    <Step num={2} color="blue">Lancez l'application <b>FBI</b> sur la 3DS.</Step>
+                    <Step num={3} color="blue">Allez dans <b>SD &gt; cias</b>.</Step>
+                    <Step num={4} color="blue">Sélectionnez le jeu et choisissez <b>Install and delete CIAs</b>.</Step>
+                  </div>
                 </div>
               </AccordionContent>
             </AccordionItem>
@@ -410,32 +390,21 @@ export default function Tutorial() {
                       variant="outline"
                       className="text-yellow-400 border-yellow-400/30 bg-yellow-400/10"
                     >
-                      Option A
+                      LayeredFS (Recommandé)
                     </Badge>
                     <h4 className="text-white font-medium flex items-center gap-2">
                       <FileArchive size={16} /> Via Patch LayeredFS (.zip)
                     </h4>
                   </div>
-                  <ol className="list-decimal list-inside space-y-2 marker:text-yellow-500/50 pl-2">
-                    <li>
-                      Dans l'émulateur, faites <b>Clic-droit</b> sur votre jeu
-                      original.
-                    </li>
-                    <li>
-                      Sélectionnez <b>Ouvrir l'emplacement des mods</b>.
-                    </li>
-                    <li>
-                      Ouvrez le dossier <b>luma/titles/&lt;ID_JEU&gt;/</b> qui
-                      se trouve dans le zip.
-                    </li>
-                    <li>
-                      Copiez le dossier <b>RomFS</b> (du zip) vers la fenêtre de
-                      l'émulateur.
-                    </li>
-                  </ol>
+                  <div className="space-y-3">
+                    <Step num={1} color="yellow">Dans l'émulateur, faites <b>Clic-droit</b> sur votre jeu original.</Step>
+                    <Step num={2} color="yellow">Sélectionnez <b>Ouvrir l'emplacement des mods</b>.</Step>
+                    <Step num={3} color="yellow">Ouvrez le dossier <b>luma/titles/&lt;ID_JEU&gt;/</b> qui se trouve dans le zip.</Step>
+                    <Step num={4} color="yellow">Copiez le dossier <b>RomFS</b> (du zip) vers la fenêtre de l'émulateur.</Step>
+                  </div>
                 </div>
 
-                <Separator className="bg-white/10" />
+                <div className="h-px bg-white/5" />
 
                 <div className="space-y-3">
                   <div className="flex items-center gap-2">
@@ -443,7 +412,7 @@ export default function Tutorial() {
                       variant="outline"
                       className="text-blue-400 border-blue-400/30 bg-blue-400/10"
                     >
-                      Option B
+                      ROM pré-patchée (Alternatif)
                     </Badge>
                     <h4 className="text-white font-medium flex items-center gap-2">
                       <HardDrive size={16} /> Via ROM pré-patchée (.cia / .3ds)
