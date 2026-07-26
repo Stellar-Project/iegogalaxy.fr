@@ -32,9 +32,8 @@ dist-ssr
 *.sln
 *.sw?
 
-# Backend uploads (but not the folder itself)
-backend/uploads/*
-!backend/uploads/.gitkeep
+# Backend uploads
+backend/uploads/
 
 # Prisma
 backend/prisma/migrations/

@@ -6,6 +6,7 @@ import staticFiles from "@fastify/static";
 import multipart from "@fastify/multipart";
 import { fileURLToPath } from "url";
 import { dirname, join } from "path";
+import { existsSync, mkdirSync } from "fs";
 
 import { auth } from "./lib/auth.js";
 import patchRoutes from "./routes/patches.js";
@@ -36,8 +37,11 @@ fastify.addContentTypeParser("application/json", { parseAs: "string", bodyLimit:
 await fastify.register(cors, { origin: true, credentials: true });
 await fastify.register(rateLimit, { global: false });
 await fastify.register(multipart);
+const uploadsDir = join(__dirname, "../uploads");
+if (!existsSync(uploadsDir)) mkdirSync(uploadsDir, { recursive: true });
+
 await fastify.register(staticFiles, {
-  root: join(__dirname, "../uploads"),
+  root: uploadsDir,
   prefix: "/uploads/",
   cacheControl: true,
   maxAge: "7d",
