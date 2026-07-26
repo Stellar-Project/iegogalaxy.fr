@@ -38,7 +38,7 @@ await fastify.register(cors, { origin: true, credentials: true });
 await fastify.register(rateLimit, { global: false });
 await fastify.register(multipart);
 const uploadsDir = join(__dirname, "../uploads");
-if (!existsSync(uploadsDir)) mkdirSync(uploadsDir, { recursive: true });
+if (!existsSync(uploadsDir)) mkdirSync(uploadsDir, { recursive: true, mode: 0o755 });
 
 await fastify.register(staticFiles, {
   root: uploadsDir,
