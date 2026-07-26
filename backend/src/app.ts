@@ -37,6 +37,8 @@ await fastify.register(multipart);
 await fastify.register(staticFiles, {
   root: join(__dirname, "../uploads"),
   prefix: "/uploads/",
+  cacheControl: true,
+  maxAge: "7d",
 });
 
 fastify.all("/api/auth/*", async (req, reply) => {
