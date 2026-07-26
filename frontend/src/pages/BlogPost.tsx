@@ -4,6 +4,7 @@ import { api } from "@/api/client";
 import type { Post } from "@/api/types";
 import { ArrowLeft, Calendar } from "lucide-react";
 import Loading from "@/components/Loading";
+import { useMeta } from "@/lib/useMeta";
 
 export default function BlogPost() {
   const { slug } = useParams();
@@ -14,6 +15,8 @@ export default function BlogPost() {
     if (!slug) return;
     api.getPost(slug).then(setPost).catch(() => setPost(null)).finally(() => setLoading(false));
   }, [slug]);
+
+  useMeta({ title: post?.title || "Actualité", description: post?.excerpt || undefined });
 
   if (loading) return <div className="min-h-screen bg-slate-950 flex items-center justify-center"><Loading /></div>;
 

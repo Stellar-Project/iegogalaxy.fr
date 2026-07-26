@@ -8,6 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { DiscordMemberCard } from "@/components/DiscordMemberCard";
+import { useMeta } from "@/lib/useMeta";
 import { useTeam, useTimeline, useCredits } from "@/api/useData";
 
 const iconMap: Record<string, React.ElementType> = { Palette, Wrench, Heart };
@@ -19,6 +20,7 @@ const colorMap: Record<string, string> = {
 const linkIconMap: Record<string, React.ElementType> = { Github, Twitter, Youtube, Instagram, Globe, Gamepad2, Users };
 
 export default function About() {
+  useMeta({ title: "À propos", description: "Découvre l'équipe Stellar Project, l'histoire du projet de traduction et les crédits." });
   const { data: members } = useTeam();
   const { data: timelineEvents } = useTimeline();
   const { data: credits } = useCredits();

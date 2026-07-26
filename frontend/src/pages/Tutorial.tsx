@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
+import { useMeta } from "@/lib/useMeta";
 import {
   Info,
   AlertTriangle,
@@ -26,6 +27,7 @@ import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 
 export default function Tutorial() {
+  useMeta({ title: "Tutoriel", description: "Guide complet pour patcher Inazuma Eleven GO Galaxy Supernova et Big Bang avec les outils Stellar Project." });
   return (
     <div className="relative min-h-screen flex flex-col items-center text-slate-200 bg-slate-950 overflow-hidden px-4 py-20">
       <div className="absolute inset-0 z-0">

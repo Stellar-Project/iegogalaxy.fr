@@ -6,6 +6,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { motion } from "framer-motion";
 import Loading from "@/components/Loading";
 import { BookOpen, ChevronRight, ExternalLink, Tag } from "lucide-react";
+import { useMeta } from "@/lib/useMeta";
 
 export default function Wiki() {
   const [tools, setTools] = useState<WikiTool[]>([]);
@@ -15,6 +16,8 @@ export default function Wiki() {
   useEffect(() => {
     api.getWikiTools().then(setTools).catch(() => {}).finally(() => setLoading(false));
   }, []);
+
+  useMeta({ title: "Wiki", description: "Ressources, guides et documentation pour le projet de traduction française d'Inazuma Eleven GO Galaxy." });
 
   const allTags = [...new Set(tools.flatMap((t) => t.tags))].sort();
   const filtered = activeTag ? tools.filter((t) => t.tags.includes(activeTag)) : tools;

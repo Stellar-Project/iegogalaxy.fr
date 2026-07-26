@@ -5,6 +5,7 @@ import type { WikiPage } from "@/api/types";
 import { motion } from "framer-motion";
 import { ChevronRight } from "lucide-react";
 import Loading from "@/components/Loading";
+import { useMeta } from "@/lib/useMeta";
 
 interface Heading { id: string; text: string; level: number }
 
@@ -45,6 +46,8 @@ export default function WikiPageView() {
     setLoading(true);
     api.getWikiPage(slug).then(setPage).catch(() => setPage(null)).finally(() => setLoading(false));
   }, [slug]);
+
+  useMeta({ title: page?.title || "Page wiki", description: page?.content ? page.content.replace(/<[^>]*>/g, "").slice(0, 160) : undefined });
 
   if (loading) {
     return (

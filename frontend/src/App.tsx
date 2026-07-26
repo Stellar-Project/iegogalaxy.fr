@@ -4,6 +4,7 @@ import Layout from "./components/Layout";
 import AdminLayout from "./components/admin/Layout";
 import ProtectedRoute from "./components/admin/ProtectedRoute";
 import Tracker from "./components/Tracker";
+import { useMeta } from "@/lib/useMeta";
 import Home from "./pages/Home";
 import Tutorial from "./pages/Tutorial";
 import About from "./pages/About";
@@ -26,6 +27,7 @@ import BlogAdmin from "./pages/admin/BlogAdmin";
 import ConfigAdmin from "./pages/admin/ConfigAdmin";
 
 export default function App() {
+  useMeta({});
   return (
     <AuthProvider>
       <Tracker />
