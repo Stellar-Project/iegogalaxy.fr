@@ -10,15 +10,15 @@ import { Plus, Pencil, Trash2, Check, X } from "lucide-react";
 export default function BlogAdmin() {
   const [posts, setPosts] = useState<Post[]>([]);
   const [editing, setEditing] = useState<string | null>(null);
-  const [form, setForm] = useState<PostInput>({ title: "", slug: "", excerpt: "", content: "", published: false });
+  const [form, setForm] = useState<PostInput>({ title: "", slug: "", excerpt: "", content: "", category: "non-classé", published: false });
 
   useEffect(() => { load(); }, []);
 
   const load = async () => setPosts(await api.getPosts(true));
 
   const startEdit = (p?: Post) => {
-    if (p) { setEditing(p.id); setForm({ title: p.title, slug: p.slug, excerpt: p.excerpt || "", content: p.content, published: p.published }); }
-    else { setEditing("new"); setForm({ title: "", slug: "", excerpt: "", content: "", published: false }); }
+    if (p) { setEditing(p.id); setForm({ title: p.title, slug: p.slug, excerpt: p.excerpt || "", content: p.content, category: p.category, published: p.published }); }
+    else { setEditing("new"); setForm({ title: "", slug: "", excerpt: "", content: "", category: "non-classé", published: false }); }
   };
 
   const save = async () => {
@@ -45,7 +45,10 @@ export default function BlogAdmin() {
               <Input placeholder="Titre" value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} className="bg-slate-800 border-white/10 text-white" />
               <Input placeholder="Slug (ex: nouvelle-version)" value={form.slug} onChange={(e) => setForm({ ...form, slug: e.target.value })} className="bg-slate-800 border-white/10 text-white" />
             </div>
-            <Input placeholder="Extrait (optionnel)" value={form.excerpt || ""} onChange={(e) => setForm({ ...form, excerpt: e.target.value })} className="bg-slate-800 border-white/10 text-white" />
+            <div className="grid grid-cols-2 gap-3">
+              <Input placeholder="Catégorie (ex: technique, annonce)" value={form.category || ""} onChange={(e) => setForm({ ...form, category: e.target.value })} className="bg-slate-800 border-white/10 text-white" />
+              <Input placeholder="Extrait (optionnel)" value={form.excerpt || ""} onChange={(e) => setForm({ ...form, excerpt: e.target.value })} className="bg-slate-800 border-white/10 text-white" />
+            </div>
             <TiptapEditor content={form.content} onChange={(html) => setForm({ ...form, content: html })} placeholder="Contenu de l'article..." />
             <label className="flex items-center gap-2 text-sm text-slate-400"><input type="checkbox" checked={form.published} onChange={(e) => setForm({ ...form, published: e.target.checked })} /> Publié</label>
             <div className="flex gap-2">
@@ -64,6 +67,7 @@ export default function BlogAdmin() {
                 <div className="flex items-center gap-2">
                   <span className="font-bold text-white truncate">{p.title}</span>
                   {!p.published && <span className="text-xs bg-yellow-500/20 text-yellow-400 px-2 py-0.5 rounded-full shrink-0">brouillon</span>}
+                  <span className="text-[10px] text-slate-500 shrink-0">[{p.category}]</span>
                 </div>
                 <p className="text-xs text-slate-500 mt-0.5">/{p.slug} — {new Date(p.createdAt).toLocaleDateString("fr-FR")}</p>
               </div>

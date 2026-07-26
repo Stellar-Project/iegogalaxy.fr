@@ -14,12 +14,16 @@ import { Link } from "react-router-dom";
 
 function NewsSection() {
   const [posts, setPosts] = useState<Post[]>([]);
+  const [activeCat, setActiveCat] = useState<string | null>(null);
 
   useEffect(() => {
     api.getPosts().then(setPosts).catch(() => {});
   }, []);
 
   if (posts.length === 0) return null;
+
+  const cats = [...new Set(posts.map((p) => p.category).filter(Boolean))].sort();
+  const filtered = activeCat ? posts.filter((p) => p.category === activeCat) : posts;
 
   return (
     <section className="relative z-10 py-20 px-4">
@@ -28,12 +32,21 @@ function NewsSection() {
           className="text-3xl md:text-4xl font-bold text-center text-white">
           Actualités
         </motion.h2>
+        {cats.length > 1 && (
+          <div className="flex flex-wrap justify-center gap-2">
+            <button onClick={() => setActiveCat(null)} className={`text-xs px-3 py-1.5 rounded-full transition-colors ${!activeCat ? "bg-blue-500/20 text-blue-400 border border-blue-500/30" : "bg-white/5 text-slate-400 border border-white/10 hover:border-white/20"}`}>Toutes</button>
+            {cats.map((cat) => (
+              <button key={cat} onClick={() => setActiveCat(activeCat === cat ? null : cat)} className={`text-xs px-3 py-1.5 rounded-full transition-colors ${activeCat === cat ? "bg-blue-500/20 text-blue-400 border border-blue-500/30" : "bg-white/5 text-slate-400 border border-white/10 hover:border-white/20"}`}>{cat}</button>
+            ))}
+          </div>
+        )}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {posts.slice(0, 3).map((post, i) => (
+          {filtered.slice(0, 3).map((post, i) => (
             <motion.div key={post.id} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }}>
               <Card className="bg-slate-900/50 border-white/10 hover:border-blue-500/30 transition-all h-full">
                 <CardContent className="p-6 flex flex-col h-full">
                   <div className="flex items-center gap-2 text-xs text-slate-500 mb-3">
+                    {post.category && <span className="text-[10px] bg-blue-500/10 text-blue-400 px-1.5 py-0.5 rounded">{post.category}</span>}
                     <Calendar size={12} />
                     {new Date(post.createdAt).toLocaleDateString("fr-FR")}
                   </div>

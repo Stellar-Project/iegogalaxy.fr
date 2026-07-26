@@ -50,6 +50,7 @@ export interface Post {
   slug: string;
   excerpt: string | null;
   content: string;
+  category: string;
   published: boolean;
   createdAt: string;
   updatedAt: string;
@@ -60,6 +61,7 @@ export interface PostInput {
   slug: string;
   excerpt?: string;
   content: string;
+  category?: string;
   published?: boolean;
 }
 
