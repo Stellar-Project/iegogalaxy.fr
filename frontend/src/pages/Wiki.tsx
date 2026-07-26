@@ -1,13 +1,12 @@
 import { useEffect, useState, useMemo } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { api } from "@/api/client";
 import type { WikiTool } from "@/api/types";
 import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import Loading from "@/components/Loading";
 import { useMeta } from "@/lib/useMeta";
-import { BookOpen, ChevronRight, ExternalLink, Search, Grid3X3, List, Tag, FileText, LayoutGrid } from "lucide-react";
+import { BookOpen, ChevronRight, Search, Grid3X3, List, Tag, FileText } from "lucide-react";
 
 export default function Wiki() {
   const [tools, setTools] = useState<WikiTool[]>([]);
@@ -15,6 +14,7 @@ export default function Wiki() {
   const [activeTag, setActiveTag] = useState<string | null>(null);
   const [search, setSearch] = useState("");
   const [view, setView] = useState<"grid" | "list">("grid");
+  const navigate = useNavigate();
 
   useEffect(() => {
     api.getWikiTools().then(setTools).catch(() => {}).finally(() => setLoading(false));
@@ -114,6 +114,8 @@ export default function Wiki() {
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
             {filtered.map((tool, i) => (
               <motion.div key={tool.id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}>
+                <div onClick={() => { const s = tool.pages?.[0]?.slug; if (s) navigate(s.startsWith("/") ? s : `/wiki/${s}`); }}
+                     className={`cursor-pointer ${!tool.pages?.length ? "cursor-default" : ""}`}>
                 <Card className="bg-slate-900/50 border-white/10 hover:border-yellow-500/30 transition-all h-full group">
                   <CardContent className="p-5 flex flex-col h-full">
                     <div className="flex items-center gap-3 mb-3">
@@ -134,21 +136,15 @@ export default function Wiki() {
                       </div>
                       <div className="flex items-center gap-2 shrink-0">
                         {tool.pages && tool.pages.length > 0 && (
-                          <Link to={tool.pages[0].slug.startsWith("/") ? tool.pages[0].slug : `/wiki/${tool.pages[0].slug}`}
-                            className="inline-flex items-center gap-1 text-[11px] text-blue-400 hover:text-blue-300 transition-colors">
+                          <span className="inline-flex items-center gap-1 text-[11px] text-blue-400">
                             <FileText size={12} /> {tool.pages.length > 1 ? `${tool.pages.length} pages` : "Guide"}
-                          </Link>
-                        )}
-                        {tool.link && tool.link !== "#" && (
-                          <a href={tool.link} target="_blank" rel="noopener noreferrer"
-                            className="inline-flex items-center gap-1 text-[11px] text-slate-500 hover:text-white transition-colors">
-                            <ExternalLink size={12} /> Site
-                          </a>
+                          </span>
                         )}
                       </div>
                     </div>
                   </CardContent>
                 </Card>
+                </div>
               </motion.div>
             ))}
           </div>
@@ -156,6 +152,8 @@ export default function Wiki() {
           <div className="space-y-2">
             {filtered.map((tool, i) => (
               <motion.div key={tool.id} initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.03 }}>
+                <div onClick={() => { const s = tool.pages?.[0]?.slug; if (s) navigate(s.startsWith("/") ? s : `/wiki/${s}`); }}
+                     className={`cursor-pointer ${!tool.pages?.length ? "cursor-default" : ""}`}>
                 <Card className="bg-slate-900/50 border-white/10 hover:border-yellow-500/30 transition-all">
                   <CardContent className="p-4 flex items-center gap-4">
                     {tool.imagePath
@@ -174,23 +172,17 @@ export default function Wiki() {
                     </div>
                     <div className="flex items-center gap-2 shrink-0">
                       {tool.pages && tool.pages.length > 0 && (
-                        <Link to={tool.pages[0].slug.startsWith("/") ? tool.pages[0].slug : `/wiki/${tool.pages[0].slug}`}
-                          className="inline-flex items-center gap-1 text-xs text-blue-400 hover:text-blue-300">
+                        <span className="inline-flex items-center gap-1 text-xs text-blue-400">
                           <FileText size={12} /> {tool.pages.length > 1 ? `${tool.pages.length} pages` : "Lire"}
-                        </Link>
+                        </span>
                       )}
-                      {tool.link && tool.link !== "#" && (
-                        <a href={tool.link} target="_blank" rel="noopener noreferrer"
-                          className="inline-flex items-center gap-1 text-xs text-slate-500 hover:text-white">
-                          <ExternalLink size={12} /> Site
-                        </a>
-                      )}
-                      {!tool.pages?.length && !tool.link && (
-                        <span className="text-xs text-slate-600">Aucun lien</span>
+                      {!tool.pages?.length && (
+                        <span className="text-xs text-slate-600">Aucune page</span>
                       )}
                     </div>
                   </CardContent>
                 </Card>
+                </div>
               </motion.div>
             ))}
           </div>
