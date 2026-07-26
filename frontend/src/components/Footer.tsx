@@ -1,6 +1,5 @@
 import { Github, Twitter, Youtube, Heart, Code2, Rss } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 import { useConfig } from "@/api/useData";
 
@@ -13,6 +12,7 @@ export default function Footer() {
     { icon: Twitter, href: "https://x.com/INEGGSNBBFR", colorClass: "hover:text-blue-400 hover:bg-blue-400/10", label: "Twitter" },
     { icon: Github, href: "https://github.com/Stellar-Project", colorClass: "hover:text-white hover:bg-white/10", label: "GitHub" },
     { icon: Youtube, href: "https://www.youtube.com/channel/UClqF38koy3zeCTdFDkEIXbg", colorClass: "hover:text-red-500 hover:bg-red-500/10", label: "YouTube" },
+    { icon: Rss, href: "/rss.xml", colorClass: "hover:text-orange-400 hover:bg-orange-400/10", label: "RSS" },
   ];
 
   return (
@@ -23,14 +23,15 @@ export default function Footer() {
       </div>
 
       <div className="relative z-10">
-        <Separator className="bg-white/10" />
-
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
             <div className="space-y-4">
               <img src="/assets/pages/home/SN_BB_Logo_HD.png" alt="Inazuma Eleven Go Galaxy" className="h-24 w-auto object-contain opacity-90" />
               <p className="leading-relaxed text-slate-500">
                 Le patch de traduction française complet pour Inazuma Eleven GO Galaxy. Redécouvrez l'aventure spatiale sans barrière de langue.
+              </p>
+              <p className="text-xs text-slate-600 leading-relaxed">
+                Inazuma Eleven est une marque déposée de <strong className="text-slate-500">Level-5 Inc.</strong> Projet fan-made à but non lucratif.
               </p>
             </div>
 
@@ -50,18 +51,25 @@ export default function Footer() {
                     </Button>
                   </li>
                 ))}
-                <li><a href="/rss.xml" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center w-10 h-10 rounded-full border border-white/10 text-slate-500 hover:text-orange-400 hover:border-orange-500/30 transition-all"><Rss size={18} /></a></li>
               </ul>
             </div>
 
             <div>
-              <h3 className="text-white font-semibold text-lg mb-4">Mentions Légales</h3>
-              <ul className="space-y-2 text-slate-500">
-                <li>Inazuma Eleven est une marque déposée de <strong className="text-slate-400">Level-5 Inc.</strong></li>
-                <li>Ce projet est un fan-made à but non lucratif.</li>
+              <h3 className="text-white font-semibold text-lg mb-4">Liens utiles</h3>
+              <ul className="space-y-2">
+                <li>
+                  <Button variant="link" className="p-0 h-auto text-slate-400 hover:text-yellow-400 transition-colors" asChild>
+                    <a href="/faq">FAQ</a>
+                  </Button>
+                </li>
+                <li>
+                  <Button variant="link" className="p-0 h-auto text-slate-400 hover:text-yellow-400 transition-colors" asChild>
+                    <a href="/wiki">Wiki complet</a>
+                  </Button>
+                </li>
                 <li>
                   <Button variant="link" className="p-0 h-auto text-slate-500 hover:text-white underline decoration-slate-700 underline-offset-4" asChild>
-                    <a href="/mentions-legales">Politique de confidentialité</a>
+                    <a href="/mentions-legales">Mentions légales</a>
                   </Button>
                 </li>
               </ul>
@@ -74,7 +82,7 @@ export default function Footer() {
               <p className="text-right text-slate-500 hidden md:block">Suivez-nous sur nos réseaux</p>
               <div className="flex gap-3">
                 {socialLinks.map((social, index) => (
-                  <Button key={index} variant="outline" size="icon" className={`bg-slate-900 border-white/5 text-slate-300 transition-all duration-300 hover:scale-110 hover:border-white/10 ${social.colorClass}`} asChild>
+                  <Button key={index} variant="outline" size="icon" className={`bg-slate-900 border-white/5 text-slate-300 transition-all duration-300 hover:border-white/20 ${social.colorClass}`} asChild>
                     <a href={social.href} target="_blank" rel="noreferrer" aria-label={social.label}>
                       <social.icon className="h-5 w-5" />
                     </a>
