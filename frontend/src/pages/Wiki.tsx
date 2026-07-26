@@ -4,6 +4,7 @@ import { api } from "@/api/client";
 import type { WikiTool } from "@/api/types";
 import { Card, CardContent } from "@/components/ui/card";
 import { motion } from "framer-motion";
+import Loading from "@/components/Loading";
 import { BookOpen, ChevronRight, ExternalLink, Tag } from "lucide-react";
 
 export default function Wiki() {
@@ -15,10 +16,10 @@ export default function Wiki() {
   }, []);
 
   return (
-    <div className="relative min-h-screen flex flex-col items-center text-slate-200 bg-slate-950 overflow-hidden px-4 py-20">
-      <div className="absolute inset-0 z-0">
-        <div className="absolute inset-0 opacity-30" style={{ backgroundImage: "url('/assets/bg/bg_repeat.png')", backgroundRepeat: "repeat", backgroundPosition: "center top" }} />
-        <div className="absolute inset-0 bg-linear-to-b from-slate-950 via-slate-950/80 to-slate-950" />
+    <div className="relative min-h-screen flex flex-col items-center text-slate-200 bg-slate-950 px-4 py-20">
+      <div className="fixed inset-0 z-0 pointer-events-none">
+        <div className="absolute inset-0 bg-linear-to-b from-slate-950 via-slate-950/90 to-slate-950" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.03),transparent_70%)]" />
       </div>
 
       <div className="relative z-10 max-w-5xl mx-auto w-full space-y-12">
@@ -37,7 +38,7 @@ export default function Wiki() {
         </motion.div>
 
         {loading ? (
-          <div className="text-center text-slate-500">Chargement...</div>
+          <Loading />
         ) : tools.length === 0 ? (
           <div className="text-center text-slate-500 space-y-4">
             <BookOpen size={48} className="mx-auto opacity-30" />

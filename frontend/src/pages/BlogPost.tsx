@@ -3,6 +3,7 @@ import { useParams, Link } from "react-router-dom";
 import { api } from "@/api/client";
 import type { Post } from "@/api/types";
 import { ArrowLeft, Calendar } from "lucide-react";
+import Loading from "@/components/Loading";
 
 export default function BlogPost() {
   const { slug } = useParams();
@@ -14,7 +15,7 @@ export default function BlogPost() {
     api.getPost(slug).then(setPost).catch(() => setPost(null)).finally(() => setLoading(false));
   }, [slug]);
 
-  if (loading) return <div className="min-h-screen bg-slate-950 flex items-center justify-center text-slate-400">Chargement...</div>;
+  if (loading) return <div className="min-h-screen bg-slate-950 flex items-center justify-center"><Loading /></div>;
 
   if (!post) return (
     <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center text-slate-400 gap-4">

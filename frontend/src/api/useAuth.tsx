@@ -1,5 +1,6 @@
-import { createContext, useContext, useEffect, type ReactNode } from "react";
+import { createContext, useContext, type ReactNode } from "react";
 import { useSession, signIn, signOut } from "@/lib/auth-client";
+import Loading from "@/components/Loading";
 
 interface AuthState {
   token: string | null
@@ -13,6 +14,8 @@ const AuthContext = createContext<AuthState | null>(null);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const { data: session, isPending } = useSession();
+
+  if (isPending) return <div className="min-h-screen bg-slate-950 flex items-center justify-center"><Loading /></div>;
 
   const login = async (username: string, password: string) => {
     const res = await signIn.username({ username, password });

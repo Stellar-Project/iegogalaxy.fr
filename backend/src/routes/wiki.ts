@@ -11,20 +11,17 @@ export default async function wikiRoutes(fastify: FastifyInstance) {
   });
 
   fastify.get("/api/wiki/tools", async (request) => {
-    let session = null;
-    try {
-      session = await auth.api.getSession({ headers: request.headers as Record<string, string> });
-    } catch {}
-    return prisma.wikiTool.findMany({
-      where: session ? {} : { visible: true },
+    const query = request.query as { all?: string };
+    const tools = await prisma.wikiTool.findMany({
       orderBy: { sortOrder: "asc" },
       include: {
         pages: {
-          where: session ? {} : { published: true },
-          select: { id: true, slug: true, title: true },
+          select: { id: true, slug: true, title: true, published: true },
         },
       },
     });
+    if (query.all === "true") return tools;
+    return tools.filter((t) => t.pages.some((p) => p.published));
   });
 
   fastify.post("/api/wiki/tools", async (request, reply) => {
@@ -49,13 +46,11 @@ export default async function wikiRoutes(fastify: FastifyInstance) {
     return prisma.wikiPage.findMany({ orderBy: { createdAt: "desc" }, include: { tool: { select: { id: true, name: true } } } });
   });
 
-  fastify.get("/api/wiki/pages/:slug", async (request) => {
+  fastify.get("/api/wiki/pages/:slug", async (request, reply) => {
     const { slug } = request.params as { slug: string };
-    let session = null;
-    try { session = await auth.api.getSession({ headers: request.headers as Record<string, string> }); } catch {}
-    const page = await prisma.wikiPage.findFirst({ where: { slug }, include: { tool: true } });
-    if (!page || (!page.published && !session)) {
-      return { error: "Not found" };
+    const page = await prisma.wikiPage.findFirst({ where: { slug, published: true }, include: { tool: true } });
+    if (!page) {
+      return reply.status(404).send({ error: "Page introuvable" });
     }
     return page;
   });
