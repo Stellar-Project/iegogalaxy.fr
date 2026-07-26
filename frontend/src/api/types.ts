@@ -123,7 +123,23 @@ export interface SearchResults {
   tools: { id: string; name: string; description: string; imagePath: string | null }[];
   posts: { id: string; slug: string; title: string; excerpt: string | null }[];
 }
-  id: string
-  email: string
-  name: string
+
+export interface Game {
+  id: string;
+  slug: string;
+  name: string;
+  description: string;
+  imageUrl: string | null;
+  status: string;
+  releaseDate: string | null;
+  sortOrder: number;
+  published: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface AdminUser {
+  id: string;
+  email: string;
+  name: string;
 }

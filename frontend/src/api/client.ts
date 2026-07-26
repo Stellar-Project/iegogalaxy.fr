@@ -1,6 +1,6 @@
 import type {
   PatchVersion, TeamMember, TimelineEvent, Credit,
-  Screenshot, Post, PostInput, HeroBackground, WikiTool, WikiPage, SiteConfig, AnalyticsStats, SearchResults,
+  Screenshot, Post, PostInput, HeroBackground, WikiTool, WikiPage, SiteConfig, AnalyticsStats, SearchResults, Game,
 } from "./types";
 
 const API_BASE = "/api";
@@ -120,4 +120,12 @@ export const api = {
 
   // Search
   search: (q: string) => request<SearchResults>(`/search?q=${encodeURIComponent(q)}`),
+
+  // Games
+  getGames: () => request<Game[]>("/games"),
+  getPublishedGames: () => request<Game[]>("/games/published"),
+  getGame: (slug: string) => request<Game>(`/games/${slug}`),
+  createGame: (data: Partial<Game>) => request<Game>("/games", { method: "POST", body: JSON.stringify(data) }),
+  updateGame: (id: string, data: Partial<Game>) => request<Game>(`/games/${id}`, { method: "PUT", body: JSON.stringify(data) }),
+  deleteGame: (id: string) => request<{ success: boolean }>(`/games/${id}`, { method: "DELETE" }),
 };

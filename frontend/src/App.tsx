@@ -14,6 +14,7 @@ import WikiPageView from "./pages/wiki/WikiPageView";
 import BlogPost from "./pages/BlogPost";
 import NotFound from "./pages/NotFound";
 import Wiki from "./pages/Wiki";
+import GamePageView from "./pages/games/GamePageView";
 import Login from "./pages/admin/Login";
 import Dashboard from "./pages/admin/Dashboard";
 import PatchesAdmin from "./pages/admin/PatchesAdmin";
@@ -23,6 +24,7 @@ import CreditsAdmin from "./pages/admin/CreditsAdmin";
 import ScreenshotsAdmin from "./pages/admin/ScreenshotsAdmin";
 import HeroAdmin from "./pages/admin/HeroAdmin";
 import WikiAdmin from "./pages/admin/WikiAdmin";
+import GameAdmin from "./pages/admin/GameAdmin";
 import BlogAdmin from "./pages/admin/BlogAdmin";
 import ConfigAdmin from "./pages/admin/ConfigAdmin";
 
@@ -40,6 +42,7 @@ export default function App() {
           <Route path="/telechargement" element={<Download />} />
           <Route path="/wiki" element={<Wiki />} />
           <Route path="/wiki/:slug" element={<WikiPageView />} />
+          <Route path="/jeux/:slug" element={<GamePageView />} />
           <Route path="/actualites/:slug" element={<BlogPost />} />
           <Route path="/mentions-legales" element={<MentionsLegales />} />
         </Route>
@@ -61,6 +64,7 @@ export default function App() {
           <Route path="screenshots" element={<ScreenshotsAdmin />} />
           <Route path="hero" element={<HeroAdmin />} />
           <Route path="wiki" element={<WikiAdmin />} />
+          <Route path="jeux" element={<GameAdmin />} />
           <Route path="blog" element={<BlogAdmin />} />
           <Route path="config" element={<ConfigAdmin />} />
         </Route>

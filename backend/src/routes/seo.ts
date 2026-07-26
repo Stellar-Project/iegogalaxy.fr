@@ -13,9 +13,10 @@ Sitemap: https://iegogalaxy.fr/sitemap.xml`;
   });
 
   fastify.get("/sitemap.xml", async (_req, reply) => {
-    const [pages, posts] = await Promise.all([
+    const [pages, posts, games] = await Promise.all([
       prisma.wikiPage.findMany({ where: { published: true }, select: { slug: true, updatedAt: true } }),
       prisma.post.findMany({ where: { published: true }, select: { slug: true, updatedAt: true } }),
+      prisma.game.findMany({ where: { published: true }, select: { slug: true, updatedAt: true } }),
     ]);
 
     const urls: { loc: string; lastmod?: string; priority: string }[] = [
@@ -27,6 +28,7 @@ Sitemap: https://iegogalaxy.fr/sitemap.xml`;
       { loc: "https://iegogalaxy.fr/mentions-legales", priority: "0.3" },
       ...pages.map((p) => ({ loc: `https://iegogalaxy.fr/wiki/${p.slug}`, lastmod: p.updatedAt.toISOString(), priority: "0.7" })),
       ...posts.map((p) => ({ loc: `https://iegogalaxy.fr/actualites/${p.slug}`, lastmod: p.updatedAt.toISOString(), priority: "0.6" })),
+      ...games.map((g) => ({ loc: `https://iegogalaxy.fr/jeux/${g.slug}`, lastmod: g.updatedAt.toISOString(), priority: "0.8" })),
     ];
 
     const xml = `<?xml version="1.0" encoding="UTF-8"?>
