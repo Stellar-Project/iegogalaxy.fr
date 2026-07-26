@@ -40,4 +40,48 @@ ${urls.map((u) => `  <url>\n    <loc>${u.loc}</loc>\n    ${u.lastmod ? `<lastmod
     reply.header("Content-Type", "application/xml");
     return xml;
   });
+
+  fastify.get("/rss.xml", async (_req, reply) => {
+    const [posts, patches] = await Promise.all([
+      prisma.post.findMany({ where: { published: true }, orderBy: { createdAt: "desc" }, take: 20 }),
+      prisma.patchVersion.findMany({ orderBy: { createdAt: "desc" }, take: 5 }),
+    ]);
+
+    const items = [
+      ...posts.map((p) => ({
+        title: p.title,
+        link: `https://iegogalaxy.fr/actualites/${p.slug}`,
+        description: p.excerpt || p.content.replace(/<[^>]*>/g, "").slice(0, 200),
+        pubDate: p.createdAt.toUTCString(),
+        guid: `post-${p.id}`,
+      })),
+      ...patches.map((p) => ({
+        title: `Patch ${p.version} disponible`,
+        link: "https://iegogalaxy.fr/telechargement",
+        description: `La version ${p.version} du patch de traduction est disponible. Date : ${p.date}. Taille : ${p.size}.`,
+        pubDate: p.createdAt.toUTCString(),
+        guid: `patch-${p.id}`,
+      })),
+    ].sort((a, b) => new Date(b.pubDate).getTime() - new Date(a.pubDate).getTime()).slice(0, 20);
+
+    const rss = `<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<channel>
+  <title>Stellar Project — Traduction française Inazuma Eleven GO Galaxy</title>
+  <link>https://iegogalaxy.fr</link>
+  <description>Actualités et mises à jour du projet de traduction française</description>
+  <language>fr</language>
+  <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
+  <atom:link href="https://iegogalaxy.fr/rss.xml" rel="self" type="application/rss+xml"/>
+${items.map((item) => `  <item>\n    <title>${escapeXml(item.title)}</title>\n    <link>${item.link}</link>\n    <description>${escapeXml(item.description)}</description>\n    <pubDate>${item.pubDate}</pubDate>\n    <guid>${item.guid}</guid>\n  </item>`).join("\n")}
+</channel>
+</rss>`;
+
+    reply.header("Content-Type", "application/rss+xml; charset=utf-8");
+    return rss;
+  });
+}
+
+function escapeXml(s: string) {
+  return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&apos;");
 }

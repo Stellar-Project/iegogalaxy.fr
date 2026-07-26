@@ -1,4 +1,4 @@
-import { Github, Twitter, Youtube, Heart, Code2 } from "lucide-react";
+import { Github, Twitter, Youtube, Heart, Code2, Rss } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
@@ -50,6 +50,7 @@ export default function Footer() {
                     </Button>
                   </li>
                 ))}
+                <li><a href="/rss.xml" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center w-10 h-10 rounded-full border border-white/10 text-slate-500 hover:text-orange-400 hover:border-orange-500/30 transition-all"><Rss size={18} /></a></li>
               </ul>
             </div>
 
