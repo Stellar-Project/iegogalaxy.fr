@@ -125,7 +125,8 @@ export default function MentionsLegales() {
                 bénévoles
               </p>
               <p>
-                <strong className="text-white">Contact :</strong> ieggsnbbfr@gmail.com
+                <strong className="text-white">Contact :</strong>{" "}
+                <a href="mailto:ieggsnbbfr@gmail.com" className="text-blue-400 hover:text-blue-300 underline underline-offset-2">ieggsnbbfr@gmail.com</a>
               </p>
             </CardContent>
           </Card>
@@ -147,13 +148,35 @@ export default function MentionsLegales() {
         <Card className="bg-slate-900/50 border-slate-800 backdrop-blur-sm">
           <CardHeader>
             <CardTitle className="flex items-center gap-3 text-white text-xl">
-              <FileText className="text-slate-400" /> Confidentialité
+              <FileText className="text-slate-400" /> Confidentialité & Données
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4 text-sm md:text-base leading-relaxed text-white">
-            <p>
-              Ce site ne collecte aucune donnée personnelle nominative et
-              n'utilise pas de cookies publicitaires ou de traçage.
+            <p>Nous attachons une importance particulière à votre vie privée. Voici comment nous traitons vos données :</p>
+
+            <h4 className="font-semibold text-white text-base mt-4">Cookies</h4>
+            <ul className="list-disc list-inside space-y-1 text-slate-300">
+              <li><strong>Session admin :</strong> un cookie (<code className="text-blue-300">better-auth.session_token</code>) est déposé uniquement si vous vous connectez à l'interface d'administration. Il expire à la fermeture du navigateur.</li>
+              <li><strong>Aucun cookie publicitaire</strong> — nous n'utilisons aucun traqueur tiers, pixel ou régie publicitaire.</li>
+            </ul>
+
+            <h4 className="font-semibold text-white text-base mt-4">Analytics</h4>
+            <p className="text-slate-300">Nous collectons des statistiques de navigation anonymes pour améliorer le site :</p>
+            <ul className="list-disc list-inside space-y-1 text-slate-300">
+              <li>Page visitée (<code className="text-blue-300">path</code>)</li>
+              <li>Type de navigateur (<code className="text-blue-300">userAgent</code>)</li>
+              <li>Site référent (<code className="text-blue-300">referrer</code>)</li>
+              <li>Fichier téléchargé (uniquement pour les statistiques de téléchargement)</li>
+            </ul>
+            <p className="text-slate-400 text-sm">Aucune adresse IP, aucun identifiant personnel, aucune donnée nominative n'est collectée ou stockée.</p>
+
+            <h4 className="font-semibold text-white text-base mt-4">Durée de conservation</h4>
+            <p className="text-slate-300">Les données de navigation sont conservées jusqu'à réinitialisation manuelle via l'interface d'administration. Aucune expiration automatique n'est configurée.</p>
+
+            <h4 className="font-semibold text-white text-base mt-4">Vos droits (RGPD)</h4>
+            <p className="text-slate-300">Conformément au Règlement Général sur la Protection des Données (RGPD), vous disposez d'un droit d'accès, de rectification et de suppression des données vous concernant. Pour exercer ces droits, contactez-nous à :</p>
+            <p className="text-sm">
+              <a href="mailto:ieggsnbbfr@gmail.com?subject=RGPD%20-%20Demande%20de%20suppression" className="text-blue-400 hover:text-blue-300 underline underline-offset-2">ieggsnbbfr@gmail.com</a>
             </p>
           </CardContent>
         </Card>
