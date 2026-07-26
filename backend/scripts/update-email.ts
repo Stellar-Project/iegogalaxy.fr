@@ -16,7 +16,6 @@ if (!user) {
 }
 
 await prisma.user.update({ where: { email: oldEmail }, data: { email: newEmail } });
-await prisma.account.updateMany({ where: { userId: user.id, providerId: "credential" }, data: { email: newEmail } });
 
 console.log(`✓ Email mis à jour : ${oldEmail} → ${newEmail}`);
 await prisma.$disconnect();
