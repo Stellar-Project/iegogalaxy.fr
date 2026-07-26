@@ -2,7 +2,7 @@ import { Link, Outlet, useLocation } from "react-router-dom";
 import { useAuth } from "@/api/useAuth";
 import { Button } from "@/components/ui/button";
 import {
-  LayoutDashboard, Download, Users, Clock, Star, Image, BookOpen, Settings, LogOut, Menu, X, Newspaper, ChevronLeft, PanelLeftClose, PanelLeftOpen, Gamepad2,
+  LayoutDashboard, Download, Users, Clock, Star, Image, BookOpen, Settings, LogOut, Menu, X, Newspaper, ChevronLeft, PanelLeftClose, PanelLeftOpen, Gamepad2, HelpCircle,
 } from "lucide-react";
 import { useState } from "react";
 
@@ -17,6 +17,7 @@ const navItems = [
   { to: "/admin/wiki", icon: BookOpen, label: "Wiki" },
   { to: "/admin/blog", icon: Newspaper, label: "Actualités" },
   { to: "/admin/jeux", icon: Gamepad2, label: "Jeux" },
+  { to: "/admin/faq", icon: HelpCircle, label: "FAQ" },
   { to: "/admin/config", icon: Settings, label: "Configuration" },
 ];
 

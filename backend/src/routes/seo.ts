@@ -26,6 +26,7 @@ Sitemap: https://iegogalaxy.fr/sitemap.xml`;
       { loc: "https://iegogalaxy.fr/telechargement", priority: "0.9" },
       { loc: "https://iegogalaxy.fr/apropos", priority: "0.7" },
       { loc: "https://iegogalaxy.fr/mentions-legales", priority: "0.3" },
+      { loc: "https://iegogalaxy.fr/faq", priority: "0.5" },
       ...pages.map((p) => ({ loc: `https://iegogalaxy.fr/wiki/${p.slug}`, lastmod: p.updatedAt.toISOString(), priority: "0.7" })),
       ...posts.map((p) => ({ loc: `https://iegogalaxy.fr/actualites/${p.slug}`, lastmod: p.updatedAt.toISOString(), priority: "0.6" })),
       ...games.map((g) => ({ loc: `https://iegogalaxy.fr/jeux/${g.slug}`, lastmod: g.updatedAt.toISOString(), priority: "0.8" })),

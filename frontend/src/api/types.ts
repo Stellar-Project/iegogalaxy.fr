@@ -138,6 +138,17 @@ export interface Game {
   updatedAt: string;
 }
 
+export interface FaqItem {
+  id: string;
+  question: string;
+  answer: string;
+  category: string;
+  sortOrder: number;
+  published: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface AdminUser {
   id: string;
   email: string;

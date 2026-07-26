@@ -8,7 +8,7 @@ export default async function exportRoutes(fastify: FastifyInstance) {
   });
 
   fastify.get("/api/export", async () => {
-    const [patches, team, timeline, credits, screenshots, hero, wikiTools, wikiPages, config, posts, games] = await Promise.all([
+    const [patches, team, timeline, credits, screenshots, hero, wikiTools, wikiPages, config, posts, games, faq] = await Promise.all([
       prisma.patchVersion.findMany(),
       prisma.teamMember.findMany(),
       prisma.timelineEvent.findMany(),
@@ -20,7 +20,8 @@ export default async function exportRoutes(fastify: FastifyInstance) {
       prisma.siteConfig.findUnique({ where: { id: "default" } }),
       prisma.post.findMany(),
       prisma.game.findMany(),
+      prisma.faqItem.findMany(),
     ]);
-    return { patches, team, timeline, credits, screenshots, hero, wikiTools, wikiPages, config, posts, games, exportedAt: new Date().toISOString() };
+    return { patches, team, timeline, credits, screenshots, hero, wikiTools, wikiPages, config, posts, games, faq, exportedAt: new Date().toISOString() };
   });
 }

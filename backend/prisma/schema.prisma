@@ -211,3 +211,14 @@ model Game {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
+
+model FaqItem {
+  id        String   @id @default(cuid())
+  question  String
+  answer    String
+  category  String   @default("general")
+  sortOrder Int      @default(0)
+  published Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
