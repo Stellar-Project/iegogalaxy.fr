@@ -81,7 +81,7 @@ export default function Download() {
           <div className="grid md:grid-cols-2 gap-8 lg:gap-12 px-4">
             <GameCard
               title="Supernova"
-              logo="/assets/logo/SN_Logo_HD.png"
+              logo="/assets/pages/download/SN_Logo_HD.png"
               color="yellow"
               patchLink={supernovaPatch}
               patchSize={patchSize}
@@ -93,7 +93,7 @@ export default function Download() {
             />
             <GameCard
               title="Big Bang"
-              logo="/assets/logo/BB_Logo_HD.png"
+              logo="/assets/pages/download/BB_Logo_HD.png"
               color="blue"
               patchLink={bigbangPatch}
               patchSize={patchSize}

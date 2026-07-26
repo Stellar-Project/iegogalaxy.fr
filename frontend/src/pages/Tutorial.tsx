@@ -170,7 +170,7 @@ export default function Tutorial() {
                       className="flex flex-col items-center gap-1"
                     >
                       <img
-                        src="/assets/logo/azahar-logo.svg"
+                        src="/assets/pages/tutorial/azahar-logo.svg"
                         alt="Azahar"
                         className="w-5 h-5 object-contain"
                       />
@@ -190,7 +190,7 @@ export default function Tutorial() {
                       className="flex flex-col items-center gap-1"
                     >
                       <img
-                        src="/assets/logo/citra-logo.png"
+                        src="/assets/pages/tutorial/citra-logo.png"
                         alt="Citra"
                         className="w-5 h-5 object-contain"
                       />

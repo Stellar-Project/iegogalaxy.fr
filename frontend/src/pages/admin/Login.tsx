@@ -27,12 +27,12 @@ export default function Login() {
     <div className="min-h-screen bg-slate-950 flex">
       <div className="hidden lg:flex relative w-1/2 items-center justify-center overflow-hidden">
         <div className="absolute inset-0">
-          <img src="/assets/bg/mainVisual_01.png" alt="" className="w-full h-full object-cover opacity-60" />
+          <img src="/assets/global/bg/mainVisual_01.png" alt="" className="w-full h-full object-cover opacity-60" />
           <div className="absolute inset-0 bg-gradient-to-r from-slate-950/80 via-slate-950/50 to-transparent" />
-          <div className="absolute inset-0" style={{ backgroundImage: "url('/assets/bg/bg_repeat.png')", backgroundRepeat: "repeat", opacity: 0.1 }} />
+          <div className="absolute inset-0" style={{ backgroundImage: "url('/assets/global/bg/bg_repeat.png')", backgroundRepeat: "repeat", opacity: 0.1 }} />
         </div>
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="relative z-10 text-center px-12">
-          <img src="/assets/logo/logo.png" alt="Inazuma Eleven GO Galaxy" className="h-16 mx-auto mb-6" />
+          <img src="/assets/global/logo.png" alt="Inazuma Eleven GO Galaxy" className="h-16 mx-auto mb-6" />
           <h1 className="text-4xl font-extrabold text-white mb-2">Administration</h1>
           <p className="text-slate-400 text-lg">Stellar Project</p>
         </motion.div>
@@ -40,13 +40,13 @@ export default function Login() {
 
       <div className="w-full lg:w-1/2 flex items-center justify-center p-8 relative overflow-hidden">
         <div className="absolute inset-0 lg:hidden">
-          <img src="/assets/bg/mainVisual_01.png" alt="" className="w-full h-full object-cover opacity-20" />
-          <div className="absolute inset-0" style={{ backgroundImage: "url('/assets/bg/bg_repeat.png')", backgroundRepeat: "repeat", opacity: 0.05 }} />
+          <img src="/assets/global/bg/mainVisual_01.png" alt="" className="w-full h-full object-cover opacity-20" />
+          <div className="absolute inset-0" style={{ backgroundImage: "url('/assets/global/bg/bg_repeat.png')", backgroundRepeat: "repeat", opacity: 0.05 }} />
           <div className="absolute inset-0 bg-slate-950/70" />
         </div>
         <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="relative z-10 w-full max-w-md">
           <div className="text-center mb-8 lg:hidden">
-            <img src="/assets/logo/logo.png" alt="" className="h-12 mx-auto mb-4" />
+            <img src="/assets/global/logo.png" alt="" className="h-12 mx-auto mb-4" />
             <h1 className="text-2xl font-bold text-white">Administration</h1>
           </div>
           <div className="bg-slate-900/80 backdrop-blur border border-white/10 rounded-xl p-8">

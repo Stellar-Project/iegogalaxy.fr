@@ -12,7 +12,7 @@ export default function Unavailable() {
         <div
           className="absolute inset-0 opacity-30"
           style={{
-            backgroundImage: "url('/assets/bg/bg_repeat.png')",
+            backgroundImage: "url('/assets/global/bg/bg_repeat.png')",
             backgroundRepeat: "repeat",
             backgroundPosition: "center top",
           }}

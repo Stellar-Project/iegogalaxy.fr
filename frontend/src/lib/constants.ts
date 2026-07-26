@@ -1,7 +1,7 @@
 export const HERO_BACKGROUNDS = [
-  "/assets/bg/mainVisual_01.png",
-  "/assets/bg/mainVisual_02.png",
-  "/assets/bg/mainVisual_03.png",
+  "/assets/global/bg/mainVisual_01.png",
+  "/assets/global/bg/mainVisual_02.png",
+  "/assets/global/bg/mainVisual_03.png",
 ];
 
 export const SCREENSHOTS = [

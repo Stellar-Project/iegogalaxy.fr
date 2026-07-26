@@ -30,9 +30,10 @@ export default function About() {
   }, {} as Record<string, typeof credits>);
 
   return (
-    <div className="relative min-h-screen flex flex-col items-center text-slate-200 bg-slate-950 overflow-hidden px-4 py-20">
-      <div className="absolute inset-0 z-0">
-        <div className="absolute inset-0 bg-linear-to-b from-slate-950 via-slate-950/80 to-slate-950" />
+    <div className="relative min-h-screen flex flex-col items-center text-slate-200 bg-slate-950 px-4 py-20">
+      <div className="fixed inset-0 z-0 pointer-events-none">
+        <div className="absolute inset-0 bg-linear-to-b from-slate-950 via-slate-950/90 to-slate-950" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.03),transparent_70%)]" />
       </div>
 
       <div className="relative z-10 max-w-6xl mx-auto space-y-20 w-full">

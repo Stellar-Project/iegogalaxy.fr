@@ -18,7 +18,7 @@ export default function Footer() {
   return (
     <footer className="relative bg-slate-950 text-slate-400 text-sm overflow-hidden z-20">
       <div className="absolute inset-0 z-0">
-        <div className="absolute inset-0 opacity-50" style={{ backgroundImage: "url('/assets/bg/bg_repeat.png')", backgroundRepeat: "repeat", backgroundPosition: "center top" }} />
+        <div className="absolute inset-0 opacity-50" style={{ backgroundImage: "url('/assets/global/bg/bg_repeat.png')", backgroundRepeat: "repeat", backgroundPosition: "center top" }} />
         <div className="absolute inset-0 bg-linear-to-t from-slate-950 via-slate-950/80 to-slate-950/90" />
       </div>
 
@@ -28,7 +28,7 @@ export default function Footer() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
             <div className="space-y-4">
-              <img src="/assets/logo/SN_BB_Logo_HD.png" alt="Inazuma Eleven Go Galaxy" className="h-24 w-auto object-contain opacity-90" />
+              <img src="/assets/pages/home/SN_BB_Logo_HD.png" alt="Inazuma Eleven Go Galaxy" className="h-24 w-auto object-contain opacity-90" />
               <p className="leading-relaxed text-slate-500">
                 Le patch de traduction française complet pour Inazuma Eleven GO Galaxy. Redécouvrez l'aventure spatiale sans barrière de langue.
               </p>

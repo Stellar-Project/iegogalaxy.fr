@@ -124,7 +124,7 @@ export const Navbar = () => {
           <div
             className="absolute inset-0 opacity-50"
             style={{
-              backgroundImage: "url('/assets/bg/bg_repeat.png')",
+              backgroundImage: "url('/assets/global/bg/bg_repeat.png')",
               backgroundRepeat: "repeat",
               backgroundPosition: "center top",
             }}
@@ -140,7 +140,7 @@ export const Navbar = () => {
             >
               <a href="/">
                 <img
-                  src="/assets/logo/SN_BB_Logo_HD.png"
+                  src="/assets/pages/home/SN_BB_Logo_HD.png"
                   alt="Inazuma Eleven Go Galaxy FR"
                   className="h-[70px] w-auto object-contain"
                 />

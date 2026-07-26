@@ -12,7 +12,7 @@ export default function NotFound() {
         <div
           className="absolute inset-0 opacity-30"
           style={{
-            backgroundImage: "url('/assets/bg/bg_repeat.png')",
+            backgroundImage: "url('/assets/global/bg/bg_repeat.png')",
             backgroundRepeat: "repeat",
             backgroundPosition: "center top",
           }}
@@ -63,9 +63,9 @@ export default function NotFound() {
           className="flex flex-col sm:flex-row gap-4 pt-4"
         >
           <Button
-            onClick={() => navigate(-1)}
+            onClick={() => { if (window.history.length > 1) navigate(-1); else navigate("/"); }}
             variant="outline"
-            className="border-white/10 hover:bg-white/5 h-12 px-8 text-base"
+            className="text-slate-200 border-white/10 hover:bg-white/5 h-12 px-8 text-base"
           >
             <ArrowLeft className="mr-2 h-4 w-4" />
             Retour en arrière
