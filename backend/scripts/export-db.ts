@@ -1,7 +1,6 @@
-import { PrismaClient } from "../src/generated/prisma";
+import "dotenv/config";
+import { prisma } from "../src/lib/prisma.js";
 import { writeFileSync } from "fs";
-
-const prisma = new PrismaClient();
 
 const models = [
   "user", "verification",
@@ -19,8 +18,8 @@ async function main() {
     try {
       data[model] = await (prisma as any)[model].findMany();
       console.log(`✓ ${model}: ${data[model].length} lignes`);
-    } catch {
-      console.log(`✗ ${model}: ignoré`);
+    } catch (e) {
+      console.log(`✗ ${model}: ${(e as Error).message}`);
     }
   }
 

@@ -1,7 +1,6 @@
-import { PrismaClient } from "../src/generated/prisma";
+import "dotenv/config";
+import { prisma } from "../src/lib/prisma.js";
 import { readFileSync } from "fs";
-
-const prisma = new PrismaClient();
 
 const models = [
   "user", "verification",
