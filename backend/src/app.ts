@@ -21,6 +21,7 @@ import exportRoutes from "./routes/export.js";
 import uploadRoutes from "./routes/upload.js";
 import analyticsRoutes from "./routes/analytics.js";
 import searchRoutes from "./routes/search.js";
+import seoRoutes from "./routes/seo.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -68,6 +69,7 @@ await fastify.register(exportRoutes);
 await fastify.register(uploadRoutes);
 await fastify.register(analyticsRoutes);
 await fastify.register(searchRoutes);
+await fastify.register(seoRoutes);
 
 const port = parseInt(process.env.PORT || "3000");
 try {
