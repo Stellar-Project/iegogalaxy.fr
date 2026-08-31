@@ -1,13 +1,12 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import {
-  ChevronRight, Users, Clock, Heart, Rocket, Palette, Star, Globe, Gamepad2,
-  Github, Twitter, Youtube, Instagram, Wrench,
+  ChevronRight, Users, Clock, Heart, Rocket, Palette, Star, Wrench,
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { DiscordMemberCard } from "@/components/DiscordMemberCard";
+import { DiscordMemberCard, type TeamMember as CardTeamMember } from "@/components/DiscordMemberCard";
 import { useMeta } from "@/lib/useMeta";
 import { useTeam, useTimeline, useCredits } from "@/api/useData";
 
@@ -17,7 +16,6 @@ const colorMap: Record<string, string> = {
   "Anciens Traducteurs": "text-blue-400",
   "Remerciements Spéciaux": "text-red-400",
 };
-const linkIconMap: Record<string, React.ElementType> = { Github, Twitter, Youtube, Instagram, Globe, Gamepad2, Users };
 
 export default function About() {
   useMeta({ title: "À propos", description: "Découvre l'équipe Stellar Project, l'histoire du projet de traduction et les crédits." });
@@ -123,7 +121,7 @@ export default function About() {
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
               >
-                <DiscordMemberCard member={member} />
+                <DiscordMemberCard member={member as unknown as CardTeamMember} />
               </motion.div>
             ))}
           </div>
@@ -182,8 +180,8 @@ export default function About() {
             Le projet est toujours à la recherche de talents. Si vous êtes
             traducteur, graphiste ou développeur, rejoignez notre Discord.
           </p>
-          <Button size="lg" className="bg-[#5865F2] hover:bg-[#4752C4] text-white font-semibold shadow-lg rounded-full px-8 h-12 text-base transition-all hover:scale-105">
-            <a href="https://discord.gg/mtJ2EzxMkt">Rejoindre le Discord</a>
+          <Button size="lg" className="bg-[#5865F2] hover:bg-[#4752C4] text-white font-semibold shadow-lg rounded-full px-8 h-12 text-base transition-all hover:scale-105" asChild>
+            <a href="https://discord.gg/mtJ2EzxMkt" target="_blank" rel="noopener noreferrer">Rejoindre le Discord</a>
           </Button>
         </motion.div>
       </div>

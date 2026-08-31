@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { api } from "@/api/client";
 import type { AdminUser } from "@/api/types";
 import { Button } from "@/components/ui/button";
@@ -16,9 +16,27 @@ export default function UsersAdmin() {
   const [editing, setEditing] = useState<string | null>(null);
   const [form, setForm] = useState({ role: "", banned: false, banReason: "", banExpires: "" });
 
-  useEffect(() => { load(); }, []);
+  const load = useCallback(async () => {
+    const data = await api.getUsers();
+    setUsers(data);
+  }, []);
 
-  const load = async () => setUsers(await api.getUsers());
+  useEffect(() => {
+    let isMounted = true;
+
+    const fetchUsers = async () => {
+      const data = await api.getUsers();
+      if (isMounted) {
+        setUsers(data);
+      }
+    };
+
+    fetchUsers();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   const startEdit = (u: AdminUser) => {
     setEditing(u.id);

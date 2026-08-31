@@ -74,7 +74,7 @@ export const api = {
   deletePost: (id: string) => request<{ success: boolean }>(`/blog/${id}`, { method: "DELETE" }),
 
   // Export
-  exportData: () => request<any>("/export"),
+  exportData: () => request<Record<string, unknown>>("/export"),
 
   // Upload
   uploadFile: async (file: File) => {

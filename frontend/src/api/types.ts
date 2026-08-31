@@ -83,6 +83,7 @@ export interface WikiTool {
   link: string | null
   tags: string[]
   sortOrder: number
+  published: boolean
   pages?: { id: string; slug: string; title: string }[]
 }
 
@@ -93,6 +94,7 @@ export interface WikiPage {
   content: string
   toolId: string | null
   published: boolean
+  sortOrder: number
   tool?: { id: string; name: string } | null
   createdAt: string
   updatedAt: string

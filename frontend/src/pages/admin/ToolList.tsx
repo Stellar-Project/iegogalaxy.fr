@@ -1,16 +1,14 @@
 import { useState } from "react";
 import { api } from "@/api/client";
-import type { WikiTool, WikiPage } from "@/api/types";
+import type { WikiTool } from "@/api/types";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import TiptapEditor from "@/components/admin/TiptapEditor";
-import { Plus, Pencil, Trash2, Check, X, FileText, Eye, Edit3, ChevronUp, ChevronDown, GripVertical } from "lucide-react";
+import { Plus, Trash2, Check, X, Edit3, GripVertical } from "lucide-react";
 import { toast } from "sonner";
 import {
   DndContext,
@@ -19,8 +17,8 @@ import {
   PointerSensor,
   useSensor,
   useSensors,
-  DragEndEvent,
 } from "@dnd-kit/core";
+import type { DragEndEvent } from "@dnd-kit/core";
 import {
   arrayMove,
   SortableContext,
@@ -34,7 +32,6 @@ interface ToolItemProps {
   tool: WikiTool;
   onEdit: (tool: WikiTool) => void;
   onDelete: (id: string) => void;
-  onMove: (id: string, direction: "up" | "down") => void;
   isDragging: boolean;
 }
 
@@ -45,7 +42,6 @@ function ToolItem({ tool, onEdit, onDelete, isDragging }: ToolItemProps) {
     setNodeRef,
     transform,
     transition,
-    isDragging: localIsDragging,
   } = useSortable({ id: tool.id });
 
   const style = {
@@ -89,18 +85,15 @@ function ToolItem({ tool, onEdit, onDelete, isDragging }: ToolItemProps) {
 
 interface ToolListProps {
   tools: WikiTool[];
-  pages: WikiPage[];
   onRefreshTools: () => void;
   onRefreshPages: () => void;
   onSelectTool: (tool: WikiTool) => void;
-  onCreatePage: (tool: WikiTool) => void;
 }
 
-export default function ToolList({ tools, pages, onRefreshTools, onRefreshPages, onSelectTool, onCreatePage }: ToolListProps) {
+export default function ToolList({ tools, onRefreshTools, onRefreshPages, onSelectTool }: ToolListProps) {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [form, setForm] = useState({
     name: "", description: "", link: "", imagePath: "", tags: "", sortOrder: 0, published: true,
-    supernovaRomLink: "", bigbangRomLink: "", supernovaRomSize: "", bigbangRomSize: "",
   });
 
   const sensors = useSensors(
@@ -121,15 +114,13 @@ export default function ToolList({ tools, pages, onRefreshTools, onRefreshPages,
     }
   };
 
-  const resetForm = () => setForm({ name: "", description: "", link: "", imagePath: "", tags: "", sortOrder: 0, published: true, supernovaRomLink: "", bigbangRomLink: "", supernovaRomSize: "", bigbangRomSize: "" });
+  const resetForm = () => setForm({ name: "", description: "", link: "", imagePath: "", tags: "", sortOrder: 0, published: true });
 
   const startEdit = (t: WikiTool) => {
     setEditingId(t.id);
     setForm({
       name: t.name, description: t.description || "", link: t.link || "", imagePath: t.imagePath || "",
       tags: (t.tags || []).join(", "), sortOrder: t.sortOrder, published: t.published !== false,
-      supernovaRomLink: t.supernovaRomLink || "", bigbangRomLink: t.bigbangRomLink || "",
-      supernovaRomSize: t.supernovaRomSize || "", bigbangRomSize: t.bigbangRomSize || "",
     });
   };
 
@@ -169,7 +160,7 @@ export default function ToolList({ tools, pages, onRefreshTools, onRefreshPages,
               <Input placeholder="Nom" value={form.name} onChange={e => setForm({...form, name: e.target.value})} className="bg-slate-800 border-white/10 text-white" required />
               <Input placeholder="Lien (optionnel)" value={form.link} onChange={e => setForm({...form, link: e.target.value})} className="bg-slate-800 border-white/10 text-white" />
               <Input placeholder="Image (optionnel)" value={form.imagePath} onChange={e => setForm({...form, imagePath: e.target.value})} className="bg-slate-800 border-white/10 text-white" />
-              <Input placeholder="Ordre (0, 1, 2...)" type="number" value={form.sortOrder} onChange={e => setForm({...form, sortOrder: e.target.value})} className="bg-slate-800 border-white/10 text-white" />
+              <Input placeholder="Ordre (0, 1, 2...)" type="number" value={form.sortOrder} onChange={e => setForm({...form, sortOrder: Number(e.target.value)})} className="bg-slate-800 border-white/10 text-white" />
               <Label className="flex items-center gap-2 text-sm text-slate-300"><Switch checked={form.published} onCheckedChange={v => setForm({...form, published: v})} /> Publié</Label>
             </div>
             <div>
@@ -178,17 +169,6 @@ export default function ToolList({ tools, pages, onRefreshTools, onRefreshPages,
             </div>
             <div className="grid grid-cols-2 gap-3">
               <Input placeholder="Tags (séparés par des virgules)" value={form.tags} onChange={e => setForm({...form, tags: e.target.value})} className="bg-slate-800 border-white/10 text-white" />
-            </div>
-            <hr className="border-white/10 my-2" />
-            <h4 className="text-sm font-semibold text-white">ROMs Supernova</h4>
-            <div className="grid grid-cols-2 gap-3">
-              <Input placeholder="Lien ROM" value={form.supernovaRomLink} onChange={e => setForm({...form, supernovaRomLink: e.target.value})} className="bg-slate-800 border-white/10 text-white" />
-              <Input placeholder="Taille ROM" value={form.supernovaRomSize} onChange={e => setForm({...form, supernovaRomSize: e.target.value})} className="bg-slate-800 border-white/10 text-white" />
-            </div>
-            <h4 className="text-sm font-semibold text-white">ROMs Big Bang</h4>
-            <div className="grid grid-cols-2 gap-3">
-              <Input placeholder="Lien ROM" value={form.bigbangRomLink} onChange={e => setForm({...form, bigbangRomLink: e.target.value})} className="bg-slate-800 border-white/10 text-white" />
-              <Input placeholder="Taille ROM" value={form.bigbangRomSize} onChange={e => setForm({...form, bigbangRomSize: e.target.value})} className="bg-slate-800 border-white/10 text-white" />
             </div>
             <div className="flex gap-2 pt-2">
               <Button onClick={save} className="bg-blue-600 hover:bg-blue-500 text-white"><Check size={16} className="mr-1" /> Sauvegarder</Button>

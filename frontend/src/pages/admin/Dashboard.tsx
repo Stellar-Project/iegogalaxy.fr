@@ -81,7 +81,7 @@ export default function Dashboard() {
 
   return (
     <div className="space-y-6">
-      <div className="relative overflow-hidden rounded-xl bg-gradient-to-br from-slate-900 to-slate-950 border border-white/10 p-6 mb-2">
+      <div className="relative overflow-hidden rounded-xl bg-linear-to-br from-slate-900 to-slate-950 border border-white/10 p-6 mb-2">
         <div className="absolute top-0 right-0 w-64 h-64 opacity-5">
           <img src="/assets/global/bg/mainVisual_02.png" alt="" className="w-full h-full object-cover" />
         </div>
@@ -286,7 +286,7 @@ function BarChart({ data, max, color }: { data: { date: string; count: number }[
         <div key={d.date} className="flex items-center gap-3 text-sm">
           <span className="text-slate-400 w-24 shrink-0 text-xs">{d.date.slice(5)}</span>
           <div className="flex-1 bg-slate-800 rounded h-5 overflow-hidden">
-            <div className={`bg-gradient-to-r ${bgGrad} h-full rounded transition-all`} style={{ width: `${(d.count / max) * 100}%` }} />
+            <div className={`bg-linear-to-r ${bgGrad} h-full rounded transition-all`} style={{ width: `${(d.count / max) * 100}%` }} />
           </div>
           <span className="text-slate-300 w-8 text-right text-xs">{d.count}</span>
         </div>

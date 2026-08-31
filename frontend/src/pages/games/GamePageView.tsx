@@ -3,7 +3,7 @@ import { useParams, Link } from "react-router-dom";
 import { api } from "@/api/client";
 import type { Game } from "@/api/types";
 import { motion } from "framer-motion";
-import { ChevronRight, Gamepad2, Calendar, Download, ExternalLink, Server } from "lucide-react";
+import { ChevronRight, Gamepad2, Calendar, Download, ExternalLink } from "lucide-react";
 import Loading from "@/components/Loading";
 import { useMeta } from "@/lib/useMeta";
 
@@ -14,8 +14,30 @@ export default function GamePageView() {
 
   useEffect(() => {
     if (!slug) return;
-    setLoading(true);
-    api.getGame(slug).then(setGame).catch(() => setGame(null)).finally(() => setLoading(false));
+    let isMounted = true;
+
+    const fetchGame = async () => {
+      try {
+        const data = await api.getGame(slug);
+        if (isMounted) {
+          setGame(data);
+        }
+      } catch {
+        if (isMounted) {
+          setGame(null);
+        }
+      } finally {
+        if (isMounted) {
+          setLoading(false);
+        }
+      }
+    };
+
+    fetchGame();
+
+    return () => {
+      isMounted = false;
+    };
   }, [slug]);
 
   useMeta({ title: game?.name || "Jeu", description: game?.description });
@@ -51,7 +73,13 @@ export default function GamePageView() {
 
         <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="grid md:grid-cols-[300px_1fr] gap-8">
           <div>
-            {game.imageUrl ? <img src={game.imageUrl} alt={game.name} className="w-full rounded-xl border border-white/10" /> : <div className="w-full aspect-[3/4] rounded-xl bg-slate-800 flex items-center justify-center"><Gamepad2 size={64} className="text-slate-600" /></div>}
+            {game.imageUrl ? (
+              <img src={game.imageUrl} alt={game.name} className="w-full rounded-xl border border-white/10" />
+            ) : (
+              <div className="w-full aspect-3/4 rounded-xl bg-slate-800 flex items-center justify-center">
+                <Gamepad2 size={64} className="text-slate-600" />
+              </div>
+            )}
           </div>
           <div className="space-y-6">
             <h1 className="text-3xl md:text-4xl font-extrabold text-white">{game.name}</h1>
@@ -62,7 +90,10 @@ export default function GamePageView() {
                 <span className="text-yellow-400 font-semibold">{game.status}</span>
               </div>
               <div className="w-full bg-slate-800 rounded-full h-3 overflow-hidden">
-                <div className="bg-gradient-to-r from-yellow-600 to-yellow-400 h-full rounded-full transition-all" style={{ width: `${Math.min(statusPercent, 100)}%` }} />
+                <div
+                  className="bg-linear-to-r from-yellow-600 to-yellow-400 h-full rounded-full transition-all"
+                  style={{ width: `${Math.min(statusPercent, 100)}%` }}
+                />
               </div>
             </div>
 
@@ -75,8 +106,12 @@ export default function GamePageView() {
             <p className="text-slate-300 leading-relaxed">{game.description}</p>
 
             {downloadUrl && (
-              <a href={downloadUrl} target={game.downloadUrl ? "_blank" : undefined} rel={game.downloadUrl ? "noopener noreferrer" : undefined}
-                className="inline-flex items-center gap-2 bg-yellow-600 hover:bg-yellow-500 text-white px-6 py-3 rounded-lg font-semibold transition-colors">
+              <a
+                href={downloadUrl}
+                target={game.downloadUrl ? "_blank" : undefined}
+                rel={game.downloadUrl ? "noopener noreferrer" : undefined}
+                className="inline-flex items-center gap-2 bg-yellow-600 hover:bg-yellow-500 text-white px-6 py-3 rounded-lg font-semibold transition-colors"
+              >
                 {game.downloadUrl ? <ExternalLink size={18} /> : <Download size={18} />}
                 {game.downloadUrl ? "Lien externe" : "Telecharger"}
                 {game.fileSize && <span className="text-xs text-yellow-200">({game.fileSize})</span>}

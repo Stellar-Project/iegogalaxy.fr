@@ -53,7 +53,7 @@ function NewsSection() {
           {featured && (
             <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
               <Link to={`/actualites/${featured.slug}`} className="block group">
-                <div className="bg-gradient-to-r from-slate-800/50 to-slate-900/50 border border-white/10 hover:border-blue-500/30 rounded-xl p-6 md:p-8 transition-all">
+                <div className="bg-linear-to-r from-slate-800/50 to-slate-900/50 border border-white/10 hover:border-blue-500/30 rounded-xl p-6 md:p-8 transition-all">
                   <div className="flex items-center gap-2 text-xs text-slate-500 mb-3">
                     {featured.category && <span className="text-[10px] bg-blue-500/10 text-blue-400 px-1.5 py-0.5 rounded">{featured.category}</span>}
                     <Calendar size={12} />

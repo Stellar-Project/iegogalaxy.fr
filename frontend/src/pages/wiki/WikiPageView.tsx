@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { api } from "@/api/client";
 import type { WikiPage } from "@/api/types";
@@ -7,13 +7,34 @@ import { ChevronRight } from "lucide-react";
 import Loading from "@/components/Loading";
 import { useMeta } from "@/lib/useMeta";
 import { sanitize } from "@/lib/sanitize";
-import { useEditor } from "@tiptap/react";
-import StarterKit from "@tiptap/starter-kit";
-import TableOfContents from "@tiptap/extension-table-of-contents";
+
+interface TocItem {
+  id: string;
+  text: string;
+  level: number;
+}
 
 function readingTime(html: string): number {
   const words = html.replace(/<[^>]*>/g, "").split(/\s+/).filter(Boolean).length;
   return Math.max(1, Math.ceil(words / 200));
+}
+
+function extractHeadings(html: string): TocItem[] {
+  if (typeof window === "undefined") return [];
+  const doc = new DOMParser().parseFromString(html, "text/html");
+  const headings = doc.querySelectorAll("h2, h3");
+  const items: TocItem[] = [];
+
+  headings.forEach((heading) => {
+    const text = heading.textContent?.trim() || "";
+    const id = heading.id || text.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+    const level = heading.tagName.toLowerCase() === "h2" ? 2 : 3;
+    if (text) {
+      items.push({ id, text, level });
+    }
+  });
+
+  return items;
 }
 
 export default function WikiPageView() {
@@ -23,17 +44,40 @@ export default function WikiPageView() {
 
   useEffect(() => {
     if (!slug) return;
-    setLoading(true);
-    api.getWikiPage(slug).then(setPage).catch(() => setPage(null)).finally(() => setLoading(false));
+    let isMounted = true;
+
+    const fetchPage = async () => {
+      try {
+        const data = await api.getWikiPage(slug);
+        if (isMounted) {
+          setPage(data);
+        }
+      } catch {
+        if (isMounted) {
+          setPage(null);
+        }
+      } finally {
+        if (isMounted) {
+          setLoading(false);
+        }
+      }
+    };
+
+    fetchPage();
+
+    return () => {
+      isMounted = false;
+    };
   }, [slug]);
 
-  const editor = useEditor({
-    extensions: [StarterKit, TableOfContents.configure({ getHeadingIds: true })],
-    content: page?.content || "",
-    editable: false,
-  });
+  const safeContent = useMemo(() => sanitize(page?.content || ""), [page?.content]);
+  const tocList = useMemo(() => extractHeadings(safeContent), [safeContent]);
+  const mins = readingTime(safeContent);
 
-  useMeta({ title: page?.title || "Page wiki", description: page?.content ? page.content.replace(/<[^>]*>/g, "").slice(0, 160) : undefined });
+  useMeta({
+    title: page?.title || "Page wiki",
+    description: page?.content ? page.content.replace(/<[^>]*>/g, "").slice(0, 160) : undefined,
+  });
 
   if (loading) {
     return (
@@ -47,13 +91,12 @@ export default function WikiPageView() {
     return (
       <div className="relative min-h-screen bg-background flex flex-col items-center justify-center text-center text-slate-500 space-y-4 px-4">
         <p className="text-lg">Cette page n'est pas encore disponible.</p>
-        <Link to="/wiki" className="text-yellow-400 hover:underline">Retour au wiki</Link>
+        <Link to="/wiki" className="text-yellow-400 hover:underline">
+          Retour au wiki
+        </Link>
       </div>
     );
   }
-
-  const safeContent = sanitize(page.content || "");
-  const mins = readingTime(safeContent);
 
   return (
     <div className="relative min-h-screen text-slate-200 bg-background px-4 py-20">
@@ -64,9 +107,13 @@ export default function WikiPageView() {
 
       <div className="relative z-10 max-w-6xl mx-auto">
         <nav className="flex items-center gap-2 text-sm text-slate-500 mb-8">
-          <Link to="/" className="hover:text-white transition-colors">Accueil</Link>
+          <Link to="/" className="hover:text-white transition-colors">
+            Accueil
+          </Link>
           <ChevronRight size={14} />
-          <Link to="/wiki" className="hover:text-white transition-colors">Wiki</Link>
+          <Link to="/wiki" className="hover:text-white transition-colors">
+            Wiki
+          </Link>
           <ChevronRight size={14} />
           <span className="text-white">{page.title}</span>
         </nav>
@@ -78,7 +125,9 @@ export default function WikiPageView() {
               <div className="flex items-center gap-2 text-sm text-slate-400 mb-8">
                 <time dateTime={page.createdAt}>
                   {new Date(page.createdAt).toLocaleDateString("fr-FR", {
-                    year: "numeric", month: "long", day: "numeric"
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
                   })}
                 </time>
                 <span aria-hidden="true">·</span>
@@ -86,7 +135,10 @@ export default function WikiPageView() {
               </div>
             </motion.div>
 
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.15 }}
               className="wiki-content prose prose-invert max-w-none
                 [&_h2]:text-yellow-400 [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:mt-10 [&_h2]:mb-4 [&_h2]:scroll-mt-24
                 [&_h3]:text-yellow-300 [&_h3]:text-xl [&_h3]:font-semibold [&_h3]:mt-8 [&_h3]:mb-3 [&_h3]:scroll-mt-24
@@ -107,27 +159,32 @@ export default function WikiPageView() {
             {page.tool && (
               <div className="mt-12 pt-8 border-t border-white/10 flex flex-wrap items-center gap-2">
                 <span className="text-xs text-slate-500">Outil associé :</span>
-                <Link to="/wiki" className="inline-flex items-center gap-1 text-sm bg-white/5 hover:bg-white/10 text-slate-300 px-3 py-1 rounded-full transition-colors">
+                <Link
+                  to="/wiki"
+                  className="inline-flex items-center gap-1 text-sm bg-white/5 hover:bg-white/10 text-slate-300 px-3 py-1 rounded-full transition-colors"
+                >
                   {page.tool.name}
                 </Link>
               </div>
             )}
           </article>
 
-          {editor?.storage.tableOfContents.list.length > 0 && (
+          {tocList.length > 0 && (
             <aside className="hidden lg:block">
               <div className="sticky top-24 bg-slate-900/50 border border-white/10 rounded-lg p-4">
                 <h4 className="text-xs font-semibold uppercase tracking-widest text-slate-400 mb-4">
                   Sur cette page
                 </h4>
                 <nav className="space-y-1">
-                  {editor?.storage.tableOfContents.list.map((item: any) => (
-                    <a key={item.id} href={`#${item.id}`}
-                      className={`block text-sm leading-snug py-1 transition-colors hover:text-white
-                        ${item.level === 2
+                  {tocList.map((item) => (
+                    <a
+                      key={item.id}
+                      href={`#${item.id}`}
+                      className={`block text-sm leading-snug py-1 transition-colors hover:text-white ${
+                        item.level === 2
                           ? "text-slate-300 border-l-2 border-yellow-500/60 pl-3"
                           : "text-slate-500 pl-6 border-l-2 border-transparent hover:border-yellow-500/40"
-                        }`}
+                      }`}
                     >
                       {item.text}
                     </a>

@@ -18,8 +18,12 @@ export default function Login() {
     try {
       await login(username, password);
       navigate("/admin");
-    } catch (err: any) {
-      setError(err.message || "Identifiants invalides");
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError("Identifiants invalides");
+      }
     }
   };
 
@@ -28,7 +32,7 @@ export default function Login() {
       <div className="hidden lg:flex relative w-1/2 items-center justify-center overflow-hidden">
         <div className="absolute inset-0">
           <img src="/assets/global/bg/mainVisual_01.png" alt="" className="w-full h-full object-cover opacity-60" />
-          <div className="absolute inset-0 bg-gradient-to-r from-slate-950/80 via-slate-950/50 to-transparent" />
+          <div className="absolute inset-0 bg-linear-to-r from-slate-950/80 via-slate-950/50 to-transparent" />
           <div className="absolute inset-0" style={{ backgroundImage: "url('/assets/global/bg/bg_repeat.png')", backgroundRepeat: "repeat", opacity: 0.1 }} />
         </div>
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="relative z-10 text-center px-12">

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { api } from "@/api/client";
 import type { WikiTool, WikiPage } from "@/api/types";
 import { Button } from "@/components/ui/button";
@@ -7,8 +7,9 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import TiptapEditor from "@/components/admin/TiptapEditor";
-import { Plus, Pencil, Trash2, Check, X, FileText, Eye, ChevronUp, ChevronDown } from "lucide-react";
+import { Plus, Pencil, Trash2, Check, X, Eye, ChevronUp, ChevronDown } from "lucide-react";
 import { toast } from "sonner";
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
 
 interface PageEditorProps {
   tools: WikiTool[];
@@ -22,19 +23,14 @@ export default function PageEditor({ tools, pages, onRefreshPages }: PageEditorP
   const [mode, setMode] = useState<"create" | "edit">("create");
   const [form, setForm] = useState({
     slug: "", name: "", content: "", toolId: "",
-    supernovaLink: "", bigbangLink: "",
-    supernovaRomLink: "", bigbangRomLink: "",
-    supernovaRomSize: "", bigbangRomSize: "",
     published: true,
   });
 
-  const selectedTool = tools.find(t => t.id === form.toolId);
+  // Valeur affective du toolId : celle choisie par l'utilisateur,
+  // sinon le premier outil disponible. Calculée au rendu, pas d'effect.
+  const effectiveToolId = form.toolId || tools[0]?.id || "";
 
-  useEffect(() => {
-    if (tools.length > 0 && !form.toolId) {
-      setForm(prev => ({ ...prev, toolId: tools[0].id }));
-    }
-  }, [tools]);
+  const selectedTool = tools.find(t => t.id === effectiveToolId);
 
   const pagesByTool = (toolId: string) => pages.filter((p) => p.toolId === toolId);
 
@@ -42,7 +38,7 @@ export default function PageEditor({ tools, pages, onRefreshPages }: PageEditorP
     setEditingPageId(null);
     setPreview(false);
     setMode("create");
-    setForm({ slug: "", name: "", content: "", toolId: form.toolId, supernovaLink: "", bigbangLink: "", supernovaRomLink: "", bigbangRomLink: "", supernovaRomSize: "", bigbangRomSize: "", published: true });
+    setForm({ slug: "", name: "", content: "", toolId: effectiveToolId, published: true });
   };
 
   const startEdit = (page?: WikiPage) => {
@@ -53,19 +49,13 @@ export default function PageEditor({ tools, pages, onRefreshPages }: PageEditorP
         slug: page.slug,
         name: page.title,
         content: page.content || "",
-        toolId: page.toolId,
-        supernovaLink: page.supernovaLink || "",
-        bigbangLink: page.bigbangLink || "",
-        supernovaRomLink: page.supernovaRomLink || "",
-        bigbangRomLink: page.bigbangRomLink || "",
-        supernovaRomSize: page.supernovaRomSize || "",
-        bigbangRomSize: page.bigbangRomSize || "",
+        toolId: page.toolId ?? "",
         published: page.published,
       });
     } else {
       setEditingPageId("new");
       setMode("create");
-      setForm(prev => ({ ...prev, slug: "", name: "", content: "", published: true }));
+      setForm(prev => ({ ...prev, toolId: effectiveToolId, slug: "", name: "", content: "", published: true }));
     }
   };
 
@@ -74,13 +64,7 @@ export default function PageEditor({ tools, pages, onRefreshPages }: PageEditorP
       slug: form.slug,
       title: form.name,
       content: form.content,
-      toolId: form.toolId,
-      supernovaLink: form.supernovaLink || null,
-      bigbangLink: form.bigbangLink || null,
-      supernovaRomLink: form.supernovaRomLink || null,
-      bigbangRomLink: form.bigbangRomLink || null,
-      supernovaRomSize: form.supernovaRomSize || null,
-      bigbangRomSize: form.bigbangRomSize || null,
+      toolId: effectiveToolId,
       published: form.published,
     };
 
@@ -100,7 +84,7 @@ export default function PageEditor({ tools, pages, onRefreshPages }: PageEditorP
   };
 
   const movePage = async (id: string, direction: "up" | "down") => {
-    const toolPages = pagesByTool(form.toolId).sort((a, b) => a.sortOrder - b.sortOrder);
+    const toolPages = pagesByTool(effectiveToolId).sort((a, b) => a.sortOrder - b.sortOrder);
     const idx = toolPages.findIndex((p) => p.id === id);
     if (idx === -1) return;
     const swapIdx = direction === "up" ? idx - 1 : idx + 1;
@@ -121,7 +105,7 @@ export default function PageEditor({ tools, pages, onRefreshPages }: PageEditorP
       <div className="flex items-center justify-between flex-wrap gap-2">
         <h3 className="text-xl font-bold text-white">Pages de l'outil : {selectedTool.name}</h3>
         <div className="flex gap-2">
-          <Select value={form.toolId} onValueChange={v => { setForm(prev => ({ ...prev, toolId: v })); setEditingPageId(null); }}>
+          <Select value={effectiveToolId} onValueChange={v => { setForm(prev => ({ ...prev, toolId: v })); setEditingPageId(null); }}>
             <SelectTrigger className="w-[200px] bg-slate-800 border-white/10 text-white"><SelectValue /></SelectTrigger>
             <SelectContent>
               {tools.map(t => <SelectItem key={t.id} value={t.id}>{t.name}</SelectItem>)}
@@ -157,14 +141,6 @@ export default function PageEditor({ tools, pages, onRefreshPages }: PageEditorP
             ) : (
               <TiptapEditor content={form.content} onChange={html => setForm({...form, content: html})} placeholder="Contenu de la page..." />
             )}
-            <div className="grid grid-cols-2 gap-3 pt-2">
-              <Input placeholder="Lien patch Supernova (optionnel)" value={form.supernovaLink} onChange={e => setForm({...form, supernovaLink: e.target.value})} className="bg-slate-800 border-white/10 text-white" />
-              <Input placeholder="Lien patch Big Bang (optionnel)" value={form.bigbangLink} onChange={e => setForm({...form, bigbangLink: e.target.value})} className="bg-slate-800 border-white/10 text-white" />
-              <Input placeholder="Lien ROM Supernova (optionnel)" value={form.supernovaRomLink} onChange={e => setForm({...form, supernovaRomLink: e.target.value})} className="bg-slate-800 border-white/10 text-white" />
-              <Input placeholder="Taille ROM Supernova" value={form.supernovaRomSize} onChange={e => setForm({...form, supernovaRomSize: e.target.value})} className="bg-slate-800 border-white/10 text-white" />
-              <Input placeholder="Lien ROM Big Bang (optionnel)" value={form.bigbangRomLink} onChange={e => setForm({...form, bigbangRomLink: e.target.value})} className="bg-slate-800 border-white/10 text-white" />
-              <Input placeholder="Taille ROM Big Bang" value={form.bigbangRomSize} onChange={e => setForm({...form, bigbangRomSize: e.target.value})} className="bg-slate-800 border-white/10 text-white" />
-            </div>
             <div className="flex gap-2 pt-2">
               <Button onClick={save} className="bg-blue-600 hover:bg-blue-500 text-white"><Check size={16} className="mr-1" /> Sauvegarder</Button>
               <Button variant="outline" onClick={close}><X size={16} className="mr-1" /> Annuler</Button>
