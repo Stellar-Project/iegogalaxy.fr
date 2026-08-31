@@ -3,6 +3,8 @@ import { api } from "@/api/client";
 import type { SiteConfig } from "@/api/types";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Check, Save } from "lucide-react";
 
@@ -26,36 +28,13 @@ export default function ConfigAdmin() {
 
       <Card className="bg-slate-900 border-white/10">
         <CardHeader className="flex flex-row items-center justify-between">
-          <CardTitle className="text-lg text-white">Patchs</CardTitle>
-          <label className="flex items-center gap-2 text-sm text-slate-400 cursor-pointer">
+          <CardTitle className="text-lg text-white">Visibilité des patchs</CardTitle>
+          <Label className="flex items-center gap-2 text-sm cursor-pointer">
             <span className={config.showPatch !== false ? "text-green-400" : "text-slate-500"}>Visible</span>
-            <input type="checkbox" checked={config.showPatch !== false} onChange={(e) => setConfig({ ...config, showPatch: e.target.checked })} className="toggle accent-green-500" />
-          </label>
+            <Switch checked={config.showPatch !== false} onCheckedChange={(v) => setConfig({ ...config, showPatch: v })} />
+          </Label>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="text-sm text-slate-400 mb-1 block">Version</label>
-              <Input value={config.patchVersion} onChange={(e) => setConfig({ ...config, patchVersion: e.target.value })} className="bg-slate-800 border-white/10 text-white" />
-            </div>
-            <div>
-              <label className="text-sm text-slate-400 mb-1 block">Date</label>
-              <Input value={config.patchDate} onChange={(e) => setConfig({ ...config, patchDate: e.target.value })} className="bg-slate-800 border-white/10 text-white" />
-            </div>
-            <div>
-              <label className="text-sm text-slate-400 mb-1 block">Taille</label>
-              <Input value={config.patchSize} onChange={(e) => setConfig({ ...config, patchSize: e.target.value })} className="bg-slate-800 border-white/10 text-white" />
-            </div>
-            <div>
-              <label className="text-sm text-slate-400 mb-1 block">Lien Supernova</label>
-              <Input value={config.supernovaLink || ""} onChange={(e) => setConfig({ ...config, supernovaLink: e.target.value })} className="bg-slate-800 border-white/10 text-white" />
-            </div>
-            <div className="col-span-2">
-              <label className="text-sm text-slate-400 mb-1 block">Lien Big Bang</label>
-              <Input value={config.bigbangLink || ""} onChange={(e) => setConfig({ ...config, bigbangLink: e.target.value })} className="bg-slate-800 border-white/10 text-white" />
-            </div>
-          </div>
-
           <Button onClick={save} className="bg-blue-600 hover:bg-blue-500">
             {saved ? <><Check size={16} className="mr-1" /> Sauvegardé</> : <><Save size={16} className="mr-1" /> Sauvegarder</>}
           </Button>
@@ -65,10 +44,10 @@ export default function ConfigAdmin() {
       <Card className="bg-slate-900 border-white/10">
         <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle className="text-lg text-white">ROMs prêtes à patcher</CardTitle>
-          <label className="flex items-center gap-2 text-sm text-slate-400 cursor-pointer">
+          <Label className="flex items-center gap-2 text-sm cursor-pointer">
             <span className={config.showRom ? "text-green-400" : "text-slate-500"}>Visible</span>
-            <input type="checkbox" checked={config.showRom === true} onChange={(e) => setConfig({ ...config, showRom: e.target.checked })} className="toggle accent-green-500" />
-          </label>
+            <Switch checked={config.showRom === true} onCheckedChange={(v) => setConfig({ ...config, showRom: v })} />
+          </Label>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="grid grid-cols-2 gap-4">

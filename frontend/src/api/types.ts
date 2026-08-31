@@ -5,6 +5,10 @@ export interface PatchVersion {
   size: string
   supernovaLink: string | null
   bigbangLink: string | null
+  supernovaRomLink: string | null
+  bigbangRomLink: string | null
+  supernovaRomSize: string | null
+  bigbangRomSize: string | null
   changelog: string[]
   isLatest: boolean
   createdAt: string
@@ -158,4 +162,9 @@ export interface AdminUser {
   id: string;
   email: string;
   name: string;
+  role: string | null;
+  banned: boolean | null;
+  banReason: string | null;
+  banExpires: string | null;
+  createdAt: string;
 }

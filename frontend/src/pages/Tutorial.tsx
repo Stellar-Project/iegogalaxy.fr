@@ -41,7 +41,7 @@ function Step({ num, color, children }: { num: number; color: "yellow" | "blue";
 export default function Tutorial() {
   useMeta({ title: "Tutoriel", description: "Guide complet pour patcher Inazuma Eleven GO Galaxy Supernova et Big Bang avec les outils Stellar Project." });
   return (
-    <div className="relative min-h-screen flex flex-col items-center text-slate-200 bg-slate-950 overflow-hidden px-4 py-20">
+    <div className="relative min-h-screen flex flex-col items-center text-slate-200 bg-background overflow-hidden px-4 py-20">
       <div className="absolute inset-0 z-0">
         <div className="absolute inset-0 bg-linear-to-b from-slate-950 via-slate-950/80 to-slate-950" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.03),transparent_70%)]" />

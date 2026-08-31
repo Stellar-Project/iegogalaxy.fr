@@ -3,8 +3,13 @@ import { api } from "@/api/client";
 import type { Game } from "@/api/types";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
+import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Plus, Pencil, Trash2, Check, X, Gamepad2, Upload, ExternalLink, Download } from "lucide-react";
+import { toast } from "sonner";
 
 export default function GameAdmin() {
   const [games, setGames] = useState<Game[]>([]);
@@ -32,7 +37,7 @@ export default function GameAdmin() {
     try {
       const { url } = await api.uploadFile(file);
       setForm({ ...form, filePath: url.replace("/uploads/", ""), fileSize: (file.size / 1024 / 1024).toFixed(1) + " Mo" });
-    } catch { alert("Upload echoue"); }
+    } catch { toast.error("Upload échoué"); }
     setUploading(false);
   };
 
@@ -44,7 +49,9 @@ export default function GameAdmin() {
   };
 
   const remove = async (id: string) => {
-    if (confirm("Supprimer ce jeu ?")) { await api.deleteGame(id); load(); }
+    await api.deleteGame(id);
+    toast.success("Jeu supprimé");
+    load();
   };
 
   return (
@@ -68,7 +75,7 @@ export default function GameAdmin() {
               <Input placeholder="URL de l'image" value={form.imageUrl} onChange={(e) => setForm({ ...form, imageUrl: e.target.value })} className="bg-slate-800 border-white/10 text-white" />
               <Input type="number" placeholder="Ordre" value={form.sortOrder} onChange={(e) => setForm({ ...form, sortOrder: parseInt(e.target.value) || 0 })} className="bg-slate-800 border-white/10 text-white" />
             </div>
-            <textarea placeholder="Description" value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} className="w-full bg-slate-800 border border-white/10 rounded-lg p-2 text-sm text-white h-20" />
+            <Textarea placeholder="Description" value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} className="bg-slate-800 border-white/10 text-white min-h-20" />
 
             <div className="border border-white/10 rounded-lg p-3 space-y-3">
               <p className="text-xs text-slate-500 font-semibold uppercase tracking-wider">Fichier du mod</p>
@@ -88,7 +95,9 @@ export default function GameAdmin() {
               </div>
             </div>
 
-            <label className="flex items-center gap-2 text-sm text-slate-400"><input type="checkbox" checked={form.published} onChange={(e) => setForm({ ...form, published: e.target.checked })} /> Publie</label>
+            <Label className="flex items-center gap-2 text-sm text-slate-300">
+              <Switch checked={form.published} onCheckedChange={(v) => setForm({ ...form, published: v })} /> Publie
+            </Label>
             <div className="flex gap-2">
               <Button size="sm" onClick={save} className="bg-blue-600 hover:bg-blue-500 text-white"><Check size={16} className="mr-1" /> Sauvegarder</Button>
               <Button size="sm" variant="outline" onClick={() => setEditing(null)}><X size={16} className="mr-1" /> Annuler</Button>
@@ -107,7 +116,7 @@ export default function GameAdmin() {
                 <div className="min-w-0">
                   <div className="flex items-center gap-2">
                     <span className="font-bold text-white truncate">{g.name}</span>
-                    {!g.published && <span className="text-xs bg-yellow-500/20 text-yellow-400 px-2 py-0.5 rounded-full shrink-0">brouillon</span>}
+                    {!g.published && <Badge variant="outline" className="border-yellow-500/30 text-yellow-400 shrink-0">brouillon</Badge>}
                     <span className="text-xs text-slate-500 shrink-0">/{g.slug}</span>
                   </div>
                   <div className="flex items-center gap-3 text-xs text-slate-500 mt-0.5">

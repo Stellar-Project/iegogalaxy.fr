@@ -2,7 +2,7 @@ import { Link, Outlet, useLocation } from "react-router-dom";
 import { useAuth } from "@/api/useAuth";
 import { Button } from "@/components/ui/button";
 import {
-  LayoutDashboard, Download, Users, Clock, Star, Image, BookOpen, Settings, LogOut, Menu, X, Newspaper, ChevronLeft, PanelLeftClose, PanelLeftOpen, Gamepad2, HelpCircle,
+  LayoutDashboard, Download, Users, Clock, Star, Image, BookOpen, Settings, LogOut, Menu, X, Newspaper, ChevronLeft, PanelLeftClose, PanelLeftOpen, Gamepad2, HelpCircle, Shield,
 } from "lucide-react";
 import { useState } from "react";
 
@@ -19,6 +19,7 @@ const navItems = [
   { to: "/admin/jeux", icon: Gamepad2, label: "Jeux" },
   { to: "/admin/faq", icon: HelpCircle, label: "FAQ" },
   { to: "/admin/config", icon: Settings, label: "Configuration" },
+  { to: "/admin/users", icon: Shield, label: "Utilisateurs" },
 ];
 
 export default function AdminLayout() {
@@ -28,7 +29,7 @@ export default function AdminLayout() {
   const [collapsed, setCollapsed] = useState(false);
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-200 flex">
+    <div className="min-h-screen bg-background text-foreground flex">
       <aside className={`fixed inset-y-0 left-0 z-50 ${collapsed ? "w-16" : "w-64"} bg-slate-900 border-r border-white/10 transition-all duration-300 ${mobileOpen ? "translate-x-0" : "-translate-x-full"} lg:translate-x-0 lg:static`}>
         <div className={`border-b border-white/10 flex items-center ${collapsed ? "justify-center p-2 h-14" : "justify-between p-4"}`}>
           {!collapsed && <Link to="/admin" className="text-lg font-bold text-white truncate">Admin</Link>}
@@ -61,7 +62,7 @@ export default function AdminLayout() {
       </aside>
 
       <div className="flex-1 flex flex-col min-h-screen">
-        <header className="sticky top-0 z-30 bg-slate-950/80 backdrop-blur border-b border-white/10 px-4 h-14 flex items-center gap-4">
+        <header className="sticky top-0 z-30 bg-background/80 backdrop-blur border-b border-white/10 px-4 h-14 flex items-center gap-4">
           <Button variant="ghost" size="icon" className="lg:hidden" onClick={() => setMobileOpen(true)}>
             <Menu size={20} />
           </Button>

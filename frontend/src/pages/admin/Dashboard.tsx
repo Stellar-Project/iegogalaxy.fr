@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Download, Users, BookOpen, Image, Newspaper, Database, BarChart3, Eye, TrendingUp, ArrowUpRight, Globe, DownloadCloud } from "lucide-react";
 import { motion } from "framer-motion";
+import { toast } from "sonner";
 
 export default function Dashboard() {
   const [counts, setCounts] = useState({ patches: 0, team: 0, wiki: 0, screenshots: 0, blog: 0 });
@@ -41,7 +42,7 @@ export default function Dashboard() {
       const a = document.createElement("a");
       a.href = url; a.download = `iegogalaxy-export-${new Date().toISOString().slice(0, 10)}.json`; a.click();
       URL.revokeObjectURL(url);
-    } catch { alert("Export échoué"); }
+    } catch { toast.error("Export échoué"); }
     setExporting(false);
   };
 
@@ -267,7 +268,7 @@ export default function Dashboard() {
               <div className="p-2 rounded-lg bg-red-400/10"><Database size={20} className="text-red-400" /></div>
               <span className="text-sm text-slate-300">Réinitialiser les stats</span>
             </div>
-            <Button size="sm" onClick={() => { if (confirm("Tout supprimer ?")) api.resetAnalytics().then(() => { api.getAnalytics().then(setAnalytics).catch(() => {}); }); }} className="bg-red-600 hover:bg-red-500">
+            <Button size="sm" onClick={() => { api.resetAnalytics().then(() => { api.getAnalytics().then(setAnalytics).catch(() => {}); toast.success("Stats réinitialisées"); }); }} className="bg-red-600 hover:bg-red-500">
               Reset
             </Button>
           </CardContent>

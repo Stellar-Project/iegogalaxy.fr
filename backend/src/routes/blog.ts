@@ -20,7 +20,7 @@ export default async function blogRoutes(fastify: FastifyInstance) {
 
   fastify.get("/api/blog/:slug", async (request) => {
     const { slug } = request.params as { slug: string };
-    return prisma.post.findUnique({ where: { slug } });
+    return prisma.post.findFirst({ where: { slug, published: true } });
   });
 
   fastify.post("/api/blog", async (request, reply) => {

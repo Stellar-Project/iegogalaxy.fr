@@ -16,10 +16,10 @@ export default function Footer() {
   ];
 
   return (
-    <footer className="relative bg-slate-950 text-slate-400 text-sm overflow-hidden z-20">
+    <footer className="relative bg-background text-slate-400 text-sm overflow-hidden z-20">
       <div className="absolute inset-0 z-0">
         <div className="absolute inset-0 opacity-50" style={{ backgroundImage: "url('/assets/global/bg/bg_repeat.png')", backgroundRepeat: "repeat", backgroundPosition: "center top" }} />
-        <div className="absolute inset-0 bg-linear-to-t from-slate-950 via-slate-950/80 to-slate-950/90" />
+        <div className="absolute inset-0 bg-linear-to-t from-background via-background/90 to-background/95" />
       </div>
 
       <div className="relative z-10">
@@ -69,7 +69,7 @@ export default function Footer() {
                   </Button>
                 ))}
               </div>
-              <p className="text-slate-500 text-xs">Site v{websiteVersion} — Patch {config.patchVersion || "?"}</p>
+              <p className="text-slate-500 text-xs">Site {websiteVersion} — Patch {config.patchVersion || "?"}</p>
             </div>
           </div>
 

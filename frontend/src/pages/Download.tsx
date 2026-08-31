@@ -13,20 +13,20 @@ export default function Download() {
   const { data: patches } = usePatches();
 
   const latest = patches.find((p) => p.isLatest);
-  const version = latest?.version || config.patchVersion || "?";
-  const releaseDate = latest?.date || config.patchDate || "?";
-  const patchSize = latest?.size || config.patchSize || "?";
-  const supernovaPatch = latest?.supernovaLink || config.supernovaLink || "#";
-  const bigbangPatch = latest?.bigbangLink || config.bigbangLink || "#";
-  const supernovaRom = config.supernovaRomLink || "#";
-  const bigbangRom = config.bigbangRomLink || "#";
-  const supernovaRomSize = config.supernovaRomSize || "?";
-  const bigbangRomSize = config.bigbangRomSize || "?";
+  const version = latest?.version || "?";
+  const releaseDate = latest?.date || "?";
+  const patchSize = latest?.size || "?";
+  const supernovaPatch = latest?.supernovaLink || "#";
+  const bigbangPatch = latest?.bigbangLink || "#";
+  const supernovaRom = latest?.supernovaRomLink || "#";
+  const bigbangRom = latest?.bigbangRomLink || "#";
+  const supernovaRomSize = latest?.supernovaRomSize || "?";
+  const bigbangRomSize = latest?.bigbangRomSize || "?";
   const showPatch = config.showPatch !== false;
   const showRom = config.showRom === true;
 
   return (
-    <div className="relative min-h-screen flex flex-col items-center justify-center text-slate-200 bg-slate-950 overflow-hidden px-4 py-20">
+    <div className="relative min-h-screen flex flex-col items-center justify-center text-slate-200 bg-background overflow-hidden px-4 py-20">
       <div className="absolute inset-0 z-0 select-none pointer-events-none">
         <div className="absolute inset-0 bg-linear-to-b from-slate-950 via-slate-950/80 to-slate-950" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.03),transparent_70%)]" />

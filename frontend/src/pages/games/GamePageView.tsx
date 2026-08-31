@@ -20,10 +20,10 @@ export default function GamePageView() {
 
   useMeta({ title: game?.name || "Jeu", description: game?.description });
 
-  if (loading) return <div className="min-h-screen bg-slate-950 flex items-center justify-center"><Loading /></div>;
+  if (loading) return <div className="min-h-screen bg-background flex items-center justify-center"><Loading /></div>;
 
   if (!game) return (
-    <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center text-slate-500 space-y-4 px-4">
+    <div className="min-h-screen bg-background flex flex-col items-center justify-center text-slate-500 space-y-4 px-4">
       <Gamepad2 size={48} className="opacity-30" />
       <p>Jeu introuvable</p>
       <Link to="/telechargement" className="text-yellow-400 hover:underline">Voir les telechargements</Link>
@@ -34,7 +34,7 @@ export default function GamePageView() {
   const downloadUrl = game.downloadUrl || (game.filePath ? `/api/games/${game.slug}/download` : null);
 
   return (
-    <div className="relative min-h-screen text-slate-200 bg-slate-950 px-4 py-20">
+    <div className="relative min-h-screen text-slate-200 bg-background px-4 py-20">
       <div className="fixed inset-0 z-0 pointer-events-none">
         <div className="absolute inset-0 bg-linear-to-b from-slate-950 via-slate-950/90 to-slate-950" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.03),transparent_70%)]" />

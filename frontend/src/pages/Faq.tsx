@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { ChevronRight, HelpCircle } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useMeta } from "@/lib/useMeta";
+import CategoryFilter from "@/components/CategoryFilter";
 
 export default function Faq() {
   const [items, setItems] = useState<FaqItem[]>([]);
@@ -19,7 +20,7 @@ export default function Faq() {
   const filtered = activeCat ? items.filter((i) => i.category === activeCat) : items;
 
   return (
-    <div className="relative min-h-screen text-slate-200 bg-slate-950 px-4 py-20">
+    <div className="relative min-h-screen text-slate-200 bg-background px-4 py-20">
       <div className="fixed inset-0 z-0 pointer-events-none">
         <div className="absolute inset-0 bg-linear-to-b from-slate-950 via-slate-950/90 to-slate-950" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.03),transparent_70%)]" />
@@ -36,14 +37,7 @@ export default function Faq() {
           <p className="text-slate-400">Questions fréquentes sur le projet Stellar Project</p>
         </motion.div>
 
-        {categories.length > 0 && (
-          <div className="flex flex-wrap justify-center gap-2">
-            <button onClick={() => setActiveCat(null)} className={`text-xs px-3 py-1.5 rounded-full transition-colors ${!activeCat ? "bg-yellow-500/20 text-yellow-400 border border-yellow-500/30" : "bg-white/5 text-slate-400 border border-white/10 hover:border-white/20"}`}>Toutes</button>
-            {categories.map((cat) => (
-              <button key={cat} onClick={() => setActiveCat(activeCat === cat ? null : cat)} className={`text-xs px-3 py-1.5 rounded-full transition-colors ${activeCat === cat ? "bg-yellow-500/20 text-yellow-400 border border-yellow-500/30" : "bg-white/5 text-slate-400 border border-white/10 hover:border-white/20"}`}>{cat}</button>
-            ))}
-          </div>
-        )}
+        <CategoryFilter categories={categories} active={activeCat} onChange={setActiveCat} color="yellow" />
 
         <div className="space-y-2">
           {filtered.map((item) => (

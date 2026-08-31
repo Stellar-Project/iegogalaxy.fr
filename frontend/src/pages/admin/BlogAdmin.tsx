@@ -3,9 +3,13 @@ import { api } from "@/api/client";
 import type { Post, PostInput } from "@/api/types";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
+import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import TiptapEditor from "@/components/admin/TiptapEditor";
 import { Plus, Pencil, Trash2, Check, X } from "lucide-react";
+import { toast } from "sonner";
 
 export default function BlogAdmin() {
   const [posts, setPosts] = useState<Post[]>([]);
@@ -28,7 +32,9 @@ export default function BlogAdmin() {
   };
 
   const remove = async (id: string) => {
-    if (confirm("Supprimer ?")) { await api.deletePost(id); load(); }
+    await api.deletePost(id);
+    toast.success("Article supprimé");
+    load();
   };
 
   return (
@@ -50,7 +56,7 @@ export default function BlogAdmin() {
               <Input placeholder="Extrait (optionnel)" value={form.excerpt || ""} onChange={(e) => setForm({ ...form, excerpt: e.target.value })} className="bg-slate-800 border-white/10 text-white" />
             </div>
             <TiptapEditor content={form.content} onChange={(html) => setForm({ ...form, content: html })} placeholder="Contenu de l'article..." />
-            <label className="flex items-center gap-2 text-sm text-slate-400"><input type="checkbox" checked={form.published} onChange={(e) => setForm({ ...form, published: e.target.checked })} /> Publié</label>
+            <Label className="flex items-center gap-2 text-sm text-slate-300"><Switch checked={form.published} onCheckedChange={(v) => setForm({ ...form, published: v })} /> Publié</Label>
             <div className="flex gap-2">
               <Button size="sm" onClick={save} className="bg-blue-600 hover:bg-blue-500 text-white"><Check size={16} className="mr-1" /> Sauvegarder</Button>
               <Button size="sm" variant="outline" onClick={() => setEditing(null)}><X size={16} className="mr-1" /> Annuler</Button>
@@ -66,7 +72,7 @@ export default function BlogAdmin() {
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2">
                   <span className="font-bold text-white truncate">{p.title}</span>
-                  {!p.published && <span className="text-xs bg-yellow-500/20 text-yellow-400 px-2 py-0.5 rounded-full shrink-0">brouillon</span>}
+                  {!p.published && <Badge variant="outline" className="border-yellow-500/30 text-yellow-400 shrink-0">brouillon</Badge>}
                   <span className="text-[10px] text-slate-500 shrink-0">[{p.category}]</span>
                 </div>
                 <p className="text-xs text-slate-500 mt-0.5">/{p.slug} — {new Date(p.createdAt).toLocaleDateString("fr-FR")}</p>

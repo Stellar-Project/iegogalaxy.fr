@@ -3,10 +3,17 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Download, Info } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useHeroBackgrounds } from "@/api/useData";
+import { api } from "@/api/client";
+import type { PatchVersion } from "@/api/types";
 
 export function HeroSection() {
   const { data: backgrounds } = useHeroBackgrounds();
+  const [latestPatch, setLatestPatch] = useState<PatchVersion | null>(null);
   const [currentBgIndex, setCurrentBgIndex] = useState(0);
+
+  useEffect(() => {
+    api.getLatestPatch().then(setLatestPatch).catch(() => {});
+  }, []);
 
   useEffect(() => {
     if (backgrounds.length === 0) return;
@@ -14,7 +21,7 @@ export function HeroSection() {
       setCurrentBgIndex(
         (prevIndex) => (prevIndex + 1) % backgrounds.length
       );
-    }, 4000);
+    }, 8000);
     return () => clearInterval(interval);
   }, [backgrounds.length]);
 
@@ -34,7 +41,7 @@ export function HeroSection() {
             }}
           />
         </AnimatePresence>
-        <div className="absolute inset-0 bg-slate-950/60 backdrop-blur-[2px] z-10" />
+        <div className="absolute inset-0 bg-background/60 backdrop-blur-[2px] z-10" />
       </div>
 
       <motion.div
@@ -43,15 +50,17 @@ export function HeroSection() {
         transition={{ duration: 0.8 }}
         className="text-center space-y-6 max-w-4xl relative z-20"
       >
-        <div className="inline-block px-4 py-1.5 rounded-full border border-blue-500/30 bg-blue-500/10 backdrop-blur-md text-blue-300 text-sm font-medium mb-4">
-          Version 1.0 Disponible
-        </div>
+        {latestPatch && (
+          <div className="inline-block px-4 py-1.5 rounded-full border border-blue-500/30 bg-blue-500/10 backdrop-blur-md text-blue-300 text-sm font-medium mb-4">
+            Version {latestPatch.version} Disponible
+          </div>
+        )}
 
-        <h1 className="text-5xl md:text-7xl font-extrabold tracking-tighter drop-shadow-2xl space-y-2">
-          <span className="block bg-linear-to-r from-orange-500 via-yellow-400 to-orange-500 bg-clip-text text-transparent drop-shadow-[0_2px_10px_rgba(234,179,8,0.5)]">
+        <h1 className="text-5xl md:text-7xl font-extrabold tracking-tighter space-y-2">
+          <span className="block bg-linear-to-r from-orange-500 via-yellow-400 to-orange-500 bg-clip-text text-transparent">
             Inazuma Eleven
           </span>
-          <span className="block bg-linear-to-r from-blue-600 via-cyan-400 to-blue-600 bg-clip-text text-transparent drop-shadow-[0_2px_10px_rgba(34,211,238,0.5)]">
+          <span className="block bg-linear-to-r from-blue-600 via-cyan-400 to-blue-600 bg-clip-text text-transparent">
             GO Galaxy
           </span>
           <span className="block text-3xl md:text-5xl mt-4 pt-2">

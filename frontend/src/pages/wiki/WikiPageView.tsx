@@ -6,30 +6,10 @@ import { motion } from "framer-motion";
 import { ChevronRight } from "lucide-react";
 import Loading from "@/components/Loading";
 import { useMeta } from "@/lib/useMeta";
-
-interface Heading { id: string; text: string; level: number }
-
-function parseHeadings(html: string): Heading[] {
-  const regex = /<h([2-3])([^>]*)>(.*?)<\/h\1>/gi;
-  const headings: Heading[] = [];
-  let match;
-  while ((match = regex.exec(html)) !== null) {
-    const text = match[3].replace(/<[^>]*>/g, "");
-    const existingId = match[2].match(/id="([^"]+)"/);
-    const id = existingId ? existingId[1] : text.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
-    headings.push({ id, text, level: parseInt(match[1]) });
-  }
-  return headings;
-}
-
-function addHeadingIds(html: string): string {
-  return html.replace(/<h([2-3])([^>]*)>(.*?)<\/h\1>/gi, (_, level, attrs, text) => {
-    if (/id=/.test(attrs)) return `<h${level}${attrs}>${text}</h${level}>`;
-    const clean = text.replace(/<[^>]*>/g, "");
-    const id = clean.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
-    return `<h${level}${attrs} id="${id}">${text}</h${level}>`;
-  });
-}
+import { sanitize } from "@/lib/sanitize";
+import { useEditor } from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
+import TableOfContents from "@tiptap/extension-table-of-contents";
 
 function readingTime(html: string): number {
   const words = html.replace(/<[^>]*>/g, "").split(/\s+/).filter(Boolean).length;
@@ -47,11 +27,17 @@ export default function WikiPageView() {
     api.getWikiPage(slug).then(setPage).catch(() => setPage(null)).finally(() => setLoading(false));
   }, [slug]);
 
+  const editor = useEditor({
+    extensions: [StarterKit, TableOfContents.configure({ getHeadingIds: true })],
+    content: page?.content || "",
+    editable: false,
+  });
+
   useMeta({ title: page?.title || "Page wiki", description: page?.content ? page.content.replace(/<[^>]*>/g, "").slice(0, 160) : undefined });
 
   if (loading) {
     return (
-      <div className="relative min-h-screen bg-slate-950 flex items-center justify-center">
+      <div className="relative min-h-screen bg-background flex items-center justify-center">
         <Loading />
       </div>
     );
@@ -59,20 +45,18 @@ export default function WikiPageView() {
 
   if (!page) {
     return (
-      <div className="relative min-h-screen bg-slate-950 flex flex-col items-center justify-center text-center text-slate-500 space-y-4 px-4">
+      <div className="relative min-h-screen bg-background flex flex-col items-center justify-center text-center text-slate-500 space-y-4 px-4">
         <p className="text-lg">Cette page n'est pas encore disponible.</p>
-        <p className="text-sm">Contacte l'administrateur si tu penses qu'il s'agit d'une erreur.</p>
         <Link to="/wiki" className="text-yellow-400 hover:underline">Retour au wiki</Link>
       </div>
     );
   }
 
-  const headings = parseHeadings(page.content || "");
-  const html = addHeadingIds(page.content || "");
-  const mins = readingTime(page.content || "");
+  const safeContent = sanitize(page.content || "");
+  const mins = readingTime(safeContent);
 
   return (
-    <div className="relative min-h-screen text-slate-200 bg-slate-950 px-4 py-20">
+    <div className="relative min-h-screen text-slate-200 bg-background px-4 py-20">
       <div className="fixed inset-0 z-0 pointer-events-none">
         <div className="absolute inset-0 bg-linear-to-b from-slate-950 via-slate-950/90 to-slate-950" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.03),transparent_70%)]" />
@@ -117,7 +101,7 @@ export default function WikiPageView() {
                 [&_ol]:list-decimal [&_ol]:pl-6 [&_ol]:space-y-1
                 [&_hr]:border-white/10 [&_hr]:my-8
                 [&_p]:leading-relaxed [&_p]:my-4"
-              dangerouslySetInnerHTML={{ __html: html }}
+              dangerouslySetInnerHTML={{ __html: safeContent }}
             />
 
             {page.tool && (
@@ -130,22 +114,22 @@ export default function WikiPageView() {
             )}
           </article>
 
-          {headings.length > 0 && (
+          {editor?.storage.tableOfContents.list.length > 0 && (
             <aside className="hidden lg:block">
-              <div className="sticky top-24">
+              <div className="sticky top-24 bg-slate-900/50 border border-white/10 rounded-lg p-4">
                 <h4 className="text-xs font-semibold uppercase tracking-widest text-slate-400 mb-4">
                   Sur cette page
                 </h4>
                 <nav className="space-y-1">
-                  {headings.map((h) => (
-                    <a key={h.id} href={`#${h.id}`}
+                  {editor?.storage.tableOfContents.list.map((item: any) => (
+                    <a key={item.id} href={`#${item.id}`}
                       className={`block text-sm leading-snug py-1 transition-colors hover:text-white
-                        ${h.level === 2
+                        ${item.level === 2
                           ? "text-slate-300 border-l-2 border-yellow-500/60 pl-3"
                           : "text-slate-500 pl-6 border-l-2 border-transparent hover:border-yellow-500/40"
                         }`}
                     >
-                      {h.text}
+                      {item.text}
                     </a>
                   ))}
                 </nav>

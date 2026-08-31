@@ -1,80 +1,90 @@
+import { Suspense, lazy } from "react";
 import { Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/api/useAuth";
 import Layout from "./components/Layout";
 import AdminLayout from "./components/admin/Layout";
 import ProtectedRoute from "./components/admin/ProtectedRoute";
 import Tracker from "./components/Tracker";
+import Loading from "./components/Loading";
 import { useMeta } from "@/lib/useMeta";
-import Home from "./pages/Home";
-import Tutorial from "./pages/Tutorial";
-import About from "./pages/About";
-import Download from "./pages/Download";
-import MentionsLegales from "./pages/MentionsLegales";
-import WikiPageView from "./pages/wiki/WikiPageView";
-import BlogPost from "./pages/BlogPost";
-import NotFound from "./pages/NotFound";
-import Wiki from "./pages/Wiki";
-import Faq from "./pages/Faq";
-import GamePageView from "./pages/games/GamePageView";
-import Login from "./pages/admin/Login";
-import Dashboard from "./pages/admin/Dashboard";
-import PatchesAdmin from "./pages/admin/PatchesAdmin";
-import TeamAdmin from "./pages/admin/TeamAdmin";
-import TimelineAdmin from "./pages/admin/TimelineAdmin";
-import CreditsAdmin from "./pages/admin/CreditsAdmin";
-import ScreenshotsAdmin from "./pages/admin/ScreenshotsAdmin";
-import HeroAdmin from "./pages/admin/HeroAdmin";
-import WikiAdmin from "./pages/admin/WikiAdmin";
-import GameAdmin from "./pages/admin/GameAdmin";
-import FaqAdmin from "./pages/admin/FaqAdmin";
-import BlogAdmin from "./pages/admin/BlogAdmin";
-import ConfigAdmin from "./pages/admin/ConfigAdmin";
+
+const Home = lazy(() => import("./pages/Home"));
+const Tutorial = lazy(() => import("./pages/Tutorial"));
+const About = lazy(() => import("./pages/About"));
+const Download = lazy(() => import("./pages/Download"));
+const MentionsLegales = lazy(() => import("./pages/MentionsLegales"));
+const WikiPageView = lazy(() => import("./pages/wiki/WikiPageView"));
+const BlogPost = lazy(() => import("./pages/BlogPost"));
+const NotFound = lazy(() => import("./pages/NotFound"));
+const Wiki = lazy(() => import("./pages/Wiki"));
+const Faq = lazy(() => import("./pages/Faq"));
+const GamePageView = lazy(() => import("./pages/games/GamePageView"));
+const Login = lazy(() => import("./pages/admin/Login"));
+const Dashboard = lazy(() => import("./pages/admin/Dashboard"));
+const PatchesAdmin = lazy(() => import("./pages/admin/PatchesAdmin"));
+const TeamAdmin = lazy(() => import("./pages/admin/TeamAdmin"));
+const TimelineAdmin = lazy(() => import("./pages/admin/TimelineAdmin"));
+const CreditsAdmin = lazy(() => import("./pages/admin/CreditsAdmin"));
+const ScreenshotsAdmin = lazy(() => import("./pages/admin/ScreenshotsAdmin"));
+const HeroAdmin = lazy(() => import("./pages/admin/HeroAdmin"));
+const WikiAdmin = lazy(() => import("./pages/admin/WikiAdmin"));
+const GameAdmin = lazy(() => import("./pages/admin/GameAdmin"));
+const FaqAdmin = lazy(() => import("./pages/admin/FaqAdmin"));
+const BlogAdmin = lazy(() => import("./pages/admin/BlogAdmin"));
+const ConfigAdmin = lazy(() => import("./pages/admin/ConfigAdmin"));
+const UsersAdmin = lazy(() => import("./pages/admin/UsersAdmin"));
+
+function PageLoader() {
+  return <div className="min-h-screen bg-background flex items-center justify-center"><Loading /></div>;
+}
 
 export default function App() {
   useMeta({});
   return (
     <AuthProvider>
       <Tracker />
-      <Routes>
-        <Route element={<Layout />}>
-          <Route index element={<Home />} />
-          <Route path="/" element={<Home />} />
-          <Route path="/apropos" element={<About />} />
-          <Route path="/tutoriel" element={<Tutorial />} />
-          <Route path="/telechargement" element={<Download />} />
-          <Route path="/wiki" element={<Wiki />} />
-          <Route path="/wiki/:slug" element={<WikiPageView />} />
-          <Route path="/jeux/:slug" element={<GamePageView />} />
-          <Route path="/actualites/:slug" element={<BlogPost />} />
-          <Route path="/faq" element={<Faq />} />
-          <Route path="/mentions-legales" element={<MentionsLegales />} />
-        </Route>
+      <Suspense fallback={<PageLoader />}>
+        <Routes>
+          <Route element={<Layout />}>
+            <Route index element={<Home />} />
+            <Route path="/apropos" element={<About />} />
+            <Route path="/tutoriel" element={<Tutorial />} />
+            <Route path="/telechargement" element={<Download />} />
+            <Route path="/wiki" element={<Wiki />} />
+            <Route path="/wiki/:slug" element={<WikiPageView />} />
+            <Route path="/jeux/:slug" element={<GamePageView />} />
+            <Route path="/actualites/:slug" element={<BlogPost />} />
+            <Route path="/faq" element={<Faq />} />
+            <Route path="/mentions-legales" element={<MentionsLegales />} />
+          </Route>
 
-        <Route path="/admin/login" element={<Login />} />
-        <Route
-          path="/admin"
-          element={
-            <ProtectedRoute>
-              <AdminLayout />
-            </ProtectedRoute>
-          }
-        >
-          <Route index element={<Dashboard />} />
-          <Route path="patches" element={<PatchesAdmin />} />
-          <Route path="team" element={<TeamAdmin />} />
-          <Route path="timeline" element={<TimelineAdmin />} />
-          <Route path="credits" element={<CreditsAdmin />} />
-          <Route path="screenshots" element={<ScreenshotsAdmin />} />
-          <Route path="hero" element={<HeroAdmin />} />
-          <Route path="wiki" element={<WikiAdmin />} />
-          <Route path="jeux" element={<GameAdmin />} />
-          <Route path="faq" element={<FaqAdmin />} />
-          <Route path="blog" element={<BlogAdmin />} />
-          <Route path="config" element={<ConfigAdmin />} />
-        </Route>
+          <Route path="/admin/login" element={<Login />} />
+          <Route
+            path="/admin"
+            element={
+              <ProtectedRoute>
+                <AdminLayout />
+              </ProtectedRoute>
+            }
+          >
+            <Route index element={<Dashboard />} />
+            <Route path="patches" element={<PatchesAdmin />} />
+            <Route path="team" element={<TeamAdmin />} />
+            <Route path="timeline" element={<TimelineAdmin />} />
+            <Route path="credits" element={<CreditsAdmin />} />
+            <Route path="screenshots" element={<ScreenshotsAdmin />} />
+            <Route path="hero" element={<HeroAdmin />} />
+            <Route path="wiki" element={<WikiAdmin />} />
+            <Route path="jeux" element={<GameAdmin />} />
+            <Route path="faq" element={<FaqAdmin />} />
+            <Route path="blog" element={<BlogAdmin />} />
+            <Route path="config" element={<ConfigAdmin />} />
+            <Route path="users" element={<UsersAdmin />} />
+          </Route>
 
-        <Route path="*" element={<NotFound />} />
-      </Routes>
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </Suspense>
     </AuthProvider>
   );
 }

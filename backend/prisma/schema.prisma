@@ -77,16 +77,20 @@ model Verification {
 }
 
 model PatchVersion {
-  id            String   @id @default(cuid())
-  version       String
-  date          String
-  size          String
-  supernovaLink String?
-  bigbangLink   String?
-  changelog     String[]
-  isLatest      Boolean  @default(false)
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  id                String   @id @default(cuid())
+  version           String
+  date              String
+  size              String
+  supernovaLink     String?
+  bigbangLink       String?
+  supernovaRomLink  String?
+  bigbangRomLink    String?
+  supernovaRomSize  String?
+  bigbangRomSize    String?
+  changelog         String[]
+  isLatest          Boolean  @default(false)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
 }
 
 model TeamMember {

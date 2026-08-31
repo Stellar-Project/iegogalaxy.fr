@@ -10,14 +10,17 @@ import { Table } from "@tiptap/extension-table";
 import { TableRow } from "@tiptap/extension-table-row";
 import { TableCell } from "@tiptap/extension-table-cell";
 import { TableHeader } from "@tiptap/extension-table-header";
+import TableOfContents from "@tiptap/extension-table-of-contents";
 import { common, createLowlight } from "lowlight";
-import { useEffect, useCallback } from "react";
+import { useEffect, useCallback, useState } from "react";
+import { Button } from "@/components/ui/button";
 import {
   Bold, Italic, Underline as UnderlineIcon, Strikethrough, Code,
   Heading1, Heading2, Heading3, Quote, Minus,
   List, ListOrdered, Code2, Link, Image, Table as TableIcon,
   AlignLeft, AlignCenter, AlignRight,
   Undo2, Redo2,
+  ListTodo,
 } from "lucide-react";
 
 const lowlight = createLowlight(common);
@@ -29,7 +32,7 @@ interface Props {
 }
 
 export default function TiptapEditor({ content, onChange, placeholder }: Props) {
-  const editor = useEditor({
+const editor = useEditor({
     extensions: [
       StarterKit.configure({ codeBlock: false, heading: { levels: [1, 2, 3] }, link: false, underline: false }),
       Underline,
@@ -37,11 +40,12 @@ export default function TiptapEditor({ content, onChange, placeholder }: Props) 
       ImageExtension,
       CodeBlockLowlight.configure({ lowlight }),
       TextAlign.configure({ types: ["heading", "paragraph"] }),
-      Placeholder.configure({ placeholder: placeholder || "Écrivez ici..." }),
+      Placeholder.configure({ placeholder: placeholder || "Écrivez votre contenu ici..." }),
       Table.configure({ resizable: true }),
       TableRow,
       TableCell,
       TableHeader,
+      TableOfContents.configure({ HTMLTag: "nav" }),
     ],
     content,
     onUpdate: ({ editor }) => onChange(editor.getHTML()),
@@ -74,17 +78,21 @@ export default function TiptapEditor({ content, onChange, placeholder }: Props) 
     editor?.chain().focus().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run();
   }, [editor]);
 
-  if (!editor) return null;
+  const addTOC = useCallback(() => {
+    editor?.chain().focus().insertTableOfContents().run();
+  }, [editor]);
 
   const ToolBtn = ({ onClick, active, label, children }: { onClick: () => void; active?: boolean; label: string; children: React.ReactNode }) => (
-    <button type="button" onClick={onClick}
-      className={`p-1.5 rounded hover:bg-white/10 transition-colors ${active ? "bg-blue-600/40 text-blue-300" : "text-slate-300"}`}
+    <Button type="button" size="icon" variant="ghost" onClick={onClick}
+      className={`h-8 w-8 ${active ? "bg-blue-600/40 text-blue-300 hover:bg-blue-600/40" : "text-slate-300 hover:bg-white/10"}`}
       title={label}>
       {children}
-    </button>
+    </Button>
   );
 
   const Divider = () => <div className="w-px h-5 bg-white/10" />;
+
+  if (!editor) return null;
 
   return (
     <div className="bg-slate-800 border border-white/10 rounded-lg overflow-hidden">
@@ -119,6 +127,7 @@ export default function TiptapEditor({ content, onChange, placeholder }: Props) 
         <ToolBtn onClick={addLink} active={editor.isActive("link")} label="Lien"><Link size={16} /></ToolBtn>
         <ToolBtn onClick={addImage} label="Image"><Image size={16} /></ToolBtn>
         <ToolBtn onClick={addTable} label="Tableau"><TableIcon size={16} /></ToolBtn>
+        <ToolBtn onClick={addTOC} label="Table des matières"><ListTodo size={16} /></ToolBtn>
 
         <Divider />
 

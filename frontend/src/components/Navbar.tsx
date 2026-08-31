@@ -119,7 +119,7 @@ export const Navbar = () => {
         </div>
       </div>
 
-      <nav className="relative w-full border-b border-white/10 bg-slate-950 overflow-hidden">
+      <nav className="relative w-full border-b border-white/10 bg-background overflow-hidden">
         <div className="absolute inset-0 z-0">
           <div
             className="absolute inset-0 opacity-50"
@@ -167,7 +167,7 @@ export const Navbar = () => {
                 </SheetTrigger>
                 <SheetContent
                   side="right"
-                  className="bg-slate-950 border-l border-white/10 text-white w-[300px]"
+                  className="bg-background border-l border-white/10 text-white w-[300px]"
                 >
                   <div className="flex flex-col items-center space-y-6 mt-10">
                     {navLinks.map((link) => (

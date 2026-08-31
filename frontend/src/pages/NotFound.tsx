@@ -7,7 +7,7 @@ export default function NotFound() {
   const navigate = useNavigate();
 
   return (
-    <div className="relative min-h-screen flex flex-col items-center justify-center text-slate-200 bg-slate-950 overflow-hidden px-4 text-center">
+    <div className="relative min-h-screen flex flex-col items-center justify-center text-slate-200 bg-background overflow-hidden px-4 text-center">
       <div className="absolute inset-0 z-0">
         <div
           className="absolute inset-0 opacity-30"

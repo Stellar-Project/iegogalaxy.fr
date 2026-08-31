@@ -13,6 +13,16 @@ export default async function patchRoutes(fastify: FastifyInstance) {
     return prisma.patchVersion.findMany({ orderBy: { createdAt: "desc" } });
   });
 
+  fastify.get("/api/patches/latest", async () => {
+    return prisma.patchVersion.findFirst({ where: { isLatest: true } });
+  });
+
+  fastify.put("/api/patches/:id/set-latest", async (request) => {
+    const { id } = request.params as { id: string };
+    await prisma.patchVersion.updateMany({ where: { isLatest: true }, data: { isLatest: false } });
+    return prisma.patchVersion.update({ where: { id }, data: { isLatest: true } });
+  });
+
   fastify.get("/api/patches/:id", async (request) => {
     const { id } = request.params as { id: string };
     const patch = await prisma.patchVersion.findUnique({ where: { id } });
@@ -29,6 +39,10 @@ export default async function patchRoutes(fastify: FastifyInstance) {
         size: body.size,
         supernovaLink: body.supernovaLink || null,
         bigbangLink: body.bigbangLink || null,
+        supernovaRomLink: body.supernovaRomLink || null,
+        bigbangRomLink: body.bigbangRomLink || null,
+        supernovaRomSize: body.supernovaRomSize || null,
+        bigbangRomSize: body.bigbangRomSize || null,
         changelog: body.changelog || [],
         isLatest: body.isLatest ?? false,
       },
@@ -47,6 +61,10 @@ export default async function patchRoutes(fastify: FastifyInstance) {
         size: body.size,
         supernovaLink: body.supernovaLink,
         bigbangLink: body.bigbangLink,
+        supernovaRomLink: body.supernovaRomLink,
+        bigbangRomLink: body.bigbangRomLink,
+        supernovaRomSize: body.supernovaRomSize,
+        bigbangRomSize: body.bigbangRomSize,
         changelog: body.changelog,
         isLatest: body.isLatest,
       },

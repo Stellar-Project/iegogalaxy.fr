@@ -11,4 +11,12 @@ export const auth = betterAuth({
   baseURL: `${process.env.BETTER_AUTH_URL || "http://localhost:3000"}/api/auth`,
   trustedOrigins: ["http://localhost:5173", "https://iegogalaxy.fr", "http://iegogalaxy.fr"],
   rateLimit: { window: 60, max: 20 },
+  user: {
+    additionalFields: {
+      role: { type: "string" },
+      banned: { type: "boolean" },
+      banReason: { type: "string" },
+      banExpires: { type: "date" },
+    },
+  },
 });

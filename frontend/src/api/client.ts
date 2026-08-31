@@ -1,6 +1,6 @@
 import type {
   PatchVersion, TeamMember, TimelineEvent, Credit,
-  Screenshot, Post, PostInput, HeroBackground, WikiTool, WikiPage, SiteConfig, AnalyticsStats, SearchResults, Game, FaqItem,
+  Screenshot, Post, PostInput, HeroBackground, WikiTool, WikiPage, SiteConfig, AnalyticsStats, SearchResults, Game, FaqItem, AdminUser,
 } from "./types";
 
 const API_BASE = "/api";
@@ -19,6 +19,7 @@ async function request<T>(url: string, options?: RequestInit): Promise<T> {
 export const api = {
   // Patches
   getPatches: () => request<PatchVersion[]>("/patches"),
+  getLatestPatch: () => request<PatchVersion>("/patches/latest"),
   getPatch: (id: string) => request<PatchVersion>(`/patches/${id}`),
   createPatch: (data: Partial<PatchVersion>) =>
     request<PatchVersion>("/patches", { method: "POST", body: JSON.stringify(data) }),
@@ -26,6 +27,8 @@ export const api = {
     request<PatchVersion>(`/patches/${id}`, { method: "PUT", body: JSON.stringify(data) }),
   deletePatch: (id: string) =>
     request<{ success: boolean }>(`/patches/${id}`, { method: "DELETE" }),
+  setLatestPatch: (id: string) =>
+    request<PatchVersion>(`/patches/${id}/set-latest`, { method: "PUT" }),
 
   // Team
   getTeam: () => request<TeamMember[]>("/team"),
@@ -135,4 +138,8 @@ export const api = {
   createFaq: (data: Partial<FaqItem>) => request<FaqItem>("/faq", { method: "POST", body: JSON.stringify(data) }),
   updateFaq: (id: string, data: Partial<FaqItem>) => request<FaqItem>(`/faq/${id}`, { method: "PUT", body: JSON.stringify(data) }),
   deleteFaq: (id: string) => request<{ success: boolean }>(`/faq/${id}`, { method: "DELETE" }),
+
+  // Users (admin)
+  getUsers: () => request<AdminUser[]>("/users"),
+  updateUser: (id: string, data: Partial<AdminUser>) => request<AdminUser>(`/users/${id}`, { method: "PUT", body: JSON.stringify(data) }),
 };

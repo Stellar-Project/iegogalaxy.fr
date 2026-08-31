@@ -3,8 +3,10 @@ import { api } from "@/api/client";
 import type { Credit } from "@/api/types";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent } from "@/components/ui/card";
 import { Plus, Pencil, Trash2, Check, X } from "lucide-react";
+import { toast } from "sonner";
 
 export default function CreditsAdmin() {
   const [credits, setCredits] = useState<Credit[]>([]);
@@ -32,7 +34,9 @@ export default function CreditsAdmin() {
   };
 
   const remove = async (id: string) => {
-    if (confirm("Supprimer ?")) { await api.deleteCredit(id); load(); }
+    await api.deleteCredit(id);
+    toast.success("Crédit supprimé");
+    load();
   };
 
   const categories = ["Graphismes & Visuels", "Anciens Traducteurs", "Remerciements Spéciaux"];
@@ -47,9 +51,14 @@ export default function CreditsAdmin() {
       {editing && (
         <Card className="bg-slate-900 border-white/10">
           <CardContent className="p-4 space-y-3">
-            <select value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })} className="bg-slate-800 border border-white/10 rounded-lg px-3 py-2 text-sm text-white">
-              {categories.map((c) => <option key={c} value={c}>{c}</option>)}
-            </select>
+            <Select value={form.category} onValueChange={(v) => setForm({ ...form, category: v })}>
+              <SelectTrigger className="w-full bg-slate-800 border-white/10 text-white">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent className="bg-slate-900 border-white/10 text-white">
+                {categories.map((c) => <SelectItem key={c} value={c}>{c}</SelectItem>)}
+              </SelectContent>
+            </Select>
             <div className="grid grid-cols-2 gap-3">
               <Input placeholder="Nom" value={form.personName} onChange={(e) => setForm({ ...form, personName: e.target.value })} className="bg-slate-800 border-white/10 text-white" />
               <Input placeholder="Rôle / Tâche" value={form.task} onChange={(e) => setForm({ ...form, task: e.target.value })} className="bg-slate-800 border-white/10 text-white" />

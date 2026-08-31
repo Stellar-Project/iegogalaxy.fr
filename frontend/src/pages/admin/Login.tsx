@@ -24,7 +24,7 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 flex">
+    <div className="min-h-screen bg-background flex">
       <div className="hidden lg:flex relative w-1/2 items-center justify-center overflow-hidden">
         <div className="absolute inset-0">
           <img src="/assets/global/bg/mainVisual_01.png" alt="" className="w-full h-full object-cover opacity-60" />
@@ -42,7 +42,7 @@ export default function Login() {
         <div className="absolute inset-0 lg:hidden">
           <img src="/assets/global/bg/mainVisual_01.png" alt="" className="w-full h-full object-cover opacity-20" />
           <div className="absolute inset-0" style={{ backgroundImage: "url('/assets/global/bg/bg_repeat.png')", backgroundRepeat: "repeat", opacity: 0.05 }} />
-          <div className="absolute inset-0 bg-slate-950/70" />
+          <div className="absolute inset-0 bg-background/70" />
         </div>
         <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="relative z-10 w-full max-w-md">
           <div className="text-center mb-8 lg:hidden">

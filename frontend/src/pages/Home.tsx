@@ -11,11 +11,14 @@ import { ImageModal } from "@/components/ImageModal";
 import { Card, CardContent } from "@/components/ui/card";
 import { Calendar, ArrowRight, ChevronDown, BookOpen, HelpCircle, GraduationCap } from "lucide-react";
 import { Link } from "react-router-dom";
+import CategoryFilter from "@/components/CategoryFilter";
 
 function SectionDivider() {
   return (
-    <div className="relative z-10 flex justify-center py-4">
-      <div className="h-px w-32 bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+    <div className="relative z-10 flex items-center justify-center gap-4 py-4">
+      <span className="h-px w-16 bg-yellow-500/30" />
+      <span className="h-1.5 w-1.5 rotate-45 bg-yellow-500/60" />
+      <span className="h-px w-16 bg-yellow-500/30" />
     </div>
   );
 }
@@ -44,14 +47,7 @@ function NewsSection() {
           <p className="text-slate-400 max-w-xl mx-auto">Les dernières news du projet Stellar</p>
         </motion.div>
 
-        {cats.length > 1 && (
-          <div className="flex flex-wrap justify-center gap-2">
-            <button onClick={() => setActiveCat(null)} className={`text-xs px-3 py-1.5 rounded-full transition-colors ${!activeCat ? "bg-blue-500/20 text-blue-400 border border-blue-500/30" : "bg-white/5 text-slate-400 border border-white/10 hover:border-white/20"}`}>Toutes</button>
-            {cats.map((cat) => (
-              <button key={cat} onClick={() => setActiveCat(activeCat === cat ? null : cat)} className={`text-xs px-3 py-1.5 rounded-full transition-colors ${activeCat === cat ? "bg-blue-500/20 text-blue-400 border border-blue-500/30" : "bg-white/5 text-slate-400 border border-white/10 hover:border-white/20"}`}>{cat}</button>
-            ))}
-          </div>
-        )}
+        <CategoryFilter categories={cats} active={activeCat} onChange={setActiveCat} color="blue" />
 
         <div className="space-y-6">
           {featured && (
@@ -75,10 +71,9 @@ function NewsSection() {
 
           {rest.length > 0 && (
             <div className="grid md:grid-cols-2 gap-6">
-              {rest.map((post, i) => (
-                <motion.div key={post.id} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }}>
-                  <Link to={`/actualites/${post.slug}`} className="block group h-full">
-                    <Card className="bg-slate-900/50 border-white/10 hover:border-blue-500/30 transition-all h-full">
+              {rest.map((post) => (
+                <Link key={post.id} to={`/actualites/${post.slug}`} className="block group h-full">
+                  <Card className="bg-slate-900/50 border-white/10 hover:border-blue-500/30 transition-all h-full">
                       <CardContent className="p-6 flex flex-col h-full">
                         <div className="flex items-center gap-2 text-xs text-slate-500 mb-3">
                           {post.category && <span className="text-[10px] bg-blue-500/10 text-blue-400 px-1.5 py-0.5 rounded">{post.category}</span>}
@@ -93,7 +88,6 @@ function NewsSection() {
                       </CardContent>
                     </Card>
                   </Link>
-                </motion.div>
               ))}
             </div>
           )}
@@ -188,7 +182,7 @@ export default function Home() {
   }, [selectedImage]);
 
   return (
-    <main className="relative min-h-screen bg-slate-950 text-white selection:bg-blue-500/30">
+    <main className="relative min-h-screen bg-background text-foreground selection:bg-blue-500/30">
       <div className="fixed inset-0 z-0 pointer-events-none">
         <div className="absolute inset-0 bg-linear-to-b from-slate-950 via-slate-950/90 to-slate-950" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.03),transparent_70%)]" />

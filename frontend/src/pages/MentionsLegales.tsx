@@ -12,9 +12,9 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 export default function MentionsLegales() {
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-300 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-background text-slate-300/90 py-12 px-4 sm:px-6 lg:px-8">
       <div className="absolute inset-0 z-0 pointer-events-none">
-        <div className="absolute inset-0 bg-linear-to-b from-slate-950 via-slate-950/80 to-slate-950" />
+        <div className="absolute inset-0 bg-linear-to-b from-background via-background/95 to-background" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.03),transparent_70%)]" />
       </div>
 

@@ -25,6 +25,7 @@ import searchRoutes from "./routes/search.js";
 import seoRoutes from "./routes/seo.js";
 import gameRoutes from "./routes/games.js";
 import faqRoutes from "./routes/faq.js";
+import usersRoutes from "./routes/users.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -80,6 +81,7 @@ await fastify.register(searchRoutes);
 await fastify.register(seoRoutes);
 await fastify.register(gameRoutes);
 await fastify.register(faqRoutes);
+await fastify.register(usersRoutes);
 
 const port = parseInt(process.env.PORT || "3000");
 try {
