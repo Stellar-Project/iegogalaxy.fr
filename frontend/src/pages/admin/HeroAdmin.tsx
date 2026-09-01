@@ -2,18 +2,19 @@ import { api } from "@/api/client";
 import type { HeroBackground } from "@/api/types";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import CrudResource, { type FieldDef } from "@/components/admin/CrudResource";
-import { Pencil, Trash2 } from "lucide-react";
+import { Pencil, Trash2, ExternalLink, ImageIcon } from "lucide-react";
 
 const fields: FieldDef<HeroBackground>[] = [
-  { key: "imageUrl", label: "Image", type: "image", placeholder: "URL de l'image", span: 2 },
-  { key: "sortOrder", label: "Ordre", type: "number", placeholder: "Ordre" },
+  { key: "imageUrl", label: "Image de fond", type: "image", placeholder: "URL de l'image (ex: /assets/global/bg/...)", span: 2 },
+  { key: "sortOrder", label: "Ordre d'affichage", type: "number", placeholder: "0" },
 ];
 
 export default function HeroAdmin() {
   return (
     <CrudResource<HeroBackground>
-      title="Fond Hero"
+      title="Fonds d'écran Hero"
       fields={fields}
       makeDefault={() => ({ id: "", imageUrl: "", sortOrder: 0 })}
       load={api.getHero}
@@ -21,15 +22,70 @@ export default function HeroAdmin() {
       update={(id, data) => api.updateHero(id, data)}
       remove={(id) => api.deleteHero(id)}
       renderItem={(s, ctx) => (
-        <Card key={s.id} className="bg-slate-900/50 border-white/10 overflow-hidden group">
-          <div className="aspect-video bg-slate-800 relative">
-            <img src={s.imageUrl} alt="" className="w-full h-full object-contain" />
-            <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-              <Button size="icon" variant="ghost" className="h-8 w-8 bg-black/50 text-slate-300" onClick={() => ctx.edit(s)}><Pencil size={14} /></Button>
-              <Button size="icon" variant="ghost" className="h-8 w-8 bg-black/50 text-red-400" onClick={() => ctx.remove(s.id)}><Trash2 size={14} /></Button>
+        <Card key={s.id} className="bg-card/70 border-border overflow-hidden group hover:border-primary/40 transition-colors backdrop-blur-md shadow-xs">
+          <div className="aspect-video bg-secondary/40 relative overflow-hidden">
+            {s.imageUrl ? (
+              <img
+                src={s.imageUrl}
+                alt="Fond d'écran"
+                className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+              />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center text-muted-foreground">
+                <ImageIcon size={28} />
+              </div>
+            )}
+
+            <Badge
+              variant="outline"
+              className="absolute top-2.5 left-2.5 bg-background/80 backdrop-blur-xs border-border text-foreground font-mono font-black text-[11px] shadow-xs"
+            >
+              #{s.sortOrder + 1}
+            </Badge>
+
+            <div className="absolute top-2.5 right-2.5 flex items-center gap-1.5 opacity-90 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
+              {s.imageUrl && (
+                <Button
+                  size="icon"
+                  variant="ghost"
+                  asChild
+                  className="h-8 w-8 bg-background/80 backdrop-blur-xs text-foreground hover:bg-background cursor-pointer shadow-xs"
+                >
+                  <a href={s.imageUrl} target="_blank" rel="noopener noreferrer" title="Ouvrir l'image en taille réelle">
+                    <ExternalLink size={14} />
+                  </a>
+                </Button>
+              )}
+              <Button
+                size="icon"
+                variant="ghost"
+                className="h-8 w-8 bg-background/80 backdrop-blur-xs text-foreground hover:bg-background cursor-pointer shadow-xs"
+                onClick={() => ctx.edit(s)}
+                title="Modifier"
+              >
+                <Pencil size={14} />
+              </Button>
+              <Button
+                size="icon"
+                variant="ghost"
+                className="h-8 w-8 bg-background/80 backdrop-blur-xs text-destructive hover:bg-destructive/10 cursor-pointer shadow-xs"
+                onClick={() => {
+                  if (window.confirm("Êtes-vous sûr de vouloir supprimer ce fond d'écran ?")) {
+                    ctx.remove(s.id);
+                  }
+                }}
+                title="Supprimer"
+              >
+                <Trash2 size={14} />
+              </Button>
             </div>
           </div>
-          <CardContent className="p-2 text-xs text-slate-500 truncate">{s.imageUrl}</CardContent>
+
+          <CardContent className="p-3">
+            <p className="text-xs text-muted-foreground font-mono font-bold truncate" title={s.imageUrl}>
+              {s.imageUrl || <span className="italic font-normal">Aucune URL définie</span>}
+            </p>
+          </CardContent>
         </Card>
       )}
     />

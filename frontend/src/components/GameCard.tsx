@@ -1,8 +1,5 @@
 import { motion } from "framer-motion";
-import {
-  Download as DownloadIcon,
-  HardDrive, Gamepad2,
-} from "lucide-react";
+import { Download as DownloadIcon, HardDrive, Gamepad2 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -18,7 +15,7 @@ const trackDownload = (file: string) => {
 interface GameCardProps {
   title: string;
   logo: string;
-  color: "yellow" | "blue";
+  color: "supernova" | "bigbang" | "primary" | "accent";
   patchLink: string;
   patchSize: string;
   romLink: string;
@@ -40,96 +37,114 @@ export function GameCard({
   showRom = false,
   delay = 0,
 }: GameCardProps) {
-  const isYellow = color === "yellow";
-  const mainColorClass = isYellow ? "text-yellow-400" : "text-blue-400";
-  const btnColorClass = isYellow
-    ? "bg-yellow-500 hover:bg-yellow-400 hover:shadow-yellow-500/20"
-    : "bg-blue-600 hover:bg-blue-500 hover:shadow-blue-500/20";
-  const glowColorClass = isYellow ? "bg-yellow-500/5" : "bg-blue-500/5";
-  const borderColorClass = isYellow
-    ? "hover:border-yellow-500/30"
-    : "hover:border-blue-500/30";
-  const iconColorClass = isYellow ? "text-yellow-500" : "text-blue-500";
-  const gradientColorClass = isYellow ? "via-yellow-500/50" : "via-blue-500/50";
-  const shadowColorClass = isYellow
-    ? "group-hover:drop-shadow-[0_0_10px_rgba(250,204,21,0.3)]"
-    : "group-hover:drop-shadow-[0_0_10px_rgba(96,165,250,0.3)]";
+  const isSupernova = color === "supernova" || color === "accent";
+
+  const mainColorClass = isSupernova ? "text-supernova" : "text-bigbang";
+  const btnColorClass = isSupernova
+    ? "bg-supernova text-supernova-foreground hover:bg-supernova/90 shadow-[0_0_20px_var(--color-supernova)]"
+    : "bg-primary text-primary-foreground hover:bg-primary/90 shadow-[0_0_20px_var(--color-primary)]";
+  const glowColorClass = isSupernova ? "bg-supernova/15" : "bg-primary/15";
+  const borderColorClass = isSupernova
+    ? "hover:border-supernova/50"
+    : "hover:border-primary/50";
+  const iconColorClass = isSupernova ? "text-supernova" : "text-primary";
+  const gradientColorClass = isSupernova ? "via-supernova/60" : "via-primary/60";
+  const btnOutlineClass = isSupernova
+    ? "border-supernova/30 hover:bg-supernova/10 text-foreground"
+    : "border-primary/30 hover:bg-primary/10 text-foreground";
+
+  const isExternalPatch = patchLink.startsWith("http");
+  const isExternalRom = romLink.startsWith("http");
 
   return (
     <motion.div
-      initial={{ opacity: 0, x: isYellow ? -40 : 40 }}
+      initial={{ opacity: 0, x: isSupernova ? -30 : 30 }}
       whileInView={{ opacity: 1, x: 0 }}
       viewport={{ once: true }}
-      transition={{ duration: 0.6, delay }}
+      transition={{ duration: 0.5, delay }}
       className="h-full"
     >
       <Card
-        className={`h-full bg-slate-900/50 backdrop-blur-sm border-white/5 ${borderColorClass} transition-all duration-300 group overflow-hidden relative`}
+        className={`h-full bg-card/70 border-border ${borderColorClass} backdrop-blur-md transition-all duration-300 group overflow-hidden relative shadow-xs flex flex-col`}
       >
         <div
-          className={`absolute top-0 left-0 w-full h-1 bg-linear-to-r from-transparent ${gradientColorClass} to-transparent opacity-0 group-hover:opacity-100 transition-opacity`}
+          className={`absolute top-0 left-0 w-full h-0.5 bg-linear-to-r from-transparent ${gradientColorClass} to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300`}
         />
 
         <CardHeader className="text-center pb-2">
           <CardTitle
-            className={`text-2xl font-bold ${mainColorClass} ${shadowColorClass} transition-all`}
+            className={`text-2xl font-black tracking-tight ${mainColorClass} transition-colors`}
           >
             {title}
           </CardTitle>
         </CardHeader>
 
-        <CardContent className="flex flex-col items-center justify-between space-y-8 p-6 pt-4 h-full">
-          <div className="relative w-full flex justify-center py-4">
+        <CardContent className="flex flex-col items-center justify-between space-y-6 p-6 pt-2 flex-1">
+          <div className="relative w-full flex justify-center py-4 my-auto">
             <div
-              className={`absolute inset-0 ${glowColorClass} blur-3xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500`}
+              className={`absolute inset-0 ${glowColorClass} blur-3xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none`}
             />
             <img
               src={logo}
               alt={`${title} Logo`}
-              className="h-48 md:h-56 object-contain relative z-10 drop-shadow-2xl transform group-hover:scale-105 transition-transform duration-500"
+              className="h-44 sm:h-52 object-contain relative z-10 drop-shadow-xl transform group-hover:scale-105 transition-transform duration-500"
             />
           </div>
 
-          <div className="w-full space-y-3">
-            {showPatch && (
+          <div className="w-full space-y-3 pt-2">
+            {showPatch && patchLink && (
               <Button
                 asChild
-                className={`w-full ${btnColorClass} text-white font-bold h-12 text-lg shadow-lg transition-all`}
+                className={`w-full ${btnColorClass} font-black h-11 text-base shadow-sm transition-all cursor-pointer`}
               >
-                <a href={patchLink} download onClick={() => trackDownload(patchLink)}>
-                  <DownloadIcon className="mr-2 h-5 w-5" />
-                  Télécharger Patch
+                <a
+                  href={patchLink}
+                  target={isExternalPatch ? "_blank" : undefined}
+                  rel={isExternalPatch ? "noopener noreferrer" : undefined}
+                  download={!isExternalPatch}
+                  onClick={() => trackDownload(patchLink)}
+                >
+                  <DownloadIcon className="mr-2 h-4 w-4" />
+                  Télécharger le Patch
                 </a>
               </Button>
             )}
 
-            {showRom && (
+            {showRom && romLink && (
               <Button
                 asChild
-                variant="secondary"
-                className="w-full bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold h-10 border border-white/10"
+                variant="outline"
+                className={`w-full ${btnOutlineClass} font-black h-10 border-border cursor-pointer`}
               >
-                <a href={romLink} download onClick={() => trackDownload(romLink)}>
-                  <Gamepad2 className="mr-2 h-4 w-4" />
-                  Télécharger ROM
+                <a
+                  href={romLink}
+                  target={isExternalRom ? "_blank" : undefined}
+                  rel={isExternalRom ? "noopener noreferrer" : undefined}
+                  download={!isExternalRom}
+                  onClick={() => trackDownload(romLink)}
+                >
+                  <Gamepad2 className="mr-2 h-4 w-4 text-muted-foreground" />
+                  Télécharger la ROM
                 </a>
               </Button>
             )}
 
-            {showPatch && showRom && <Separator className="bg-white/10 my-2" />}
+            {showPatch && showRom && <Separator className="bg-border my-2" />}
 
-            <div className="flex items-center justify-center gap-4 text-xs text-slate-500 uppercase tracking-wider font-medium">
-              {showPatch && (
+            <div className="flex items-center justify-center gap-3 text-[11px] text-muted-foreground uppercase tracking-wider font-mono font-black">
+              {showPatch && patchSize && (
                 <div className="flex items-center gap-1.5">
-                  <HardDrive size={12} className={iconColorClass} />
-                  Patch : {patchSize}
+                  <HardDrive size={13} className={iconColorClass} />
+                  <span>Patch : {patchSize}</span>
                 </div>
               )}
-              {showPatch && showRom && <div className="w-px bg-slate-700 h-3" />}
-              {showRom && (
+              {showPatch && showRom && patchSize && romSize && (
+                <div className="w-px bg-border h-3" />
+              )}
+              {showRom && romSize && (
                 <div className="flex items-center gap-1.5">
-                  <HardDrive size={12} className="text-slate-400" />
-                  ROM : {romSize}
+                  <HardDrive size={13} className="text-muted-foreground" />
+                  <span>ROM : {romSize}</span>
                 </div>
               )}
             </div>

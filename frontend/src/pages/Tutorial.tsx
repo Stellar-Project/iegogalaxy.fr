@@ -10,7 +10,7 @@ import {
   ChevronRight,
   MonitorPlay,
   ExternalLink,
-  Youtube,
+  Video,
   Trash2,
   CheckCircle2,
 } from "lucide-react";
@@ -25,26 +25,44 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 
-function Step({ num, color, children }: { num: number; color: "yellow" | "blue"; children: React.ReactNode }) {
-  const colors = {
-    yellow: "bg-yellow-500/20 border-yellow-500/30 text-yellow-400",
-    blue: "bg-blue-500/20 border-blue-500/30 text-blue-400",
-  };
+interface StepProps {
+  num: number;
+  color?: "accent" | "primary";
+  children: React.ReactNode;
+}
+
+function Step({ num, color = "accent", children }: StepProps) {
+  const badgeClasses =
+    color === "accent"
+      ? "bg-accent/15 border-accent/40 text-accent"
+      : "bg-primary/15 border-primary/40 text-primary";
+
   return (
     <div className="flex items-start gap-3">
-      <div className={`w-6 h-6 rounded-full ${colors[color]} text-xs font-bold flex items-center justify-center shrink-0 mt-0.5`}>{num}</div>
-      <span className="text-slate-400 text-sm leading-relaxed pt-0.5">{children}</span>
+      <div
+        className={`w-6 h-6 rounded-full border ${badgeClasses} text-xs font-black flex items-center justify-center shrink-0 mt-0.5 shadow-xs`}
+      >
+        {num}
+      </div>
+      <div className="text-muted-foreground text-sm leading-relaxed pt-0.5 flex-1 font-medium">
+        {children}
+      </div>
     </div>
   );
 }
 
 export default function Tutorial() {
-  useMeta({ title: "Tutoriel", description: "Guide complet pour patcher Inazuma Eleven GO Galaxy Supernova et Big Bang avec les outils Stellar Project." });
+  useMeta({
+    title: "Tutoriel d'installation",
+    description:
+      "Guide complet pour installer et patcher Inazuma Eleven GO Galaxy Supernova et Big Bang sur Nintendo 3DS et émulateurs.",
+  });
+
   return (
-    <div className="relative min-h-screen flex flex-col items-center text-slate-200 bg-background overflow-hidden px-4 py-20">
-      <div className="absolute inset-0 z-0">
-        <div className="absolute inset-0 bg-linear-to-b from-slate-950 via-slate-950/80 to-slate-950" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.03),transparent_70%)]" />
+    <div className="relative min-h-screen flex flex-col items-center text-foreground bg-background overflow-hidden px-4 py-16 sm:py-24">
+      <div className="absolute inset-0 z-0 select-none pointer-events-none">
+        <div className="absolute inset-0 bg-linear-to-b from-background via-background/95 to-background" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,var(--color-primary)/0.03,transparent_70%)]" />
       </div>
 
       <div className="relative z-10 max-w-4xl mx-auto space-y-16 w-full">
@@ -54,32 +72,56 @@ export default function Tutorial() {
           transition={{ duration: 0.6 }}
           className="text-center space-y-4"
         >
-          <h1 className="text-4xl md:text-5xl font-extrabold text-white tracking-tight">
-            Guide <span className="text-yellow-400">d'Installation</span>
-          </h1>
-          <div className="flex items-center justify-center gap-2 text-slate-400 text-sm">
+          <div className="flex items-center justify-center gap-2 text-muted-foreground text-xs sm:text-sm">
             <Button
               variant="link"
               asChild
-              className="text-slate-400 hover:text-yellow-400 p-0 h-auto"
+              className="text-muted-foreground hover:text-primary p-0 h-auto text-xs sm:text-sm cursor-pointer"
             >
               <Link to="/">Accueil</Link>
             </Button>
             <ChevronRight size={14} />
-            <span className="text-yellow-400">Tutoriel</span>
+            <span className="text-primary font-black">Tutoriel</span>
           </div>
+
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-black text-foreground tracking-tight">
+            Guide <span className="text-accent">d'Installation</span>
+          </h1>
+          <p className="text-muted-foreground max-w-2xl mx-auto text-sm sm:text-base leading-relaxed font-medium">
+            Suivez attentivement les étapes ci-dessous pour installer le patch
+            français sur console Nintendo 3DS (Luma3DS) ou sur émulateurs
+            (Citra, Azahar).
+          </p>
         </motion.div>
 
-        <div className="flex justify-center gap-4 md:gap-8 text-xs">
+        <div className="flex justify-center items-center gap-3 sm:gap-8 text-xs font-black">
           {[
-            { num: "1", label: "Prérequis", color: "text-yellow-400 border-yellow-500/30" },
-            { num: "2", label: "Nettoyage", color: "text-red-400 border-red-500/30" },
-            { num: "3", label: "Installation", color: "text-green-400 border-green-500/30" },
+            {
+              num: "1",
+              label: "Prérequis",
+              color: "text-accent border-accent/40 bg-accent/10",
+            },
+            {
+              num: "2",
+              label: "Nettoyage",
+              color: "text-destructive border-destructive/40 bg-destructive/10",
+            },
+            {
+              num: "3",
+              label: "Installation",
+              color: "text-primary border-primary/40 bg-primary/10",
+            },
           ].map((step, i) => (
             <div key={step.num} className="flex items-center gap-2">
-              <div className={`w-7 h-7 rounded-full border ${step.color} bg-white/5 flex items-center justify-center text-xs font-bold`}>{step.num}</div>
-              <span className="text-slate-400 hidden sm:inline">{step.label}</span>
-              {i < 2 && <div className="hidden sm:block w-8 h-px bg-white/10" />}
+              <div
+                className={`w-7 h-7 rounded-full border ${step.color} flex items-center justify-center text-xs font-black shadow-xs`}
+              >
+                {step.num}
+              </div>
+              <span className="text-foreground hidden sm:inline">
+                {step.label}
+              </span>
+              {i < 2 && <div className="hidden sm:block w-8 h-px bg-border" />}
             </div>
           ))}
         </div>
@@ -87,141 +129,146 @@ export default function Tutorial() {
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2, duration: 0.6 }}
+          transition={{ delay: 0.15, duration: 0.5 }}
         >
-          <Alert className="bg-blue-500/10 border-blue-500/30 text-blue-200">
-            <Info className="h-4 w-4 text-blue-400" />
-            <AlertTitle className="text-blue-400 font-semibold mb-2">
-              À propos du patch
+          <Alert className="bg-primary/10 border-primary/30 text-foreground">
+            <Info className="h-4 w-4 text-primary shrink-0" />
+            <AlertTitle className="text-primary font-black mb-1">
+              À propos du patch français
             </AlertTitle>
-            <AlertDescription className="text-slate-300 leading-relaxed">
-              Ce patch traduit les éléments essentiels du jeu (techniques,
-              talents, menus, histoire) pour vous permettre de profiter
-              pleinement de l'aventure en français.
+            <AlertDescription className="text-muted-foreground leading-relaxed text-xs sm:text-sm font-medium">
+              Ce patch traduit les dialogues, l'histoire principale, les noms de
+              techniques, les talents et les interfaces pour vous offrir une
+              immersion complète en français.
             </AlertDescription>
           </Alert>
         </motion.div>
 
-        <div className="space-y-8">
-          <div className="flex items-center gap-4">
-            <div className="h-10 w-10 rounded-full bg-yellow-500/10 flex items-center justify-center border border-yellow-500/20 text-yellow-400 font-bold">
+        <div className="space-y-6">
+          <div className="flex items-center gap-3">
+            <div className="h-9 w-9 rounded-full bg-accent/10 flex items-center justify-center border border-accent/20 text-accent font-black text-sm">
               1
             </div>
-            <h2 className="text-2xl md:text-3xl font-bold text-white">
+            <h2 className="text-2xl sm:text-3xl font-black text-foreground tracking-tight">
               Vérifier votre équipement
             </h2>
           </div>
 
-          <Alert className="bg-slate-900/50 border-yellow-500/20 text-slate-300">
-            <AlertTriangle className="h-4 w-4 text-yellow-400" />
-            <AlertTitle className="text-yellow-400 font-semibold mb-1">
-              Pas encore prêt ?
+          <Alert className="bg-card/70 border-accent/30 text-foreground shadow-xs">
+            <AlertTriangle className="h-4 w-4 text-accent shrink-0" />
+            <AlertTitle className="text-accent font-black mb-1">
+              Pas encore équipé ?
             </AlertTitle>
-            <AlertDescription>
-              <span>
-                Si vous n'avez pas encore{" "}
-                <strong className="text-white">hacké votre console</strong> ou
-                installé d'<strong className="text-white">émulateur</strong>,
-                suivez d'abord ces guides avant de télécharger le patch.
-              </span>
+            <AlertDescription className="text-muted-foreground text-xs sm:text-sm leading-relaxed font-medium">
+              Si votre 3DS n'est pas encore sous{" "}
+              <strong className="text-foreground font-black">
+                Custom Firmware (CFW)
+              </strong>{" "}
+              ou si vous n'avez pas installé d'
+              <strong className="text-foreground font-black">
+                émulateur
+              </strong>
+              , consultez d'abord ces guides :
             </AlertDescription>
           </Alert>
 
           <div className="grid md:grid-cols-2 gap-6">
-            <Card className="bg-slate-900/50 border-white/5 backdrop-blur-sm flex flex-col">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-3 text-lg text-yellow-400">
-                  <Gamepad2 className="h-6 w-6" />
-                  Guide 3DS (CFW)
+            <Card className="bg-card/70 border-border backdrop-blur-md flex flex-col shadow-xs">
+              <CardHeader className="pb-3">
+                <CardTitle className="flex items-center gap-2.5 text-base sm:text-lg text-accent font-black tracking-tight">
+                  <Gamepad2 className="h-5 w-5" />
+                  Guide 3DS (CFW & Luma3DS)
                 </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-4 flex-1 flex flex-col">
-                <p className="text-slate-400 text-sm leading-relaxed flex-1">
-                  Nécessaire pour les consoles 3DS/2DS. Vous devez installer
-                  Luma3DS.
+              <CardContent className="space-y-4 flex-1 flex flex-col justify-between">
+                <p className="text-muted-foreground text-xs sm:text-sm leading-relaxed font-medium">
+                  Indispensable sur 2DS / 3DS. Votre console doit être équipée
+                  de Luma3DS pour activer le patch sans altérer vos cartouches
+                  d'origine.
                 </p>
-                <div className="grid grid-cols-2 gap-3 pt-2">
+                <div className="grid grid-cols-2 gap-2.5 pt-2">
                   <Button
                     variant="outline"
-                    className="bg-yellow-500/10 border-yellow-500/20 text-yellow-400 hover:bg-yellow-500/20 hover:text-yellow-300 transition-all text-xs h-auto py-2"
+                    className="bg-accent/10 border-accent/30 text-accent hover:bg-accent/20 hover:text-accent text-xs h-auto py-2 font-black cursor-pointer"
                     asChild
                   >
                     <a
-                      href="https://3ds.hacks.guide"
+                      href="https://3ds.hacks.guide/fr_FR/"
                       target="_blank"
-                      rel="noreferrer"
+                      rel="noopener noreferrer"
                       className="flex flex-col items-center gap-1"
                     >
-                      <ExternalLink size={14} /> Guide Hack
+                      <ExternalLink size={14} /> Guide Hack 3DS
                     </a>
                   </Button>
                   <Button
                     variant="outline"
-                    className="bg-red-500/10 border-red-500/20 text-red-400 hover:bg-red-500/20 hover:text-red-300 transition-all text-xs h-auto py-2"
+                    className="bg-destructive/10 border-destructive/30 text-destructive hover:bg-destructive/20 hover:text-destructive text-xs h-auto py-2 font-black cursor-pointer"
                     asChild
                   >
                     <a
                       href="https://www.youtube.com/watch?v=A9f1izV-QVk"
                       target="_blank"
-                      rel="noreferrer"
+                      rel="noopener noreferrer"
                       className="flex flex-col items-center gap-1"
                     >
-                      <Youtube size={14} /> Tuto Vidéo
+                      <Video size={14} /> Tuto Vidéo
                     </a>
                   </Button>
                 </div>
               </CardContent>
             </Card>
 
-            <Card className="bg-slate-900/50 border-white/5 backdrop-blur-sm flex flex-col">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-3 text-lg text-blue-400">
-                  <MonitorPlay className="h-6 w-6" />
-                  Émulateurs PC/Android
+            <Card className="bg-card/70 border-border backdrop-blur-md flex flex-col shadow-xs">
+              <CardHeader className="pb-3">
+                <CardTitle className="flex items-center gap-2.5 text-base sm:text-lg text-primary font-black tracking-tight">
+                  <MonitorPlay className="h-5 w-5" />
+                  Émulateurs PC / Android
                 </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-4 flex-1 flex flex-col">
-                <p className="text-slate-400 text-sm leading-relaxed flex-1">
-                  Logiciels recommandés pour jouer sans console.
+              <CardContent className="space-y-4 flex-1 flex flex-col justify-between">
+                <p className="text-muted-foreground text-xs sm:text-sm leading-relaxed font-medium">
+                  Logiciels recommandés pour faire tourner le jeu sur votre
+                  ordinateur ou smartphone avec de meilleurs graphismes.
                 </p>
-                <div className="grid grid-cols-2 gap-3 pt-2">
+                <div className="grid grid-cols-2 gap-2.5 pt-2">
                   <Button
                     variant="outline"
-                    className="bg-slate-800/50 border-slate-700 text-slate-200 hover:bg-slate-800 hover:text-white hover:border-blue-500/50 transition-all text-xs h-auto py-2"
+                    className="bg-secondary/60 border-border text-foreground hover:bg-secondary hover:border-primary/40 text-xs h-auto py-2 font-black cursor-pointer"
                     asChild
                   >
                     <a
                       href="https://azahar-emu.org/pages/download/"
                       target="_blank"
-                      rel="noreferrer"
+                      rel="noopener noreferrer"
                       className="flex flex-col items-center gap-1"
                     >
                       <img
                         src="/assets/pages/tutorial/azahar-logo.svg"
                         alt="Azahar"
-                        className="w-5 h-5 object-contain"
+                        className="w-4 h-4 object-contain"
                       />
-                      Azahar
+                      Azahar Emulator
                     </a>
                   </Button>
 
                   <Button
                     variant="outline"
-                    className="bg-slate-800/50 border-slate-700 text-slate-200 hover:bg-slate-800 hover:text-white hover:border-orange-500/50 transition-all text-xs h-auto py-2"
+                    className="bg-secondary/60 border-border text-foreground hover:bg-secondary hover:border-primary/40 text-xs h-auto py-2 font-black cursor-pointer"
                     asChild
                   >
                     <a
                       href="https://citra-emulator.com/download"
                       target="_blank"
-                      rel="noreferrer"
+                      rel="noopener noreferrer"
                       className="flex flex-col items-center gap-1"
                     >
                       <img
                         src="/assets/pages/tutorial/citra-logo.png"
                         alt="Citra"
-                        className="w-5 h-5 object-contain"
+                        className="w-4 h-4 object-contain"
                       />
-                      Citra
+                      Citra Emulator
                     </a>
                   </Button>
                 </div>
@@ -230,135 +277,250 @@ export default function Tutorial() {
           </div>
         </div>
 
-        <div className="space-y-8">
-          <div className="flex items-center gap-4">
-            <div className="h-10 w-10 rounded-full bg-red-500/10 flex items-center justify-center border border-red-500/20 text-red-400 font-bold">
+        <div className="space-y-6">
+          <div className="flex items-center gap-3">
+            <div className="h-9 w-9 rounded-full bg-destructive/10 flex items-center justify-center border border-destructive/20 text-destructive font-black text-sm">
               2
             </div>
-            <h2 className="text-2xl md:text-3xl font-bold text-white">
-              Nettoyage des fichiers
+            <h2 className="text-2xl sm:text-3xl font-black text-foreground tracking-tight">
+              Nettoyage des anciens fichiers
             </h2>
           </div>
 
           <Alert
             variant="destructive"
-            className="bg-red-900/10 border-red-900/30 text-red-200"
+            className="bg-destructive/10 border-destructive/30 text-destructive shadow-xs"
           >
-            <Trash2 className="h-4 w-4" />
-            <AlertTitle className="font-semibold mb-2">
-              Étape Critique : Éviter les conflits
+            <Trash2 className="h-4 w-4 shrink-0" />
+            <AlertTitle className="font-black mb-1">
+              Étape Critique : Éviter les conflits de version
             </AlertTitle>
-            <AlertDescription className="text-slate-300">
-              <p className="mb-2">
-                Si vous avez une ancienne version du patch ou une ROM déjà
-                modifiée, <strong>il est impératif de tout supprimer</strong>{" "}
-                avant d'installer la nouvelle version.
-              </p>
+            <AlertDescription className="text-muted-foreground text-xs sm:text-sm leading-relaxed font-medium">
+              Si vous possédiez une version antérieure du patch ou une ROM
+              modifiée,{" "}
+              <strong className="text-foreground font-black">
+                supprimez les anciens dossiers
+              </strong>{" "}
+              avant d'installer la dernière mise à jour.
             </AlertDescription>
           </Alert>
 
           <div className="grid md:grid-cols-2 gap-6">
-            <Card className="bg-slate-900/50 border-white/5 backdrop-blur-sm">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-lg text-white">
-                  <HardDrive className="text-yellow-400 h-5 w-5" />
-                  Sur 3DS
+            <Card className="bg-card/70 border-border backdrop-blur-md shadow-xs">
+              <CardHeader className="pb-3">
+                <CardTitle className="flex items-center gap-2 text-base sm:text-lg text-foreground font-black tracking-tight">
+                  <HardDrive className="text-accent h-5 w-5" />
+                  Sur Nintendo 3DS
                 </CardTitle>
               </CardHeader>
-              <CardContent className="text-slate-400 text-sm space-y-4">
-                <Step num={1} color="yellow">Allez dans <b>Luma → titles</b> sur votre carte SD.</Step>
-                <Step num={2} color="yellow">
-                  Supprimez les dossiers suivants s'ils existent :
-                  <div className="mt-2 space-y-1 pl-4 border-l-2 border-white/10">
-                    <code className="bg-black/40 px-1.5 py-0.5 rounded text-slate-200 block w-fit font-mono text-xs">000400000010BB00 (Supernova)</code>
-                    <code className="bg-black/40 px-1.5 py-0.5 rounded text-slate-200 block w-fit font-mono text-xs">000400000010BA00 (Big Bang)</code>
+              <CardContent className="text-muted-foreground text-xs sm:text-sm space-y-3.5">
+                <Step num={1} color="accent">
+                  Insérez votre carte SD sur PC et ouvrez le répertoire{" "}
+                  <strong className="text-foreground font-mono font-black">
+                    luma/titles/
+                  </strong>
+                  .
+                </Step>
+                <Step num={2} color="accent">
+                  Supprimez les dossiers correspondants s'ils existent :
+                  <div className="mt-2 space-y-1.5 pl-3 border-l-2 border-border">
+                    <code className="bg-secondary px-2 py-0.5 rounded text-foreground block w-fit font-mono text-xs border border-border font-black">
+                      000400000010BB00 (Supernova)
+                    </code>
+                    <code className="bg-secondary px-2 py-0.5 rounded text-foreground block w-fit font-mono text-xs border border-border font-black">
+                      000400000010BA00 (Big Bang)
+                    </code>
                   </div>
                 </Step>
-                <Step num={3} color="yellow">Si vous aviez installé un <b>.CIA</b> pré-patché, supprimez le jeu via <b>FBI</b> (Titles &gt; Delete Title And Ticket).</Step>
+                <Step num={3} color="accent">
+                  Si vous aviez un{" "}
+                  <strong className="text-foreground font-black">
+                    .CIA
+                  </strong>{" "}
+                  pré-patché installé, désinstallez-le proprement via{" "}
+                  <strong className="text-foreground font-black">FBI</strong> (
+                  <em>Titles &gt; Delete Title And Ticket</em>).
+                </Step>
               </CardContent>
             </Card>
 
-            <Card className="bg-slate-900/50 border-white/5 backdrop-blur-sm">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-lg text-white">
-                  <MonitorPlay className="text-blue-400 h-5 w-5" />
-                  Sur Émulateur
+            <Card className="bg-card/70 border-border backdrop-blur-md shadow-xs">
+              <CardHeader className="pb-3">
+                <CardTitle className="flex items-center gap-2 text-base sm:text-lg text-foreground font-black tracking-tight">
+                  <MonitorPlay className="text-primary h-5 w-5" />
+                  Sur Émulateur (PC / Android)
                 </CardTitle>
               </CardHeader>
-              <CardContent className="text-slate-400 text-sm space-y-4">
-                <Step num={1} color="blue">Dans l'émulateur, faites <b>Clic-droit</b> sur le jeu.</Step>
-                <Step num={2} color="blue">Choisissez <b>Ouvrir l'emplacement des mods</b>.</Step>
-                <Step num={3} color="blue">Supprimez intégralement le dossier <b>RomFS</b> présent.</Step>
-                <Step num={4} color="blue">Si vous utilisiez une ROM pré-patchée (.3ds/.cia), supprimez le fichier de votre ordinateur.</Step>
+              <CardContent className="text-muted-foreground text-xs sm:text-sm space-y-3.5">
+                <Step num={1} color="primary">
+                  Dans la liste des jeux de l'émulateur, faites un{" "}
+                  <strong className="text-foreground font-black">
+                    Clic-droit
+                  </strong>{" "}
+                  sur le jeu.
+                </Step>
+                <Step num={2} color="primary">
+                  Cliquez sur{" "}
+                  <strong className="text-foreground font-black">
+                    Ouvrir l'emplacement des mods
+                  </strong>{" "}
+                  (ou <em>Open Mod Location</em>).
+                </Step>
+                <Step num={3} color="primary">
+                  Supprimez l'ancien dossier{" "}
+                  <strong className="text-foreground font-mono font-black">
+                    RomFS
+                  </strong>{" "}
+                  présent dans ce dossier.
+                </Step>
+                <Step num={4} color="primary">
+                  Si vous utilisiez une ROM pré-patchée obsolète, supprimez
+                  l'ancien fichier{" "}
+                  <strong className="text-foreground font-mono font-black">
+                    .3ds / .cia
+                  </strong>
+                  .
+                </Step>
               </CardContent>
             </Card>
           </div>
         </div>
 
-        <div id="instructions" className="space-y-8 pb-12">
-          <div className="flex items-center gap-4">
-            <div className="h-10 w-10 rounded-full bg-green-500/10 flex items-center justify-center border border-green-500/20 text-green-400 font-bold">
+        <div id="instructions" className="space-y-6 pb-12">
+          <div className="flex items-center gap-3">
+            <div className="h-9 w-9 rounded-full bg-primary/10 flex items-center justify-center border border-primary/20 text-primary font-black text-sm">
               3
             </div>
-            <h2 className="text-2xl md:text-3xl font-bold text-white">
+            <h2 className="text-2xl sm:text-3xl font-black text-foreground tracking-tight">
               Installation du Patch
             </h2>
           </div>
 
-          <Accordion type="single" collapsible className="w-full space-y-4">
+          <Accordion
+            type="single"
+            collapsible
+            defaultValue="console-3ds"
+            className="w-full space-y-4"
+          >
             <AccordionItem
               value="console-3ds"
-              className="border border-white/10 bg-slate-900/30 rounded-lg px-4"
+              className="border border-border bg-card/70 rounded-2xl px-4 sm:px-6 shadow-xs overflow-hidden"
             >
-              <AccordionTrigger className="hover:text-yellow-400 text-slate-200">
+              <AccordionTrigger className="hover:text-accent text-foreground py-4 cursor-pointer">
                 <div className="flex items-center gap-3">
-                  <HardDrive className="h-5 w-5 text-yellow-400" />
-                  <span className="text-lg font-semibold">
-                    Méthode Console 3DS
+                  <HardDrive className="h-5 w-5 text-accent" />
+                  <span className="text-base sm:text-lg font-black tracking-tight">
+                    Méthode Console Nintendo 3DS
                   </span>
                 </div>
               </AccordionTrigger>
-              <AccordionContent className="text-slate-400 space-y-6 pt-4 pb-4 px-2">
-                <div className="space-y-3">
-                  <div className="flex items-center gap-2">
+
+              <AccordionContent className="text-muted-foreground space-y-6 pt-2 pb-6">
+                <div className="space-y-3.5">
+                  <div className="flex flex-wrap items-center gap-2">
                     <Badge
                       variant="outline"
-                      className="text-yellow-400 border-yellow-400/30 bg-yellow-400/10"
+                      className="text-accent border-accent/40 bg-accent/10 font-black text-xs"
                     >
-                      LayeredFS (Recommandé)
+                      LayeredFS (Méthode Recommandée)
                     </Badge>
-                    <h4 className="text-white font-medium flex items-center gap-2">
-                      <FileArchive size={16} /> Via Patch LayeredFS (.zip)
+                    <h4 className="text-foreground font-black text-sm flex items-center gap-1.5">
+                      <FileArchive size={15} /> Via l'archive Patch (.zip)
                     </h4>
                   </div>
                   <div className="space-y-3">
-                    <Step num={1} color="yellow">Ouvrez l'archive <b>.zip</b> téléchargée.</Step>
-                    <Step num={2} color="yellow">Glissez le dossier <b>luma</b> à la racine de votre carte SD.</Step>
-                    <Step num={3} color="yellow">Remettez la SD dans la console et allumez-la en maintenant <b>SELECT</b>.</Step>
-                    <Step num={4} color="yellow">Dans le menu Luma, cochez l'option <b>(x) Enable game patching</b>.</Step>
-                    <Step num={5} color="yellow">Appuyez sur <b>START</b> pour redémarrer. C'est prêt !</Step>
+                    <Step num={1} color="accent">
+                      Extrayez l'archive{" "}
+                      <strong className="text-foreground font-mono font-black">
+                        .zip
+                      </strong>{" "}
+                      téléchargée depuis la page Téléchargement.
+                    </Step>
+                    <Step num={2} color="accent">
+                      Copiez le dossier{" "}
+                      <strong className="text-foreground font-mono font-black">
+                        luma
+                      </strong>{" "}
+                      directement à la{" "}
+                      <strong className="text-foreground font-black">
+                        racine
+                      </strong>{" "}
+                      de votre carte SD.
+                    </Step>
+                    <Step num={3} color="accent">
+                      Réinsérez la carte SD dans votre 3DS et allumez la console
+                      en maintenant le bouton{" "}
+                      <strong className="text-foreground font-black">
+                        SELECT
+                      </strong>{" "}
+                      enfoncé.
+                    </Step>
+                    <Step num={4} color="accent">
+                      Dans le menu de configuration Luma3DS, cochez l'option{" "}
+                      <strong className="text-foreground font-black">
+                        (x) Enable game patching
+                      </strong>{" "}
+                      avec le bouton{" "}
+                      <strong className="text-foreground font-black">A</strong>.
+                    </Step>
+                    <Step num={5} color="accent">
+                      Appuyez sur{" "}
+                      <strong className="text-foreground font-black">
+                        START
+                      </strong>{" "}
+                      pour sauvegarder et redémarrer la console. Lancez votre
+                      jeu original : il est désormais en français !
+                    </Step>
                   </div>
                 </div>
 
-                <div className="h-px bg-white/5" />
+                <div className="h-px bg-border/60" />
 
-                <div className="space-y-3">
-                  <div className="flex items-center gap-2">
+                <div className="space-y-3.5">
+                  <div className="flex flex-wrap items-center gap-2">
                     <Badge
                       variant="outline"
-                      className="text-blue-400 border-blue-400/30 bg-blue-400/10"
+                      className="text-primary border-primary/40 bg-primary/10 font-black text-xs"
                     >
-                      ROM pré-patchée (Alternatif)
+                      Installation Directe
                     </Badge>
-                    <h4 className="text-white font-medium flex items-center gap-2">
-                      <HardDrive size={16} /> Via ROM pré-patchée (.cia)
+                    <h4 className="text-foreground font-black text-sm flex items-center gap-1.5">
+                      <HardDrive size={15} /> Via ROM pré-patchée (.cia)
                     </h4>
                   </div>
                   <div className="space-y-3">
-                    <Step num={1} color="blue">Copiez le fichier <b>.cia</b> dans le dossier <b>cias</b> de la carte SD.</Step>
-                    <Step num={2} color="blue">Lancez l'application <b>FBI</b> sur la 3DS.</Step>
-                    <Step num={3} color="blue">Allez dans <b>SD &gt; cias</b>.</Step>
-                    <Step num={4} color="blue">Sélectionnez le jeu et choisissez <b>Install and delete CIAs</b>.</Step>
+                    <Step num={1} color="primary">
+                      Copiez le fichier{" "}
+                      <strong className="text-foreground font-mono font-black">
+                        .cia
+                      </strong>{" "}
+                      dans le dossier{" "}
+                      <strong className="text-foreground font-mono font-black">
+                        cias/
+                      </strong>{" "}
+                      de votre carte SD.
+                    </Step>
+                    <Step num={2} color="primary">
+                      Lancez l'application{" "}
+                      <strong className="text-foreground font-black">
+                        FBI
+                      </strong>{" "}
+                      sur votre 3DS.
+                    </Step>
+                    <Step num={3} color="primary">
+                      Naviguez dans{" "}
+                      <strong className="text-foreground font-mono font-black">
+                        SD &gt; cias
+                      </strong>
+                      .
+                    </Step>
+                    <Step num={4} color="primary">
+                      Sélectionnez le fichier du jeu et choisissez{" "}
+                      <strong className="text-foreground font-black">
+                        Install and delete CIA
+                      </strong>{" "}
+                      pour installer le jeu sur le menu HOME.
+                    </Step>
                   </div>
                 </div>
               </AccordionContent>
@@ -366,77 +528,114 @@ export default function Tutorial() {
 
             <AccordionItem
               value="emulator"
-              className="border border-white/10 bg-slate-900/30 rounded-lg px-4"
+              className="border border-border bg-card/70 rounded-2xl px-4 sm:px-6 shadow-xs overflow-hidden"
             >
-              <AccordionTrigger className="hover:text-green-400 text-slate-200">
+              <AccordionTrigger className="hover:text-primary text-foreground py-4 cursor-pointer">
                 <div className="flex items-center gap-3">
-                  <MonitorPlay className="h-5 w-5 text-green-400" />
-                  <span className="text-lg font-semibold">
-                    Méthode Émulateur
+                  <MonitorPlay className="h-5 w-5 text-primary" />
+                  <span className="text-base sm:text-lg font-black tracking-tight">
+                    Méthode Émulateur (Citra / Azahar)
                   </span>
                 </div>
               </AccordionTrigger>
-              <AccordionContent className="text-slate-400 space-y-6 pt-4 pb-4 px-2">
-                <Alert className="bg-green-500/10 border-green-500/30 text-green-200 mb-4">
-                  <Info className="h-4 w-4 text-green-400" />
-                  <AlertDescription>
-                    Compatible avec Citra et Azahar. La procédure est identique.
+
+              <AccordionContent className="text-muted-foreground space-y-6 pt-2 pb-6">
+                <Alert className="bg-primary/10 border-primary/30 text-foreground">
+                  <Info className="h-4 w-4 text-primary shrink-0" />
+                  <AlertDescription className="text-xs sm:text-sm font-medium">
+                    Compatible avec Citra Nightly/Canary et Azahar Emulator sur
+                    Windows, macOS, Linux et Android.
                   </AlertDescription>
                 </Alert>
 
-                <div className="space-y-3">
-                  <div className="flex items-center gap-2">
+                <div className="space-y-3.5">
+                  <div className="flex flex-wrap items-center gap-2">
                     <Badge
                       variant="outline"
-                      className="text-yellow-400 border-yellow-400/30 bg-yellow-400/10"
+                      className="text-accent border-accent/40 bg-accent/10 font-black text-xs"
                     >
-                      LayeredFS (Recommandé)
+                      Dossier Mod (Recommandé)
                     </Badge>
-                    <h4 className="text-white font-medium flex items-center gap-2">
-                      <FileArchive size={16} /> Via Patch LayeredFS (.zip)
+                    <h4 className="text-foreground font-black text-sm flex items-center gap-1.5">
+                      <FileArchive size={15} /> Via Patch LayeredFS (.zip)
                     </h4>
                   </div>
                   <div className="space-y-3">
-                    <Step num={1} color="yellow">Dans l'émulateur, faites <b>Clic-droit</b> sur votre jeu original.</Step>
-                    <Step num={2} color="yellow">Sélectionnez <b>Ouvrir l'emplacement des mods</b>.</Step>
-                    <Step num={3} color="yellow">Ouvrez le dossier <b>luma/titles/&lt;ID_JEU&gt;/</b> qui se trouve dans le zip.</Step>
-                    <Step num={4} color="yellow">Copiez le dossier <b>RomFS</b> (du zip) vers la fenêtre de l'émulateur.</Step>
+                    <Step num={1} color="accent">
+                      Dans votre émulateur, faites un{" "}
+                      <strong className="text-foreground font-black">
+                        Clic-droit
+                      </strong>{" "}
+                      sur la jaquette du jeu japonais.
+                    </Step>
+                    <Step num={2} color="accent">
+                      Sélectionnez{" "}
+                      <strong className="text-foreground font-black">
+                        Ouvrir l'emplacement des mods
+                      </strong>{" "}
+                      (ou <em>Open Mods Directory</em>).
+                    </Step>
+                    <Step num={3} color="accent">
+                      Ouvrez le dossier{" "}
+                      <strong className="text-foreground font-mono font-black">
+                        luma/titles/&lt;TITLE_ID&gt;/
+                      </strong>{" "}
+                      situé à l'intérieur du zip téléchargé.
+                    </Step>
+                    <Step num={4} color="accent">
+                      Glissez-déposez le sous-dossier{" "}
+                      <strong className="text-foreground font-mono font-black">
+                        RomFS
+                      </strong>{" "}
+                      directement dans le dossier des mods ouvert par
+                      l'émulateur.
+                    </Step>
                   </div>
                 </div>
 
-                <div className="h-px bg-white/5" />
+                <div className="h-px bg-border/60" />
 
-                <div className="space-y-3">
-                  <div className="flex items-center gap-2">
+                <div className="space-y-3.5">
+                  <div className="flex flex-wrap items-center gap-2">
                     <Badge
                       variant="outline"
-                      className="text-blue-400 border-blue-400/30 bg-blue-400/10"
+                      className="text-primary border-primary/40 bg-primary/10 font-black text-xs"
                     >
-                      ROM pré-patchée (Alternatif)
+                      Fichiers Prêts à l'emploi
                     </Badge>
-                    <h4 className="text-white font-medium flex items-center gap-2">
-                      <HardDrive size={16} /> Via ROM pré-patchée (.cia / .3ds)
+                    <h4 className="text-foreground font-black text-sm flex items-center gap-1.5">
+                      <HardDrive size={15} /> Via ROM pré-patchée (.3ds / .cia)
                     </h4>
                   </div>
-                  <div className="pl-2 space-y-4">
-                    <div>
-                      <p className="text-slate-300 font-medium mb-1 flex items-center gap-2">
-                        <CheckCircle2 size={14} className="text-blue-400" />{" "}
+                  <div className="pl-1 space-y-3">
+                    <div className="p-3 bg-secondary/40 rounded-xl border border-border/80">
+                      <p className="text-foreground font-black mb-1 flex items-center gap-2 text-xs sm:text-sm">
+                        <CheckCircle2 size={15} className="text-primary" />{" "}
                         Fichier .3DS :
                       </p>
-                      <p className="text-sm pl-6">
-                        Faites simplement <b>Fichier &gt; Charger un fichier</b>{" "}
-                        et sélectionnez la ROM.
+                      <p className="text-xs text-muted-foreground pl-6 leading-relaxed font-medium">
+                        Faites{" "}
+                        <strong className="text-foreground font-black">
+                          Fichier &gt; Charger un fichier
+                        </strong>{" "}
+                        et sélectionnez votre fichier{" "}
+                        <code className="font-mono text-foreground font-black">.3ds</code>{" "}
+                        pour démarrer directement.
                       </p>
                     </div>
-                    <div>
-                      <p className="text-slate-300 font-medium mb-1 flex items-center gap-2">
-                        <CheckCircle2 size={14} className="text-blue-400" />{" "}
+
+                    <div className="p-3 bg-secondary/40 rounded-xl border border-border/80">
+                      <p className="text-foreground font-black mb-1 flex items-center gap-2 text-xs sm:text-sm">
+                        <CheckCircle2 size={15} className="text-primary" />{" "}
                         Fichier .CIA :
                       </p>
-                      <p className="text-sm pl-6">
-                        Faites <b>Fichier &gt; Installer un CIA</b>. Le jeu
-                        apparaîtra ensuite dans votre liste principale.
+                      <p className="text-xs text-muted-foreground pl-6 leading-relaxed font-medium">
+                        Faites{" "}
+                        <strong className="text-foreground font-black">
+                          Fichier &gt; Installer un CIA
+                        </strong>
+                        . Le jeu apparaîtra de manière permanente dans votre
+                        grille de jeux.
                       </p>
                     </div>
                   </div>

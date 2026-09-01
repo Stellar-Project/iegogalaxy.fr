@@ -2,27 +2,60 @@ interface CategoryFilterProps {
   categories: string[];
   active: string | null;
   onChange: (cat: string | null) => void;
-  color?: "blue" | "yellow";
+  color?: "primary" | "accent" | "supernova" | "bigbang";
+  className?: string;
 }
 
-export default function CategoryFilter({ categories, active, onChange, color = "blue" }: CategoryFilterProps) {
+export default function CategoryFilter({
+  categories,
+  active,
+  onChange,
+  color = "primary",
+  className = "",
+}: CategoryFilterProps) {
   if (categories.length <= 1) return null;
-  const accent = color === "blue"
-    ? { active: "bg-blue-500/20 text-blue-400 border-blue-500/30" }
-    : { active: "bg-yellow-500/20 text-yellow-400 border-yellow-500/30" };
+
+  const colorStyles: Record<string, string> = {
+    primary: "bg-primary/15 text-primary border-primary/40 shadow-xs font-black",
+    accent: "bg-accent/15 text-accent border-accent/40 shadow-xs font-black",
+    supernova: "bg-supernova/15 text-supernova border-supernova/40 shadow-xs font-black",
+    bigbang: "bg-bigbang/15 text-bigbang border-bigbang/40 shadow-xs font-black",
+  };
+
+  const activeClasses = colorStyles[color] || colorStyles.primary;
+
+  const inactiveClasses =
+    "bg-secondary/40 text-muted-foreground border-border hover:text-foreground hover:bg-secondary/80 hover:border-border/80 font-medium";
 
   return (
-    <div className="flex flex-wrap justify-center gap-2">
-      <button onClick={() => onChange(null)}
-        className={`text-xs px-3 py-1.5 rounded-full transition-colors border ${!active ? accent.active : "bg-white/5 text-slate-400 border-white/10 hover:border-white/20"}`}>
+    <div className={`flex flex-wrap justify-center items-center gap-2 ${className}`}>
+      <button
+        type="button"
+        onClick={() => onChange(null)}
+        aria-pressed={!active}
+        className={`text-xs px-3.5 py-1.5 rounded-full transition-all duration-200 border cursor-pointer ${
+          !active ? activeClasses : inactiveClasses
+        }`}
+      >
         Toutes
       </button>
-      {categories.map((cat) => (
-        <button key={cat} onClick={() => onChange(active === cat ? null : cat)}
-          className={`text-xs px-3 py-1.5 rounded-full transition-colors border ${active === cat ? accent.active : "bg-white/5 text-slate-400 border-white/10 hover:border-white/20"}`}>
-          {cat}
-        </button>
-      ))}
+
+      {categories.map((cat) => {
+        const isSelected = active === cat;
+        return (
+          <button
+            key={cat}
+            type="button"
+            onClick={() => onChange(isSelected ? null : cat)}
+            aria-pressed={isSelected}
+            className={`text-xs px-3.5 py-1.5 rounded-full transition-all duration-200 border cursor-pointer ${
+              isSelected ? activeClasses : inactiveClasses
+            }`}
+          >
+            {cat}
+          </button>
+        );
+      })}
     </div>
   );
 }

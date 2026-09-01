@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
-import { Menu, Github, Twitter, Youtube } from "lucide-react";
+import { Link, useLocation } from "react-router-dom";
+import { Menu, Globe, Share2, Video, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet";
+import SearchDialog from "@/components/SearchDialog";
 
 type NavItem = {
   name: string;
@@ -50,142 +52,202 @@ const NavGameButton = ({
 }: {
   item: NavItem;
   isActive: boolean;
-  onClick: () => void;
+  onClick?: () => void;
 }) => {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
-    <a
-      href={item.href}
+    <Link
+      to={item.href}
       onClick={onClick}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      className="transition-transform active:scale-95 block"
+      className="transition-transform duration-150 active:scale-95 block shrink-0 cursor-pointer"
     >
       <img
         src={isActive || isHovered ? item.imgOn : item.imgOff}
         alt={item.name}
-        className="h-12 w-auto object-contain transition-all duration-200"
+        className="h-10 sm:h-11 md:h-12 w-auto object-contain transition-all duration-200"
       />
-    </a>
+    </Link>
   );
 };
 
 export const Navbar = () => {
-  const [currentPath, setCurrentPath] = useState("#home");
+  const location = useLocation();
   const [isOpen, setIsOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
 
-  const handleNavClick = (href: string) => {
-    setCurrentPath(href);
-    setIsOpen(false);
-  };
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
+        e.preventDefault();
+        setSearchOpen((prev) => !prev);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
 
   return (
-    <div className="w-full z-50 flex flex-col">
-      <div className="bg-black text-white h-10 flex items-center justify-between px-4 sm:px-6 lg:px-8 text-sm border-b border-white/10 relative z-30">
-        <div className="shrink-0">
-          <span className="text-white font-semibold">Stellar-Project</span>
-          {/* <img
-            src="/assets/team_logo.png"
-            alt="Team Logo"
-            className="h-8 w-auto object-contain"
-          /> */}
-        </div>
-        <div className="flex items-center gap-4">
-          <a
-            href="https://x.com/INEGGSNBBFR"
-            target="_blank"
-            rel="noreferrer"
-            className="hover:text-blue-400 text-gray-400"
-          >
-            <Twitter size={18} />
-          </a>
-          <a
-            href="https://github.com/Stellar-Project"
-            target="_blank"
-            rel="noreferrer"
-            className="hover:text-white text-gray-400"
-          >
-            <Github size={18} />
-          </a>
-          <a
-            href="https://www.youtube.com/channel/UClqF38koy3zeCTdFDkEIXbg"
-            target="_blank"
-            rel="noreferrer"
-            className="hover:text-red-500 text-gray-400"
-          >
-            <Youtube size={18} />
-          </a>
-        </div>
-      </div>
-
-      <nav className="relative w-full border-b border-white/10 bg-background overflow-hidden">
-        <div className="absolute inset-0 z-0">
-          <div
-            className="absolute inset-0 opacity-50"
-            style={{
-              backgroundImage: "url('/assets/global/bg/bg_repeat.png')",
-              backgroundRepeat: "repeat",
-              backgroundPosition: "center top",
-            }}
-          />
-          <div className="absolute inset-0 bg-linear-to-b from-slate-950/80 via-slate-950/60 to-slate-950/90" />
-        </div>
-
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-24">
-            <div
-              className="shrink-0 cursor-pointer pt-2"
-              onClick={() => handleNavClick("#home")}
-            >
-              <a href="/">
-                <img
-                  src="/assets/pages/home/SN_BB_Logo_HD.png"
-                  alt="Inazuma Eleven Go Galaxy FR"
-                  className="h-[70px] w-auto object-contain"
-                />
-              </a>
+    <>
+      <header className="w-full z-50 flex flex-col sticky top-0">
+        <div className="bg-card/90 backdrop-blur-md text-foreground border-b border-border/80">
+          <div className="max-w-7xl mx-auto h-9 sm:h-10 flex items-center justify-between px-4 sm:px-6 lg:px-8 text-xs sm:text-sm">
+            <div className="shrink-0 flex items-center gap-2">
+              <span className="text-primary font-mono font-black tracking-tight">STELLAR</span>
+              <span className="text-muted-foreground text-[11px] font-black tracking-wider uppercase hidden sm:inline-block">
+                • Project
+              </span>
             </div>
 
-            <div className="hidden md:flex items-center space-x-6">
-              {navLinks.map((link) => (
-                <NavGameButton
-                  key={link.name}
-                  item={link}
-                  isActive={currentPath === link.href}
-                  onClick={() => handleNavClick(link.href)}
-                />
-              ))}
-            </div>
+            <div className="flex items-center gap-3 sm:gap-4">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setSearchOpen(true)}
+                className="h-7 px-2.5 text-xs text-muted-foreground hover:text-foreground hover:bg-secondary flex items-center gap-1.5 cursor-pointer font-medium"
+              >
+                <Search size={14} />
+                <span className="hidden sm:inline">Recherche</span>
+                <kbd className="hidden sm:inline-flex text-[10px] font-mono font-black bg-secondary px-1.5 py-0.5 rounded border border-border">
+                  ⌘K
+                </kbd>
+              </Button>
 
-            <div className="md:hidden">
-              <Sheet open={isOpen} onOpenChange={setIsOpen}>
-                <SheetTrigger asChild>
-                  <Button variant="ghost" size="icon" className="text-white">
-                    <Menu className="h-8 w-8" />
-                  </Button>
-                </SheetTrigger>
-                <SheetContent
-                  side="right"
-                  className="bg-background border-l border-white/10 text-white w-[300px]"
+              <div className="h-3 w-px bg-border/80" />
+
+              <div className="flex items-center gap-2 sm:gap-2.5 text-muted-foreground">
+                <a
+                  href="https://x.com/INEGGSNBBFR"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Twitter"
+                  className="hover:text-primary transition-colors p-1 cursor-pointer"
                 >
-                  <div className="flex flex-col items-center space-y-6 mt-10">
-                    {navLinks.map((link) => (
-                      <NavGameButton
-                        key={link.name}
-                        item={link}
-                        isActive={currentPath === link.href}
-                        onClick={() => handleNavClick(link.href)}
-                      />
-                    ))}
-                  </div>
-                </SheetContent>
-              </Sheet>
+                  <Globe size={15} />
+                </a>
+                <a
+                  href="https://github.com/Stellar-Project"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="GitHub"
+                  className="hover:text-foreground transition-colors p-1 cursor-pointer"
+                >
+                  <Share2 size={15} />
+                </a>
+                <a
+                  href="https://www.youtube.com/channel/UClqF38koy3zeCTdFDkEIXbg"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="YouTube"
+                  className="hover:text-destructive transition-colors p-1 cursor-pointer"
+                >
+                  <Video size={15} />
+                </a>
+              </div>
             </div>
           </div>
         </div>
-      </nav>
-    </div>
+
+        <nav className="relative w-full border-b border-border/80 bg-background/95 backdrop-blur-md overflow-hidden">
+          <div className="absolute inset-0 z-0 pointer-events-none">
+            <div
+              className="absolute inset-0 opacity-20"
+              style={{
+                backgroundImage: "url('/assets/global/bg/bg_repeat.png')",
+                backgroundRepeat: "repeat",
+                backgroundPosition: "center top",
+              }}
+            />
+            <div className="absolute inset-0 bg-linear-to-b from-background/70 via-background/90 to-background" />
+          </div>
+
+          <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex items-center justify-between h-20 sm:h-24">
+              <div className="shrink-0 flex items-center">
+                <Link to="/" className="inline-block py-2 cursor-pointer">
+                  <img
+                    src="/assets/pages/home/SN_BB_Logo_HD.png"
+                    alt="Inazuma Eleven GO Galaxy FR"
+                    className="h-14 sm:h-16 md:h-17 w-auto object-contain hover:scale-105 transition-transform duration-300"
+                  />
+                </Link>
+              </div>
+
+              <div className="hidden md:flex items-center gap-3 lg:gap-4 xl:gap-5">
+                {navLinks.map((link) => {
+                  const isActive =
+                    link.href === "/"
+                      ? location.pathname === "/"
+                      : location.pathname.startsWith(link.href);
+
+                  return (
+                    <NavGameButton
+                      key={link.name}
+                      item={link}
+                      isActive={isActive}
+                    />
+                  );
+                })}
+              </div>
+
+              <div className="md:hidden flex items-center gap-2">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => setSearchOpen(true)}
+                  className="text-foreground h-9 w-9 cursor-pointer"
+                  aria-label="Recherche"
+                >
+                  <Search size={20} />
+                </Button>
+
+                <Sheet open={isOpen} onOpenChange={setIsOpen}>
+                  <SheetTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="text-foreground h-9 w-9 cursor-pointer"
+                      aria-label="Menu de navigation"
+                    >
+                      <Menu className="h-6 w-6" />
+                    </Button>
+                  </SheetTrigger>
+                  <SheetContent
+                    side="right"
+                    className="bg-card/95 backdrop-blur-md border-l border-border text-foreground w-70 p-6"
+                  >
+                    <SheetTitle className="text-base font-black text-foreground mb-6">
+                      Navigation
+                    </SheetTitle>
+                    <div className="flex flex-col items-center space-y-5">
+                      {navLinks.map((link) => {
+                        const isActive =
+                          link.href === "/"
+                            ? location.pathname === "/"
+                            : location.pathname.startsWith(link.href);
+
+                        return (
+                          <NavGameButton
+                            key={link.name}
+                            item={link}
+                            isActive={isActive}
+                            onClick={() => setIsOpen(false)}
+                          />
+                        );
+                      })}
+                    </div>
+                  </SheetContent>
+                </Sheet>
+              </div>
+            </div>
+          </div>
+        </nav>
+      </header>
+
+      <SearchDialog open={searchOpen} onClose={() => setSearchOpen(false)} />
+    </>
   );
 };
 

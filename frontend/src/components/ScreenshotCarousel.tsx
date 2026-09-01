@@ -1,11 +1,12 @@
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronLeft, ChevronRight, ZoomIn } from "lucide-react";
-import { useScreenshots } from "@/api/useData";
+import { ChevronLeft, ChevronRight, ZoomIn, Image as ImageIcon } from "lucide-react";
+import { api } from "@/api/client";
+import type { Screenshot } from "@/api/types";
 
 const slideVariants = {
   enter: (direction: number) => ({
-    x: direction > 0 ? 1000 : -1000,
+    x: direction > 0 ? 800 : -800,
     opacity: 0,
   }),
   center: {
@@ -15,7 +16,7 @@ const slideVariants = {
   },
   exit: (direction: number) => ({
     zIndex: 0,
-    x: direction < 0 ? 1000 : -1000,
+    x: direction < 0 ? 800 : -800,
     opacity: 0,
   }),
 };
@@ -30,32 +31,79 @@ interface ScreenshotCarouselProps {
 }
 
 export function ScreenshotCarousel({ onSelect }: ScreenshotCarouselProps) {
-  const { data: screenshots } = useScreenshots();
+  const [screenshots, setScreenshots] = useState<Screenshot[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [isPaused, setIsPaused] = useState(false);
   const [[page, direction], setPage] = useState([0, 0]);
-  const imageIndex = screenshots.length > 0 ? Math.abs(page % screenshots.length) : 0;
-
-  const paginate = useCallback(
-    (newDirection: number) => {
-      setPage([page + newDirection, newDirection]);
-    },
-    [page]
-  );
 
   useEffect(() => {
+    let isMounted = true;
+    api
+      .getScreenshots()
+      .then((data) => {
+        if (isMounted) {
+          setScreenshots(data);
+        }
+      })
+      .catch(() => {})
+      .finally(() => {
+        if (isMounted) setLoading(false);
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  const imageIndex =
+    screenshots.length > 0
+      ? ((page % screenshots.length) + screenshots.length) % screenshots.length
+      : 0;
+
+  const paginate = useCallback((newDirection: number) => {
+    setPage(([prevPage]) => [prevPage + newDirection, newDirection]);
+  }, []);
+
+  const goToSlide = (index: number) => {
+    const diff = index - imageIndex;
+    if (diff !== 0) {
+      setPage([page + diff, diff > 0 ? 1 : -1]);
+    }
+  };
+
+  useEffect(() => {
+    if (screenshots.length <= 1 || isPaused) return;
+
     const timer = setInterval(() => {
       paginate(1);
-    }, 3000);
+    }, 4000);
+
     return () => clearInterval(timer);
-  }, [paginate]);
+  }, [paginate, screenshots.length, isPaused]);
+
+  if (loading || screenshots.length === 0) return null;
 
   return (
-    <section className="relative z-10 py-24 px-4 overflow-hidden">
-      <div className="max-w-5xl mx-auto">
-        <h2 className="text-3xl font-bold text-center mb-12 text-yellow-400">
-          Aperçu In-Game
-        </h2>
+    <section className="relative z-10 py-20 px-4 sm:px-6 overflow-hidden">
+      <div className="max-w-5xl mx-auto space-y-10">
+        <div className="text-center space-y-2">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-semibold uppercase tracking-wider">
+            <ImageIcon size={13} />
+            Galerie Visuelle
+          </div>
+          <h2 className="text-3xl sm:text-4xl font-extrabold text-foreground tracking-tight">
+            Aperçu In-Game
+          </h2>
+          <p className="text-sm text-muted-foreground max-w-xl mx-auto">
+            Découvrez la traduction française en action directement sur les dialogues, menus et cinématiques.
+          </p>
+        </div>
 
-        <div className="relative w-full aspect-video md:aspect-2400/1350 max-w-4xl mx-auto bg-slate-900/50 rounded-xl overflow-hidden border border-white/10 shadow-2xl">
+        <div
+          className="relative w-full aspect-video md:aspect-video max-w-4xl mx-auto bg-card/70 backdrop-blur-md rounded-2xl overflow-hidden border border-border shadow-lg group"
+          onMouseEnter={() => setIsPaused(true)}
+          onMouseLeave={() => setIsPaused(false)}
+        >
           <AnimatePresence initial={false} custom={direction}>
             <motion.img
               key={page}
@@ -67,7 +115,7 @@ export function ScreenshotCarousel({ onSelect }: ScreenshotCarouselProps) {
               exit="exit"
               transition={{
                 x: { type: "spring", stiffness: 300, damping: 30 },
-                opacity: { duration: 0.2 },
+                opacity: { duration: 0.25 },
               }}
               drag="x"
               dragConstraints={{ left: 0, right: 0 }}
@@ -81,42 +129,54 @@ export function ScreenshotCarousel({ onSelect }: ScreenshotCarouselProps) {
                   paginate(-1);
                 }
               }}
-              onClick={() => screenshots[imageIndex] && onSelect(screenshots[imageIndex].imageUrl)}
-              className="absolute inset-0 w-full h-full object-contain cursor-grab active:cursor-grabbing"
-              alt="Gameplay Screenshot"
+              onClick={() =>
+                screenshots[imageIndex] &&
+                onSelect(screenshots[imageIndex].imageUrl)
+              }
+              className="absolute inset-0 w-full h-full object-contain cursor-grab active:cursor-grabbing select-none"
+              alt={`Capture de jeu ${imageIndex + 1}`}
             />
           </AnimatePresence>
 
-          <div className="absolute inset-0 pointer-events-none flex items-center justify-between px-2 md:px-4 z-10">
+          <div className="absolute inset-0 pointer-events-none flex items-center justify-between px-3 sm:px-5 z-10">
             <button
-              className="pointer-events-auto bg-black/50 hover:bg-black/70 text-white rounded-full p-2 md:p-3 backdrop-blur-sm transition-all hover:scale-110"
+              type="button"
+              className="pointer-events-auto bg-secondary/80 hover:bg-secondary text-foreground rounded-full p-2.5 sm:p-3 border border-border/80 backdrop-blur-md transition-all hover:scale-105 shadow-md cursor-pointer"
               onClick={() => paginate(-1)}
+              aria-label="Image précédente"
             >
-              <ChevronLeft size={24} />
+              <ChevronLeft size={20} />
             </button>
             <button
-              className="pointer-events-auto bg-black/50 hover:bg-black/70 text-white rounded-full p-2 md:p-3 backdrop-blur-sm transition-all hover:scale-110"
+              type="button"
+              className="pointer-events-auto bg-secondary/80 hover:bg-secondary text-foreground rounded-full p-2.5 sm:p-3 border border-border/80 backdrop-blur-md transition-all hover:scale-105 shadow-md cursor-pointer"
               onClick={() => paginate(1)}
+              aria-label="Image suivante"
             >
-              <ChevronRight size={24} />
+              <ChevronRight size={20} />
             </button>
           </div>
 
-          <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-2 z-10">
+          <div className="absolute top-4 right-4 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity z-10">
+            <div className="bg-background/80 backdrop-blur-md border border-border px-3 py-1.5 rounded-full text-xs text-foreground font-medium flex items-center gap-1.5 shadow-sm">
+              <ZoomIn size={14} className="text-primary" /> Cliquer pour agrandir
+            </div>
+          </div>
+
+          <div className="absolute bottom-4 left-0 right-0 flex justify-center items-center gap-2 z-10">
             {screenshots.map((_, idx) => (
-              <div
+              <button
                 key={idx}
-                className={`h-1.5 rounded-full transition-all duration-300 ${
-                  idx === imageIndex ? "w-8 bg-blue-500" : "w-1.5 bg-white/30"
+                type="button"
+                onClick={() => goToSlide(idx)}
+                aria-label={`Aller à la capture ${idx + 1}`}
+                className={`h-1.5 rounded-full transition-all duration-300 cursor-pointer ${
+                  idx === imageIndex
+                    ? "w-8 bg-primary"
+                    : "w-2 bg-muted-foreground/40 hover:bg-muted-foreground/70"
                 }`}
               />
             ))}
-          </div>
-
-          <div className="absolute inset-0 pointer-events-none flex items-end justify-end p-4 opacity-0 hover:opacity-100 transition-opacity">
-            <div className="bg-black/60 backdrop-blur-sm px-3 py-1 rounded-full text-xs text-white flex items-center gap-1">
-              <ZoomIn size={14} /> Cliquer pour agrandir
-            </div>
           </div>
         </div>
       </div>

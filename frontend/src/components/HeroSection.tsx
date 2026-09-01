@@ -1,107 +1,145 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Download, Info } from "lucide-react";
+import { Download, Info, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useHeroBackgrounds } from "@/api/useData";
 import { api } from "@/api/client";
-import type { PatchVersion } from "@/api/types";
+import type { HeroBackground, PatchVersion } from "@/api/types";
 
 export function HeroSection() {
-  const { data: backgrounds } = useHeroBackgrounds();
+  const [backgrounds, setBackgrounds] = useState<HeroBackground[]>([]);
   const [latestPatch, setLatestPatch] = useState<PatchVersion | null>(null);
   const [currentBgIndex, setCurrentBgIndex] = useState(0);
 
   useEffect(() => {
-    api.getLatestPatch().then(setLatestPatch).catch(() => {});
+    let isMounted = true;
+
+    Promise.all([
+      api.getHero().catch(() => []),
+      api.getLatestPatch().catch(() => null),
+    ]).then(([bgs, patch]) => {
+      if (isMounted) {
+        setBackgrounds(bgs);
+        setLatestPatch(patch);
+      }
+    });
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   useEffect(() => {
-    if (backgrounds.length === 0) return;
+    if (backgrounds.length <= 1) return;
     const interval = setInterval(() => {
-      setCurrentBgIndex(
-        (prevIndex) => (prevIndex + 1) % backgrounds.length
-      );
+      setCurrentBgIndex((prevIndex) => (prevIndex + 1) % backgrounds.length);
     }, 8000);
     return () => clearInterval(interval);
   }, [backgrounds.length]);
 
+  const currentBgUrl = backgrounds[currentBgIndex]?.imageUrl;
+
   return (
-    <section className="relative z-10 min-h-[calc(100vh-140px)] flex flex-col items-center justify-center px-4 py-20 overflow-hidden">
-      <div className="absolute inset-0 z-0">
+    <section className="relative z-10 min-h-[calc(100vh-100px)] flex flex-col items-center justify-center px-4 py-16 sm:py-20 overflow-hidden">
+      <div className="absolute inset-0 z-0 select-none pointer-events-none">
         <AnimatePresence mode="popLayout">
-          <motion.div
-            key={currentBgIndex}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0, zIndex: -1 }}
-            transition={{ duration: 1.5, ease: "easeInOut" }}
-            className="absolute inset-0 bg-cover bg-center"
-            style={{
-              backgroundImage: `url("${backgrounds[currentBgIndex]?.imageUrl || ""}")`,
-            }}
-          />
+          {currentBgUrl ? (
+            <motion.div
+              key={currentBgIndex}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0, zIndex: -1 }}
+              transition={{ duration: 1.2, ease: "easeInOut" }}
+              className="absolute inset-0 bg-cover bg-center"
+              style={{
+                backgroundImage: `url("${currentBgUrl}")`,
+              }}
+            />
+          ) : (
+            <div
+              className="absolute inset-0 bg-cover bg-center opacity-40"
+              style={{
+                backgroundImage: "url('/assets/global/bg/bg_repeat.png')",
+                backgroundRepeat: "repeat",
+              }}
+            />
+          )}
         </AnimatePresence>
-        <div className="absolute inset-0 bg-background/60 backdrop-blur-[2px] z-10" />
+
+        <div className="absolute inset-0 bg-radial from-background/90 via-background/70 to-background/40 z-10" />
+        <div className="absolute inset-0 bg-linear-to-b from-background/50 via-transparent to-background z-10" />
       </div>
 
       <motion.div
-        initial={{ opacity: 0, y: 30 }}
+        initial={{ opacity: 0, y: 25 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8 }}
+        transition={{ duration: 0.7 }}
         className="text-center space-y-6 max-w-4xl relative z-20"
       >
         {latestPatch && (
-          <div className="inline-block px-4 py-1.5 rounded-full border border-blue-500/30 bg-blue-500/10 backdrop-blur-md text-blue-300 text-sm font-medium mb-4">
-            Version {latestPatch.version} Disponible
-          </div>
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full border border-accent/40 bg-accent/15 backdrop-blur-md text-accent text-xs sm:text-sm font-black tracking-wide shadow-xs"
+          >
+            <Sparkles size={14} />
+            <span>Patch Version {latestPatch.version} Disponible</span>
+          </motion.div>
         )}
 
-        <h1 className="text-5xl md:text-7xl font-extrabold tracking-tighter space-y-2">
-          <span className="block bg-linear-to-r from-orange-500 via-yellow-400 to-orange-500 bg-clip-text text-transparent">
-            Inazuma Eleven
-          </span>
-          <span className="block bg-linear-to-r from-blue-600 via-cyan-400 to-blue-600 bg-clip-text text-transparent">
-            GO Galaxy
-          </span>
-          <span className="block text-3xl md:text-5xl mt-4 pt-2">
-            <span className="bg-linear-to-r from-white via-purple-300 to-fuchsia-500 bg-clip-text text-transparent font-bold">
-              Big Bang / Supernova
+        <div className="space-y-2">
+          <h1 className="text-4xl sm:text-6xl md:text-7xl font-black tracking-tighter leading-none drop-shadow-[0_4px_16px_rgba(0,0,0,0.9)]">
+            <span className="block text-accent drop-shadow-[0_0_25px_var(--color-accent)]">
+              INAZUMA ELEVEN
             </span>
-            <span className="block text-2xl md:text-3xl text-slate-300 font-semibold mt-2">
-              Patch Français
+            <span className="block text-primary drop-shadow-[0_0_25px_var(--color-primary)] mt-1">
+              GO GALAXY
             </span>
-          </span>
-        </h1>
+          </h1>
 
-        <p className="text-xl md:text-2xl text-slate-200 font-light max-w-2xl mx-auto leading-relaxed">
+          <div className="pt-2 text-xl sm:text-3xl md:text-4xl font-black tracking-tight">
+            <span className="text-bigbang drop-shadow-[0_0_15px_var(--color-bigbang)]">
+              BIG BANG
+            </span>
+            <span className="text-muted-foreground mx-2.5 font-light">/</span>
+            <span className="text-supernova drop-shadow-[0_0_15px_var(--color-supernova)]">
+              SUPERNOVA
+            </span>
+            <span className="block text-base sm:text-xl md:text-2xl text-foreground/90 font-black mt-2 uppercase tracking-wide">
+              Patch Français Intégral
+            </span>
+          </div>
+        </div>
+
+        <p className="text-sm sm:text-base md:text-lg text-foreground/90 font-bold max-w-xl mx-auto leading-relaxed drop-shadow-sm">
           L'aventure ultime traduite par la team{" "}
-          <span className="font-semibold text-blue-400">Stellar Project</span>.
-          <br />
-          <span className="text-base text-slate-400">
-            Une expérience créée par des fans, pour des fans.
+          <strong className="text-primary font-black">Stellar Project</strong>.
+          <br className="hidden sm:inline" />
+          <span className="text-muted-foreground font-medium">
+            {" "}Une expérience complète créée par des fans, pour des fans.
           </span>
         </p>
 
-        <div className="flex flex-col sm:flex-row gap-4 justify-center pt-8">
+        <div className="flex flex-col sm:flex-row gap-3.5 sm:gap-4 justify-center items-center pt-4 sm:pt-6">
           <Button
             asChild
             size="lg"
-            className="h-14 px-8 text-lg rounded-full bg-blue-600 hover:bg-blue-500 shadow-[0_0_20px_rgba(37,99,235,0.3)] transition-all hover:scale-105"
+            className="w-full sm:w-auto h-12 sm:h-13 px-8 text-sm sm:text-base font-black rounded-xl bg-primary text-primary-foreground hover:bg-primary/90 shadow-[0_0_25px_var(--color-primary)] transition-all hover:scale-105 cursor-pointer"
           >
-            <a href="/telechargement">
+            <Link to="/telechargement">
               <Download className="mr-2 h-5 w-5" /> Télécharger le Patch
-            </a>
+            </Link>
           </Button>
 
           <Button
             asChild
             size="lg"
             variant="outline"
-            className="h-14 px-8 text-lg rounded-full border-white/20 bg-white/5 hover:bg-white/10 text-white backdrop-blur-md"
+            className="w-full sm:w-auto h-12 sm:h-13 px-8 text-sm sm:text-base font-black rounded-xl border-border bg-card/70 hover:bg-secondary text-foreground backdrop-blur-md transition-all hover:scale-105 cursor-pointer shadow-xs"
           >
-            <a href="/apropos">
-              <Info className="mr-2 h-5 w-5" /> En savoir plus
-            </a>
+            <Link to="/tutoriel">
+              <Info className="mr-2 h-5 w-5 text-accent" /> Guide d'installation
+            </Link>
           </Button>
         </div>
       </motion.div>

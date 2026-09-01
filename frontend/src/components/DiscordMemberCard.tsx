@@ -58,13 +58,13 @@ interface LanyardData {
 const getRoleIcon = (category: string) => {
   switch (category) {
     case "lead":
-      return <Sparkles size={12} className="text-yellow-400" />;
+      return <Sparkles size={12} className="text-accent" />;
     case "dev":
-      return <Code size={12} className="text-blue-400" />;
+      return <Code size={12} className="text-primary" />;
     case "trans":
-      return <Languages size={12} className="text-green-400" />;
+      return <Languages size={12} className="text-primary" />;
     case "art":
-      return <PenTool size={12} className="text-pink-400" />;
+      return <PenTool size={12} className="text-supernova" />;
     default:
       return <Users size={12} />;
   }
@@ -73,13 +73,13 @@ const getRoleIcon = (category: string) => {
 const getStatusColor = (status?: string) => {
   switch (status) {
     case "online":
-      return "bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.6)]";
+      return "bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.6)]";
     case "idle":
-      return "bg-yellow-500 shadow-[0_0_8px_rgba(234,179,8,0.6)]";
+      return "bg-amber-500 shadow-[0_0_8px_rgba(245,158,11,0.6)]";
     case "dnd":
-      return "bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.6)]";
+      return "bg-destructive shadow-[0_0_8px_rgba(239,68,68,0.6)]";
     default:
-      return "bg-slate-500";
+      return "bg-muted-foreground/60";
   }
 };
 
@@ -97,31 +97,46 @@ const getStatusLabel = (status?: string) => {
 };
 
 export function DiscordMemberCard({ member }: { member: TeamMember }) {
-  const [lanyardData, setLanyardData] = useState<LanyardData | null>(null);
-  const [loading, setLoading] = useState(
-    !!member.discordId && member.discordId !== "000000000000000000"
+  const hasValidDiscordId = Boolean(
+    member.discordId && member.discordId !== "000000000000000000"
   );
 
+  const [lanyardData, setLanyardData] = useState<LanyardData | null>(null);
+  const [loading, setLoading] = useState(hasValidDiscordId);
+
   useEffect(() => {
-    if (!member.discordId || member.discordId === "000000000000000000") {
-      setLoading(false);
+    if (!hasValidDiscordId || !member.discordId) {
       return;
     }
+
+    let isMounted = true;
 
     const fetchData = () => {
       fetch(`https://api.lanyard.rest/v1/users/${member.discordId}`)
         .then((res) => res.json())
         .then((data) => {
-          if (data.success) setLanyardData(data.data);
-          setLoading(false);
+          if (isMounted) {
+            if (data.success) {
+              setLanyardData(data.data);
+            }
+            setLoading(false);
+          }
         })
-        .catch(() => setLoading(false));
+        .catch(() => {
+          if (isMounted) {
+            setLoading(false);
+          }
+        });
     };
 
     fetchData();
     const interval = setInterval(fetchData, 30000);
-    return () => clearInterval(interval);
-  }, [member.discordId]);
+
+    return () => {
+      isMounted = false;
+      clearInterval(interval);
+    };
+  }, [hasValidDiscordId, member.discordId]);
 
   const user = lanyardData?.discord_user;
   const status = lanyardData?.discord_status || "offline";
@@ -144,33 +159,33 @@ export function DiscordMemberCard({ member }: { member: TeamMember }) {
   const customStatus = lanyardData?.activities.find((a) => a.type === 4);
 
   return (
-    <Card className="bg-slate-900/40 border-white/5 hover:border-yellow-500/30 hover:bg-slate-800/50 transition-all group overflow-hidden h-full flex flex-col">
-      <div className="h-28 w-full relative bg-slate-950">
+    <Card className="bg-card/70 border-border hover:border-primary/40 hover:bg-card/90 transition-all duration-300 group overflow-hidden h-full flex flex-col shadow-xs">
+      <div className="h-28 w-full relative bg-secondary/60">
         {bannerUrl ? (
           <img
             src={bannerUrl}
-            alt="Discord Banner"
+            alt="Bannière Discord"
             className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-500"
           />
         ) : (
-          <div className="w-full h-full bg-[radial-gradient(circle_at_top_right,var(--tw-gradient-stops))] from-slate-800 via-slate-900 to-slate-950 opacity-80" />
+          <div className="w-full h-full bg-linear-to-tr from-secondary via-secondary/70 to-primary/10 opacity-70" />
         )}
-        <div className="absolute inset-0 bg-linear-to-t from-slate-900 via-transparent to-transparent" />
+        <div className="absolute inset-0 bg-linear-to-t from-card via-transparent to-transparent" />
       </div>
 
-      <CardContent className="flex flex-col items-start px-6 -mt-14 relative z-10 grow pb-6 w-full">
+      <CardContent className="flex flex-col items-start px-5 sm:px-6 -mt-14 relative z-10 grow pb-6 w-full">
         <div className="relative">
-          <Avatar className="h-24 w-24 border-[6px] border-slate-900 shadow-2xl group-hover:border-slate-800 transition-colors bg-slate-950">
+          <Avatar className="h-24 w-24 border-4 border-card shadow-xl group-hover:border-card/80 transition-colors bg-secondary">
             <AvatarImage
               src={avatarUrl}
               alt={displayName}
               className="object-cover"
             />
-            <AvatarFallback className="bg-slate-800 text-slate-400 text-xl font-bold">
+            <AvatarFallback className="bg-secondary text-foreground text-xl font-black">
               {loading ? (
-                <Loader2 className="animate-spin" />
+                <Loader2 className="animate-spin text-primary" />
               ) : (
-                displayName?.substring(0, 2).toUpperCase()
+                displayName.substring(0, 2).toUpperCase()
               )}
             </AvatarFallback>
           </Avatar>
@@ -179,12 +194,12 @@ export function DiscordMemberCard({ member }: { member: TeamMember }) {
             <Tooltip>
               <TooltipTrigger asChild>
                 <div
-                  className={`absolute bottom-1 right-1 h-6 w-6 rounded-full border-4 border-slate-900 ${getStatusColor(
+                  className={`absolute bottom-1 right-1 h-5 w-5 rounded-full border-2 border-card ${getStatusColor(
                     status
-                  )} transition-colors`}
+                  )} transition-colors cursor-pointer`}
                 />
               </TooltipTrigger>
-              <TooltipContent className="bg-slate-800 border-white/10 text-white text-xs">
+              <TooltipContent className="bg-popover border-border text-popover-foreground text-xs shadow-md font-black">
                 <p>{getStatusLabel(status)}</p>
               </TooltipContent>
             </Tooltip>
@@ -192,11 +207,11 @@ export function DiscordMemberCard({ member }: { member: TeamMember }) {
         </div>
 
         <div className="mt-3 w-full">
-          <h3 className="text-xl font-bold text-white group-hover:text-yellow-400 transition-colors truncate">
+          <h3 className="text-lg sm:text-xl font-black text-foreground group-hover:text-primary transition-colors truncate tracking-tight">
             {loading ? "Chargement..." : displayName}
           </h3>
           {user && (
-            <p className="text-slate-500 text-xs font-mono mb-2">
+            <p className="text-muted-foreground text-xs font-mono font-bold mb-2">
               @{user.username}
             </p>
           )}
@@ -205,55 +220,55 @@ export function DiscordMemberCard({ member }: { member: TeamMember }) {
         <div className="flex flex-wrap gap-2 mb-4">
           <Badge
             variant="outline"
-            className="bg-white/5 border-white/10 text-slate-300 gap-1.5 px-2 py-0.5 text-[10px] uppercase tracking-wider"
+            className="bg-secondary/40 border-border text-foreground gap-1.5 px-2 py-0.5 text-[10px] uppercase tracking-wider font-black"
           >
             {getRoleIcon(member.category)}
             {member.role}
           </Badge>
         </div>
 
-        <Separator className="bg-white/5 mb-4" />
+        <Separator className="bg-border/60 mb-4" />
 
-        <div className="w-full mt-auto min-h-[60px] text-sm">
+        <div className="w-full mt-auto min-h-14.5 text-xs">
           {mainActivity ? (
-            <div className="flex items-start gap-3 bg-white/5 p-3 rounded-lg border border-white/5">
+            <div className="flex items-start gap-3 bg-secondary/40 p-2.5 rounded-lg border border-border/60">
               <div className="mt-0.5 shrink-0">
                 {mainActivity.name === "Spotify" ? (
-                  <Music size={18} className="text-green-400" />
+                  <Music size={16} className="text-emerald-400" />
                 ) : mainActivity.name === "Visual Studio Code" ? (
-                  <Code size={18} className="text-blue-400" />
+                  <Code size={16} className="text-primary" />
                 ) : (
-                  <Gamepad2 size={18} className="text-purple-400" />
+                  <Gamepad2 size={16} className="text-accent" />
                 )}
               </div>
-              <div className="overflow-hidden">
-                <p className="font-semibold text-white truncate text-xs uppercase tracking-wide opacity-70">
-                  {mainActivity.type === 2 ? "Écoute" : "Joue à"}
+              <div className="overflow-hidden min-w-0">
+                <p className="font-black text-muted-foreground truncate text-[10px] uppercase tracking-wider">
+                  {mainActivity.type === 2 ? "Écoute" : "En jeu"}
                 </p>
-                <p className="font-medium text-slate-200 truncate">
+                <p className="font-black text-foreground truncate">
                   {mainActivity.name}
                 </p>
                 {mainActivity.details && (
-                  <p className="text-slate-400 text-xs truncate">
+                  <p className="text-muted-foreground text-[11px] font-medium truncate">
                     {mainActivity.details}
                   </p>
                 )}
                 {mainActivity.state && (
-                  <p className="text-slate-500 text-xs truncate">
+                  <p className="text-muted-foreground/80 text-[11px] font-medium truncate">
                     {mainActivity.state}
                   </p>
                 )}
               </div>
             </div>
           ) : customStatus?.state ? (
-            <div className="flex items-center gap-3 p-3 text-slate-400 italic bg-white/5 rounded-lg border border-white/5">
-              <Coffee size={16} />
-              <p className="text-xs line-clamp-2">"{customStatus.state}"</p>
+            <div className="flex items-center gap-2.5 p-2.5 text-muted-foreground italic bg-secondary/30 rounded-lg border border-border/40 font-medium">
+              <Coffee size={15} className="shrink-0" />
+              <p className="text-[11px] line-clamp-2">« {customStatus.state} »</p>
             </div>
           ) : (
-            <div className="flex items-center gap-2 text-slate-600 p-3">
-              <Monitor size={16} />
-              <p className="text-xs">Pas d'activité récente</p>
+            <div className="flex items-center gap-2 text-muted-foreground/60 p-2 font-medium">
+              <Monitor size={15} />
+              <p className="text-[11px]">Pas d'activité récente</p>
             </div>
           )}
         </div>

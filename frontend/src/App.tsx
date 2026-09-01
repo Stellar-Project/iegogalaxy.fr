@@ -1,48 +1,50 @@
-import { Suspense, lazy } from "react";
-import { Routes, Route } from "react-router-dom";
-import { AuthProvider } from "@/api/useAuth";
-import Layout from "./components/Layout";
-import AdminLayout from "./components/admin/Layout";
-import ProtectedRoute from "./components/admin/ProtectedRoute";
-import Tracker from "./components/Tracker";
-import Loading from "./components/Loading";
-import { useMeta } from "@/lib/useMeta";
+import { Suspense, lazy } from "react"
+import { Routes, Route } from "react-router-dom"
+import { AuthProvider } from "@/api/useAuth"
+import Layout from "./components/Layout"
+import AdminLayout from "./components/admin/Layout"
+import ProtectedRoute from "./components/admin/ProtectedRoute"
+import Loading from "./components/Loading"
+import { useMeta } from "@/lib/useMeta"
 
-const Home = lazy(() => import("./pages/Home"));
-const Tutorial = lazy(() => import("./pages/Tutorial"));
-const About = lazy(() => import("./pages/About"));
-const Download = lazy(() => import("./pages/Download"));
-const MentionsLegales = lazy(() => import("./pages/MentionsLegales"));
-const WikiPageView = lazy(() => import("./pages/wiki/WikiPageView"));
-const BlogPost = lazy(() => import("./pages/BlogPost"));
-const NotFound = lazy(() => import("./pages/NotFound"));
-const Wiki = lazy(() => import("./pages/Wiki"));
-const Faq = lazy(() => import("./pages/Faq"));
-const GamePageView = lazy(() => import("./pages/games/GamePageView"));
-const Login = lazy(() => import("./pages/admin/Login"));
-const Dashboard = lazy(() => import("./pages/admin/Dashboard"));
-const PatchesAdmin = lazy(() => import("./pages/admin/PatchesAdmin"));
-const TeamAdmin = lazy(() => import("./pages/admin/TeamAdmin"));
-const TimelineAdmin = lazy(() => import("./pages/admin/TimelineAdmin"));
-const CreditsAdmin = lazy(() => import("./pages/admin/CreditsAdmin"));
-const ScreenshotsAdmin = lazy(() => import("./pages/admin/ScreenshotsAdmin"));
-const HeroAdmin = lazy(() => import("./pages/admin/HeroAdmin"));
-const WikiAdmin = lazy(() => import("./pages/admin/WikiAdmin"));
-const GameAdmin = lazy(() => import("./pages/admin/GameAdmin"));
-const FaqAdmin = lazy(() => import("./pages/admin/FaqAdmin"));
-const BlogAdmin = lazy(() => import("./pages/admin/BlogAdmin"));
-const ConfigAdmin = lazy(() => import("./pages/admin/ConfigAdmin"));
-const UsersAdmin = lazy(() => import("./pages/admin/UsersAdmin"));
+// Pages publiques (Lazy Loaded)
+const Home = lazy(() => import("./pages/Home"))
+const Tutorial = lazy(() => import("./pages/Tutorial"))
+const About = lazy(() => import("./pages/About"))
+const Download = lazy(() => import("./pages/Download"))
+const MentionsLegales = lazy(() => import("./pages/MentionsLegales"))
+const Wiki = lazy(() => import("./pages/Wiki"))
+const WikiPageView = lazy(() => import("./pages/wiki/WikiPageView"))
+const GamePageView = lazy(() => import("./pages/games/GamePageView"))
+const BlogPost = lazy(() => import("./pages/BlogPost"))
+const Faq = lazy(() => import("./pages/Faq"))
+const NotFound = lazy(() => import("./pages/NotFound"))
+
+// Pages d'administration (Lazy Loaded)
+const Login = lazy(() => import("./pages/admin/Login"))
+const Dashboard = lazy(() => import("./pages/admin/Dashboard"))
+const PatchesAdmin = lazy(() => import("./pages/admin/PatchesAdmin"))
+const TeamAdmin = lazy(() => import("./pages/admin/TeamAdmin"))
+const TimelineAdmin = lazy(() => import("./pages/admin/TimelineAdmin"))
+const CreditsAdmin = lazy(() => import("./pages/admin/CreditsAdmin"))
+const ScreenshotsAdmin = lazy(() => import("./pages/admin/ScreenshotsAdmin"))
+const HeroAdmin = lazy(() => import("./pages/admin/HeroAdmin"))
+const WikiAdmin = lazy(() => import("./pages/admin/WikiAdmin"))
+const GameAdmin = lazy(() => import("./pages/admin/GameAdmin"))
+const FaqAdmin = lazy(() => import("./pages/admin/FaqAdmin"))
+const BlogAdmin = lazy(() => import("./pages/admin/BlogAdmin"))
+const ConfigAdmin = lazy(() => import("./pages/admin/ConfigAdmin"))
+const UsersAdmin = lazy(() => import("./pages/admin/UsersAdmin"))
 
 function PageLoader() {
-  return <div className="min-h-screen bg-background flex items-center justify-center"><Loading /></div>;
+  return <Loading fullScreen message="Chargement de la page..." />
 }
 
 export default function App() {
-  useMeta({});
+  useMeta({})
+
   return (
     <AuthProvider>
-      <Tracker />
       <Suspense fallback={<PageLoader />}>
         <Routes>
           <Route element={<Layout />}>
@@ -57,7 +59,6 @@ export default function App() {
             <Route path="/faq" element={<Faq />} />
             <Route path="/mentions-legales" element={<MentionsLegales />} />
           </Route>
-
           <Route path="/admin/login" element={<Login />} />
           <Route
             path="/admin"
@@ -81,10 +82,9 @@ export default function App() {
             <Route path="config" element={<ConfigAdmin />} />
             <Route path="users" element={<UsersAdmin />} />
           </Route>
-
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Suspense>
     </AuthProvider>
-  );
+  )
 }

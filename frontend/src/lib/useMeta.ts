@@ -1,34 +1,65 @@
 import { useEffect } from "react";
 
+interface MetaOptions {
+  title?: string;
+  description?: string;
+  image?: string;
+}
+
 const defaults = {
   title: "Stellar Project — Traduction française Inazuma Eleven GO Galaxy",
-  description: "Projet de traduction française des jeux Inazuma Eleven GO Galaxy (Supernova & Big Bang). Patches, outils, tutoriels et ressources.",
+  description:
+    "Projet de traduction française des jeux Inazuma Eleven GO Galaxy (Supernova & Big Bang). Patches, outils, tutoriels et ressources.",
   image: "/assets/pages/home/SN_BB_Logo_HD.png",
 };
 
-export function useMeta(overrides: { title?: string; description?: string; image?: string }) {
+export function useMeta({ title: pageTitle, description: pageDescription, image: pageImage }: MetaOptions = {}) {
   useEffect(() => {
-    const title = overrides.title ? `${overrides.title} — Stellar Project` : defaults.title;
-    const description = overrides.description || defaults.description;
-    const image = overrides.image || defaults.image;
+    const fullTitle = pageTitle ? `${pageTitle} — Stellar Project` : defaults.title;
+    const finalDescription = pageDescription || defaults.description;
+    
+    const rawImage = pageImage || defaults.image;
+    const finalImage = rawImage.startsWith("http")
+      ? rawImage
+      : `${window.location.origin}${rawImage.startsWith("/") ? "" : "/"}${rawImage}`;
 
-    document.title = title;
+    document.title = fullTitle;
 
     const setMeta = (name: string, content: string) => {
-      let el = document.querySelector(`meta[name="${name}"], meta[property="${name}"]`) as HTMLMetaElement | null;
-      if (!el) { el = document.createElement("meta"); el.setAttribute(name.startsWith("og:") ? "property" : "name", name); document.head.appendChild(el); }
+      let el = document.querySelector(
+        `meta[name="${name}"], meta[property="${name}"]`
+      ) as HTMLMetaElement | null;
+
+      if (!el) {
+        el = document.createElement("meta");
+        el.setAttribute(name.startsWith("og:") ? "property" : "name", name);
+        document.head.appendChild(el);
+      }
       el.content = content;
     };
 
-    setMeta("description", description);
-    setMeta("og:title", title);
-    setMeta("og:description", description);
-    setMeta("og:image", image);
+    let canonical = document.querySelector('link[rel="canonical"]') as HTMLLinkElement | null;
+    if (!canonical) {
+      canonical = document.createElement("link");
+      canonical.setAttribute("rel", "canonical");
+      document.head.appendChild(canonical);
+    }
+    canonical.href = window.location.href;
+
+    setMeta("description", finalDescription);
+    setMeta("og:title", fullTitle);
+    setMeta("og:description", finalDescription);
+    setMeta("og:image", finalImage);
     setMeta("og:type", "website");
     setMeta("og:url", window.location.href);
+
     setMeta("twitter:card", "summary_large_image");
-    setMeta("twitter:title", title);
-    setMeta("twitter:description", description);
-    setMeta("twitter:image", image);
-  }, [overrides.title, overrides.description, overrides.image]);
+    setMeta("twitter:title", fullTitle);
+    setMeta("twitter:description", finalDescription);
+    setMeta("twitter:image", finalImage);
+
+    return () => {
+      document.title = defaults.title;
+    };
+  }, [pageTitle, pageDescription, pageImage]);
 }

@@ -9,12 +9,19 @@ export default function Tracker() {
   useEffect(() => {
     if (location.pathname.startsWith("/admin")) return;
 
+    const fullPath = location.pathname + location.search;
+
     fetch(`${API_BASE}/analytics/track`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ path: location.pathname, userAgent: navigator.userAgent, referrer: document.referrer || null }),
+      body: JSON.stringify({
+        path: fullPath,
+        userAgent: navigator.userAgent,
+        referrer: document.referrer || null,
+      }),
+      keepalive: true,
     }).catch(() => {});
-  }, [location.pathname]);
+  }, [location.pathname, location.search]);
 
   return null;
 }
