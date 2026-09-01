@@ -180,6 +180,7 @@ export interface SearchResults {
   pages: { id: string; slug: string; title: string; tool: { name: string } | null }[];
   tools: { id: string; name: string; description: string; imagePath: string | null }[];
   posts: { id: string; slug: string; title: string; excerpt: string | null }[];
+  games: { id: string; slug: string; name: string; description: string }[];
 }
 
 export interface AnalyticsStats {

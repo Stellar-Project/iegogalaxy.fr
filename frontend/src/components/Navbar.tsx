@@ -8,8 +8,8 @@ import SearchDialog from "@/components/SearchDialog";
 type NavItem = {
   name: string;
   href: string;
-  imgOff: string;
-  imgOn: string;
+  imgOff?: string;
+  imgOn?: string;
 };
 
 const navLinks: NavItem[] = [
@@ -24,6 +24,10 @@ const navLinks: NavItem[] = [
     href: "/wiki",
     imgOff: "/assets/nav/wiki_off.png",
     imgOn: "/assets/nav/wiki_on.png",
+  },
+  {
+    name: "Jeux & Mods",
+    href: "/jeux",
   },
   {
     name: "Tutoriel",
@@ -55,6 +59,22 @@ const NavGameButton = ({
   onClick?: () => void;
 }) => {
   const [isHovered, setIsHovered] = useState(false);
+
+  if (!item.imgOff || !item.imgOn) {
+    return (
+      <Link
+        to={item.href}
+        onClick={onClick}
+        className={`shrink-0 px-3 py-1.5 rounded-lg font-black text-sm tracking-tight transition-colors cursor-pointer ${
+          isActive
+            ? "text-primary bg-primary/10"
+            : "text-muted-foreground hover:text-foreground hover:bg-secondary"
+        }`}
+      >
+        {item.name}
+      </Link>
+    );
+  }
 
   return (
     <Link

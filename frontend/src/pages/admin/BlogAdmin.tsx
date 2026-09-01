@@ -6,6 +6,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import TiptapEditor from "@/components/admin/TiptapEditor";
@@ -341,19 +348,23 @@ export default function BlogAdmin() {
           </div>
 
           <div className="relative flex items-center">
-            <Filter size={14} className="absolute left-3 text-muted-foreground pointer-events-none" />
-            <select
-              value={categoryFilter}
-              onChange={(e) => setCategoryFilter(e.target.value)}
-              className="h-9 pl-8 pr-3 rounded-xl bg-card/70 border border-border text-xs text-foreground font-bold focus:outline-none focus:ring-1 focus:ring-ring cursor-pointer shadow-xs"
-            >
-              <option value="all">Toutes catégories</option>
-              {availableCategories.map((c) => (
-                <option key={c} value={c}>
-                  {c}
-                </option>
-              ))}
-            </select>
+            <Filter size={14} className="absolute left-3 z-10 text-muted-foreground pointer-events-none" />
+            <Select value={categoryFilter} onValueChange={setCategoryFilter}>
+              <SelectTrigger
+                size="sm"
+                className="h-9 pl-8 pr-3 rounded-xl bg-card/70 border-border text-xs text-foreground font-bold shadow-xs w-auto"
+              >
+                <SelectValue placeholder="Toutes catégories" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">Toutes catégories</SelectItem>
+                {availableCategories.map((c) => (
+                  <SelectItem key={c} value={c}>
+                    {c}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
         </div>
       </div>

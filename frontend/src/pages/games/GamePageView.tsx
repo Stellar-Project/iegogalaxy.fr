@@ -53,16 +53,17 @@ export default function GamePageView() {
         <p className="text-base font-black text-foreground">Jeu introuvable</p>
         <p className="text-xs">La page demandée n'existe pas ou a été retirée.</p>
         <Link
-          to="/telechargement"
+          to="/jeux"
           className="text-xs font-black text-primary hover:underline inline-flex items-center gap-1 mt-2 cursor-pointer"
         >
-          <ArrowLeft size={14} /> Voir les téléchargements
+          <ArrowLeft size={14} /> Voir tous les jeux &amp; mods
         </Link>
       </div>
     );
   }
 
-  const statusPercent = parseInt(game.status, 10) || 0;
+  const statusMatch = game.status.match(/^\s*(\d{1,3})\s*%/);
+  const statusPercent = statusMatch ? Math.min(Math.max(parseInt(statusMatch[1], 10), 0), 100) : null;
   const downloadUrl = game.downloadUrl || (game.filePath ? `/api/games/${game.slug}/download` : null);
 
   return (
@@ -73,8 +74,8 @@ export default function GamePageView() {
             Accueil
           </Link>
           <ChevronRight size={14} />
-          <Link to="/telechargement" className="hover:text-primary transition-colors cursor-pointer">
-            Téléchargement
+          <Link to="/jeux" className="hover:text-primary transition-colors cursor-pointer">
+            Jeux &amp; Mods
           </Link>
           <ChevronRight size={14} />
           <span className="text-foreground font-black truncate">{game.name}</span>
@@ -110,18 +111,28 @@ export default function GamePageView() {
               )}
             </div>
 
-            <div className="space-y-2 bg-card border border-border rounded-lg p-4">
-              <div className="flex items-center justify-between text-xs sm:text-sm">
-                <span className="font-black text-muted-foreground">Avancement de la traduction</span>
-                <span className="text-accent font-black font-mono">{game.status}</span>
+            {statusPercent !== null ? (
+              <div className="space-y-2 bg-card border border-border rounded-lg p-4">
+                <div className="flex items-center justify-between text-xs sm:text-sm">
+                  <span className="font-black text-muted-foreground">Avancement</span>
+                  <span className="text-accent font-black font-mono">{game.status}</span>
+                </div>
+                <div className="w-full bg-secondary rounded-full h-2.5 overflow-hidden border border-border/50">
+                  <div
+                    className="bg-accent h-full rounded-full"
+                    style={{ width: `${statusPercent}%` }}
+                  />
+                </div>
               </div>
-              <div className="w-full bg-secondary rounded-full h-2.5 overflow-hidden border border-border/50">
-                <div
-                  className="bg-accent h-full rounded-full"
-                  style={{ width: `${Math.min(Math.max(statusPercent, 0), 100)}%` }}
-                />
-              </div>
-            </div>
+            ) : (
+              game.status && (
+                <div>
+                  <Badge variant="outline" className="border-accent/40 bg-accent/10 text-accent font-black font-mono text-xs px-3 py-1">
+                    {game.status}
+                  </Badge>
+                </div>
+              )
+            )}
 
             <p className="text-sm sm:text-base text-muted-foreground leading-relaxed whitespace-pre-line">
               {game.description}

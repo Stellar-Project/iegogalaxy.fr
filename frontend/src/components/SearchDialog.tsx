@@ -2,7 +2,7 @@ import { useEffect, useState, useMemo, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { api } from "@/api/client";
 import type { SearchResults } from "@/api/types";
-import { Search, BookOpen, Wrench, Newspaper, Loader2 } from "lucide-react";
+import { Search, BookOpen, Wrench, Newspaper, Gamepad2, Loader2 } from "lucide-react";
 
 interface SearchDialogProps {
   open: boolean;
@@ -107,6 +107,15 @@ export default function SearchDialog({ open, onClose }: SearchDialogProps) {
         label: post.title,
         sub: post.excerpt?.slice(0, 60) || "Actualité",
         icon: <Newspaper size={15} className="text-accent shrink-0" />,
+      });
+    }
+
+    for (const g of results.games || []) {
+      list.push({
+        url: `/jeux/${g.slug}`,
+        label: g.name,
+        sub: g.description?.slice(0, 60) || "Jeu ou mod",
+        icon: <Gamepad2 size={15} className="text-primary shrink-0" />,
       });
     }
 
@@ -283,6 +292,43 @@ export default function SearchDialog({ open, onClose }: SearchDialogProps) {
                   </button>
                 );
               })}
+
+              {results.games && results.games.length > 0 && (
+                <div className="px-3 pt-3 pb-1 text-[10px] font-black uppercase tracking-wider text-muted-foreground">
+                  Jeux &amp; Mods
+                </div>
+              )}
+              {results.games?.map((g, i) => {
+                const idx =
+                  (results.pages?.length || 0) +
+                  (results.tools?.length || 0) +
+                  (results.posts?.length || 0) +
+                  i;
+                const isSelected = selectedIdx === idx;
+                return (
+                  <button
+                    key={g.id}
+                    type="button"
+                    onClick={() => goTo(`/jeux/${g.slug}`)}
+                    onMouseEnter={() => setSelectedIdx(idx)}
+                    className={`flex items-center gap-3 w-full text-left px-3 py-2.5 rounded-xl text-sm transition-colors cursor-pointer ${
+                      isSelected
+                        ? "bg-primary/15 text-foreground font-black"
+                        : "text-muted-foreground hover:bg-secondary/50 hover:text-foreground"
+                    }`}
+                  >
+                    <Gamepad2 size={15} className="text-primary shrink-0" />
+                    <div className="min-w-0 flex-1">
+                      <span className="truncate block text-foreground font-bold">{g.name}</span>
+                      {g.description && (
+                        <span className="text-[11px] text-muted-foreground truncate block">
+                          {g.description}
+                        </span>
+                      )}
+                    </div>
+                  </button>
+                );
+              })}
             </div>
           )}
 
@@ -303,7 +349,7 @@ export default function SearchDialog({ open, onClose }: SearchDialogProps) {
               <Search size={28} className="opacity-30 mb-2" />
               <p className="text-sm font-bold">Tapez au moins 2 caractères pour lancer la recherche</p>
               <p className="text-[11px] mt-1 font-mono">
-                Pages wiki · Outils · Actualités
+                Pages wiki · Outils · Actualités · Jeux &amp; Mods
               </p>
             </div>
           )}

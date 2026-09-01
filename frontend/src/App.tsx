@@ -12,6 +12,7 @@ const Home = lazy(() => import("./pages/Home"))
 const Tutorial = lazy(() => import("./pages/Tutorial"))
 const About = lazy(() => import("./pages/About"))
 const Download = lazy(() => import("./pages/Download"))
+const Games = lazy(() => import("./pages/Games"))
 const MentionsLegales = lazy(() => import("./pages/MentionsLegales"))
 const Wiki = lazy(() => import("./pages/Wiki"))
 const WikiPageView = lazy(() => import("./pages/wiki/WikiPageView"))
@@ -54,6 +55,7 @@ export default function App() {
             <Route path="/telechargement" element={<Download />} />
             <Route path="/wiki" element={<Wiki />} />
             <Route path="/wiki/:slug" element={<WikiPageView />} />
+            <Route path="/jeux" element={<Games />} />
             <Route path="/jeux/:slug" element={<GamePageView />} />
             <Route path="/actualites/:slug" element={<BlogPost />} />
             <Route path="/faq" element={<Faq />} />

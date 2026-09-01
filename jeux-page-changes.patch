@@ -1,0 +1,541 @@
+diff --git a/backend/src/routes/search.ts b/backend/src/routes/search.ts
+index 0c9fc22..b4b60e2 100644
+--- a/backend/src/routes/search.ts
++++ b/backend/src/routes/search.ts
+@@ -4,11 +4,11 @@ import { prisma } from "../lib/prisma.js";
+ export default async function searchRoutes(fastify: FastifyInstance) {
+   fastify.get("/api/search", async (request) => {
+     const { q } = request.query as { q?: string };
+-    if (!q || q.length < 2) return { pages: [], tools: [], posts: [] };
++    if (!q || q.length < 2) return { pages: [], tools: [], posts: [], games: [] };
+ 
+     const query = q.trim();
+ 
+-    const [pages, tools, posts] = await Promise.all([
++    const [pages, tools, posts, games] = await Promise.all([
+       prisma.wikiPage.findMany({
+         where: {
+           published: true,
+@@ -43,8 +43,19 @@ export default async function searchRoutes(fastify: FastifyInstance) {
+         select: { id: true, slug: true, title: true, excerpt: true },
+         take: 5,
+       }),
++      prisma.game.findMany({
++        where: {
++          published: true,
++          OR: [
++            { name: { contains: query, mode: "insensitive" } },
++            { description: { contains: query, mode: "insensitive" } },
++          ],
++        },
++        select: { id: true, slug: true, name: true, description: true },
++        take: 5,
++      }),
+     ]);
+ 
+-    return { pages, tools, posts };
++    return { pages, tools, posts, games };
+   });
+ }
+diff --git a/frontend/src/App.tsx b/frontend/src/App.tsx
+index 8324b32..1eefcbe 100644
+--- a/frontend/src/App.tsx
++++ b/frontend/src/App.tsx
+@@ -12,6 +12,7 @@ const Home = lazy(() => import("./pages/Home"))
+ const Tutorial = lazy(() => import("./pages/Tutorial"))
+ const About = lazy(() => import("./pages/About"))
+ const Download = lazy(() => import("./pages/Download"))
++const Games = lazy(() => import("./pages/Games"))
+ const MentionsLegales = lazy(() => import("./pages/MentionsLegales"))
+ const Wiki = lazy(() => import("./pages/Wiki"))
+ const WikiPageView = lazy(() => import("./pages/wiki/WikiPageView"))
+@@ -54,6 +55,7 @@ export default function App() {
+             <Route path="/telechargement" element={<Download />} />
+             <Route path="/wiki" element={<Wiki />} />
+             <Route path="/wiki/:slug" element={<WikiPageView />} />
++            <Route path="/jeux" element={<Games />} />
+             <Route path="/jeux/:slug" element={<GamePageView />} />
+             <Route path="/actualites/:slug" element={<BlogPost />} />
+             <Route path="/faq" element={<Faq />} />
+diff --git a/frontend/src/api/types.ts b/frontend/src/api/types.ts
+index ff32acf..c8097f5 100644
+--- a/frontend/src/api/types.ts
++++ b/frontend/src/api/types.ts
+@@ -180,6 +180,7 @@ export interface SearchResults {
+   pages: { id: string; slug: string; title: string; tool: { name: string } | null }[];
+   tools: { id: string; name: string; description: string; imagePath: string | null }[];
+   posts: { id: string; slug: string; title: string; excerpt: string | null }[];
++  games: { id: string; slug: string; name: string; description: string }[];
+ }
+ 
+ export interface AnalyticsStats {
+diff --git a/frontend/src/components/Navbar.tsx b/frontend/src/components/Navbar.tsx
+index 4611f57..b09ac4f 100644
+--- a/frontend/src/components/Navbar.tsx
++++ b/frontend/src/components/Navbar.tsx
+@@ -8,8 +8,8 @@ import SearchDialog from "@/components/SearchDialog";
+ type NavItem = {
+   name: string;
+   href: string;
+-  imgOff: string;
+-  imgOn: string;
++  imgOff?: string;
++  imgOn?: string;
+ };
+ 
+ const navLinks: NavItem[] = [
+@@ -25,6 +25,10 @@ const navLinks: NavItem[] = [
+     imgOff: "/assets/nav/wiki_off.png",
+     imgOn: "/assets/nav/wiki_on.png",
+   },
++  {
++    name: "Jeux & Mods",
++    href: "/jeux",
++  },
+   {
+     name: "Tutoriel",
+     href: "/tutoriel",
+@@ -56,6 +60,22 @@ const NavGameButton = ({
+ }) => {
+   const [isHovered, setIsHovered] = useState(false);
+ 
++  if (!item.imgOff || !item.imgOn) {
++    return (
++      <Link
++        to={item.href}
++        onClick={onClick}
++        className={`shrink-0 px-3 py-1.5 rounded-lg font-black text-sm tracking-tight transition-colors cursor-pointer ${
++          isActive
++            ? "text-primary bg-primary/10"
++            : "text-muted-foreground hover:text-foreground hover:bg-secondary"
++        }`}
++      >
++        {item.name}
++      </Link>
++    );
++  }
++
+   return (
+     <Link
+       to={item.href}
+diff --git a/frontend/src/components/SearchDialog.tsx b/frontend/src/components/SearchDialog.tsx
+index 7f04c6b..f23a046 100644
+--- a/frontend/src/components/SearchDialog.tsx
++++ b/frontend/src/components/SearchDialog.tsx
+@@ -2,7 +2,7 @@ import { useEffect, useState, useMemo, useRef } from "react";
+ import { useNavigate } from "react-router-dom";
+ import { api } from "@/api/client";
+ import type { SearchResults } from "@/api/types";
+-import { Search, BookOpen, Wrench, Newspaper, Loader2 } from "lucide-react";
++import { Search, BookOpen, Wrench, Newspaper, Gamepad2, Loader2 } from "lucide-react";
+ 
+ interface SearchDialogProps {
+   open: boolean;
+@@ -110,6 +110,15 @@ export default function SearchDialog({ open, onClose }: SearchDialogProps) {
+       });
+     }
+ 
++    for (const g of results.games || []) {
++      list.push({
++        url: `/jeux/${g.slug}`,
++        label: g.name,
++        sub: g.description?.slice(0, 60) || "Jeu ou mod",
++        icon: <Gamepad2 size={15} className="text-primary shrink-0" />,
++      });
++    }
++
+     return list;
+   }, [results]);
+ 
+@@ -283,6 +292,43 @@ export default function SearchDialog({ open, onClose }: SearchDialogProps) {
+                   </button>
+                 );
+               })}
++
++              {results.games && results.games.length > 0 && (
++                <div className="px-3 pt-3 pb-1 text-[10px] font-black uppercase tracking-wider text-muted-foreground">
++                  Jeux &amp; Mods
++                </div>
++              )}
++              {results.games?.map((g, i) => {
++                const idx =
++                  (results.pages?.length || 0) +
++                  (results.tools?.length || 0) +
++                  (results.posts?.length || 0) +
++                  i;
++                const isSelected = selectedIdx === idx;
++                return (
++                  <button
++                    key={g.id}
++                    type="button"
++                    onClick={() => goTo(`/jeux/${g.slug}`)}
++                    onMouseEnter={() => setSelectedIdx(idx)}
++                    className={`flex items-center gap-3 w-full text-left px-3 py-2.5 rounded-xl text-sm transition-colors cursor-pointer ${
++                      isSelected
++                        ? "bg-primary/15 text-foreground font-black"
++                        : "text-muted-foreground hover:bg-secondary/50 hover:text-foreground"
++                    }`}
++                  >
++                    <Gamepad2 size={15} className="text-primary shrink-0" />
++                    <div className="min-w-0 flex-1">
++                      <span className="truncate block text-foreground font-bold">{g.name}</span>
++                      {g.description && (
++                        <span className="text-[11px] text-muted-foreground truncate block">
++                          {g.description}
++                        </span>
++                      )}
++                    </div>
++                  </button>
++                );
++              })}
+             </div>
+           )}
+ 
+@@ -303,7 +349,7 @@ export default function SearchDialog({ open, onClose }: SearchDialogProps) {
+               <Search size={28} className="opacity-30 mb-2" />
+               <p className="text-sm font-bold">Tapez au moins 2 caractères pour lancer la recherche</p>
+               <p className="text-[11px] mt-1 font-mono">
+-                Pages wiki · Outils · Actualités
++                Pages wiki · Outils · Actualités · Jeux &amp; Mods
+               </p>
+             </div>
+           )}
+diff --git a/frontend/src/pages/Games.tsx b/frontend/src/pages/Games.tsx
+new file mode 100644
+index 0000000..fc9aa28
+--- /dev/null
++++ b/frontend/src/pages/Games.tsx
+@@ -0,0 +1,178 @@
++import { useEffect, useState, useMemo } from "react";
++import { Link } from "react-router-dom";
++import { Gamepad2, ChevronRight, Search, Calendar, Download, ExternalLink } from "lucide-react";
++import { api } from "@/api/client";
++import type { Game } from "@/api/types";
++import { Card, CardContent } from "@/components/ui/card";
++import { Badge } from "@/components/ui/badge";
++import { Input } from "@/components/ui/input";
++import Loading from "@/components/Loading";
++import { useMeta } from "@/lib/useMeta";
++
++export default function Games() {
++  useMeta({
++    title: "Jeux & Mods",
++    description:
++      "Découvrez tous les jeux, mods et projets de traduction du Stellar Project.",
++  });
++
++  const [games, setGames] = useState<Game[]>([]);
++  const [loading, setLoading] = useState(true);
++  const [search, setSearch] = useState("");
++
++  useEffect(() => {
++    let isMounted = true;
++    api
++      .getPublishedGames()
++      .then((data) => {
++        if (isMounted) setGames(data);
++      })
++      .catch(() => {})
++      .finally(() => {
++        if (isMounted) setLoading(false);
++      });
++
++    return () => {
++      isMounted = false;
++    };
++  }, []);
++
++  const filtered = useMemo(() => {
++    const q = search.trim().toLowerCase();
++    if (q.length < 2) return games;
++    return games.filter(
++      (g) =>
++        g.name.toLowerCase().includes(q) ||
++        g.description.toLowerCase().includes(q)
++    );
++  }, [games, search]);
++
++  if (loading) {
++    return <Loading fullScreen message="Chargement des jeux..." />;
++  }
++
++  return (
++    <div className="relative min-h-screen text-foreground bg-background px-4 py-16 sm:py-24">
++      <div className="relative z-10 max-w-6xl mx-auto w-full space-y-8 sm:space-y-10">
++        <div className="text-center space-y-4">
++          <div className="flex items-center justify-center gap-2 text-muted-foreground text-xs sm:text-sm">
++            <Link to="/" className="hover:text-primary transition-colors">
++              Accueil
++            </Link>
++            <ChevronRight size={14} />
++            <span className="text-primary font-medium">Jeux &amp; Mods</span>
++          </div>
++
++          <h1 className="text-4xl sm:text-5xl md:text-6xl font-black text-foreground tracking-tight">
++            Jeux <span className="text-accent">&amp; Mods</span>
++          </h1>
++          <p className="text-muted-foreground max-w-2xl mx-auto text-sm sm:text-base leading-relaxed">
++            Traductions, mods et projets développés ou soutenus par le Stellar
++            Project.
++          </p>
++        </div>
++
++        <div className="max-w-xl mx-auto">
++          <div className="relative">
++            <Search
++              size={18}
++              className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none"
++            />
++            <Input
++              type="text"
++              placeholder="Rechercher un jeu ou un mod..."
++              value={search}
++              onChange={(e) => setSearch(e.target.value)}
++              className="bg-card/80 border-border rounded-2xl pl-11 pr-4 py-5 text-sm"
++            />
++          </div>
++        </div>
++
++        {filtered.length === 0 ? (
++          <div className="text-center py-16 text-muted-foreground space-y-3">
++            {search ? (
++              <>
++                <p className="text-sm">
++                  Aucun résultat ne correspond à «{" "}
++                  <span className="text-foreground font-medium">{search}</span> ».
++                </p>
++                <button
++                  type="button"
++                  onClick={() => setSearch("")}
++                  className="text-xs text-primary hover:underline cursor-pointer font-black"
++                >
++                  Effacer la recherche
++                </button>
++              </>
++            ) : (
++              <p className="text-sm">Aucun jeu ou mod disponible pour le moment.</p>
++            )}
++          </div>
++        ) : (
++          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
++            {filtered.map((game) => {
++              const hasDownload = Boolean(game.downloadUrl || game.filePath);
++              return (
++                <Link key={game.id} to={`/jeux/${game.slug}`} className="block h-full group">
++                  <Card className="bg-card/70 border-border hover:border-primary/40 hover:bg-card/90 transition-all duration-200 h-full shadow-xs">
++                    <CardContent className="p-5 flex flex-col h-full">
++                      <div className="w-full aspect-4/3 rounded-lg overflow-hidden bg-secondary/60 border border-border/40 mb-4 flex items-center justify-center">
++                        {game.imageUrl ? (
++                          <img
++                            src={game.imageUrl}
++                            alt={game.name}
++                            className="w-full h-full object-cover"
++                          />
++                        ) : (
++                          <Gamepad2 size={40} className="text-muted-foreground/40" />
++                        )}
++                      </div>
++
++                      <div className="flex items-start justify-between gap-2 mb-2">
++                        <h3 className="text-base sm:text-lg font-black text-foreground group-hover:text-primary transition-colors tracking-tight">
++                          {game.name}
++                        </h3>
++                        {game.status && (
++                          <Badge
++                            variant="outline"
++                            className="shrink-0 border-accent/40 bg-accent/10 text-accent text-[10px] font-black font-mono uppercase tracking-wider"
++                          >
++                            {game.status}
++                          </Badge>
++                        )}
++                      </div>
++
++                      <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed flex-1 mb-4 line-clamp-3">
++                        {game.description}
++                      </p>
++
++                      <div className="flex items-center justify-between gap-2 pt-3 border-t border-border/40 text-xs">
++                        {game.releaseDate ? (
++                          <span className="flex items-center gap-1.5 text-muted-foreground font-mono">
++                            <Calendar size={12} className="text-accent" />
++                            {game.releaseDate}
++                          </span>
++                        ) : (
++                          <span />
++                        )}
++
++                        {hasDownload ? (
++                          <span className="inline-flex items-center gap-1 font-black text-primary">
++                            {game.downloadUrl ? <ExternalLink size={13} /> : <Download size={13} />}
++                            Télécharger
++                          </span>
++                        ) : (
++                          <span className="text-muted-foreground/60 font-medium">Bientôt</span>
++                        )}
++                      </div>
++                    </CardContent>
++                  </Card>
++                </Link>
++              );
++            })}
++          </div>
++        )}
++      </div>
++    </div>
++  );
++}
+diff --git a/frontend/src/pages/admin/BlogAdmin.tsx b/frontend/src/pages/admin/BlogAdmin.tsx
+index dc02902..58f840e 100644
+--- a/frontend/src/pages/admin/BlogAdmin.tsx
++++ b/frontend/src/pages/admin/BlogAdmin.tsx
+@@ -6,6 +6,13 @@ import { Button } from "@/components/ui/button";
+ import { Input } from "@/components/ui/input";
+ import { Label } from "@/components/ui/label";
+ import { Switch } from "@/components/ui/switch";
++import {
++  Select,
++  SelectContent,
++  SelectItem,
++  SelectTrigger,
++  SelectValue,
++} from "@/components/ui/select";
+ import { Badge } from "@/components/ui/badge";
+ import { Card, CardContent } from "@/components/ui/card";
+ import TiptapEditor from "@/components/admin/TiptapEditor";
+@@ -341,19 +348,23 @@ export default function BlogAdmin() {
+           </div>
+ 
+           <div className="relative flex items-center">
+-            <Filter size={14} className="absolute left-3 text-muted-foreground pointer-events-none" />
+-            <select
+-              value={categoryFilter}
+-              onChange={(e) => setCategoryFilter(e.target.value)}
+-              className="h-9 pl-8 pr-3 rounded-xl bg-card/70 border border-border text-xs text-foreground font-bold focus:outline-none focus:ring-1 focus:ring-ring cursor-pointer shadow-xs"
+-            >
+-              <option value="all">Toutes catégories</option>
+-              {availableCategories.map((c) => (
+-                <option key={c} value={c}>
+-                  {c}
+-                </option>
+-              ))}
+-            </select>
++            <Filter size={14} className="absolute left-3 z-10 text-muted-foreground pointer-events-none" />
++            <Select value={categoryFilter} onValueChange={setCategoryFilter}>
++              <SelectTrigger
++                size="sm"
++                className="h-9 pl-8 pr-3 rounded-xl bg-card/70 border-border text-xs text-foreground font-bold shadow-xs w-auto"
++              >
++                <SelectValue placeholder="Toutes catégories" />
++              </SelectTrigger>
++              <SelectContent>
++                <SelectItem value="all">Toutes catégories</SelectItem>
++                {availableCategories.map((c) => (
++                  <SelectItem key={c} value={c}>
++                    {c}
++                  </SelectItem>
++                ))}
++              </SelectContent>
++            </Select>
+           </div>
+         </div>
+       </div>
+diff --git a/frontend/src/pages/admin/GameAdmin.tsx b/frontend/src/pages/admin/GameAdmin.tsx
+index f8683ae..4b8e40c 100644
+--- a/frontend/src/pages/admin/GameAdmin.tsx
++++ b/frontend/src/pages/admin/GameAdmin.tsx
+@@ -364,14 +364,16 @@ export default function GameAdmin() {
+                   <div className="flex items-center gap-2 bg-secondary/70 border border-border px-2.5 py-1 rounded-lg text-xs">
+                     <span className="text-foreground font-mono font-bold truncate max-w-50">{form.filePath}</span>
+                     <span className="text-muted-foreground font-black font-mono">({form.fileSize || "Taille inconnue"})</span>
+-                    <button
++                    <Button
+                       type="button"
++                      size="icon"
++                      variant="ghost"
+                       onClick={() => setForm((prev) => ({ ...prev, filePath: "", fileSize: "" }))}
+-                      className="text-muted-foreground hover:text-destructive ml-1 cursor-pointer transition-colors"
++                      className="text-muted-foreground hover:text-destructive h-5 w-5 ml-1 cursor-pointer"
+                       title="Retirer le fichier"
+                     >
+                       <X size={12} />
+-                    </button>
++                    </Button>
+                   </div>
+                 )}
+               </div>
+diff --git a/frontend/src/pages/games/GamePageView.tsx b/frontend/src/pages/games/GamePageView.tsx
+index 55d60a7..060dbde 100644
+--- a/frontend/src/pages/games/GamePageView.tsx
++++ b/frontend/src/pages/games/GamePageView.tsx
+@@ -53,16 +53,17 @@ export default function GamePageView() {
+         <p className="text-base font-black text-foreground">Jeu introuvable</p>
+         <p className="text-xs">La page demandée n'existe pas ou a été retirée.</p>
+         <Link
+-          to="/telechargement"
++          to="/jeux"
+           className="text-xs font-black text-primary hover:underline inline-flex items-center gap-1 mt-2 cursor-pointer"
+         >
+-          <ArrowLeft size={14} /> Voir les téléchargements
++          <ArrowLeft size={14} /> Voir tous les jeux &amp; mods
+         </Link>
+       </div>
+     );
+   }
+ 
+-  const statusPercent = parseInt(game.status, 10) || 0;
++  const statusMatch = game.status.match(/^\s*(\d{1,3})\s*%/);
++  const statusPercent = statusMatch ? Math.min(Math.max(parseInt(statusMatch[1], 10), 0), 100) : null;
+   const downloadUrl = game.downloadUrl || (game.filePath ? `/api/games/${game.slug}/download` : null);
+ 
+   return (
+@@ -73,8 +74,8 @@ export default function GamePageView() {
+             Accueil
+           </Link>
+           <ChevronRight size={14} />
+-          <Link to="/telechargement" className="hover:text-primary transition-colors cursor-pointer">
+-            Téléchargement
++          <Link to="/jeux" className="hover:text-primary transition-colors cursor-pointer">
++            Jeux &amp; Mods
+           </Link>
+           <ChevronRight size={14} />
+           <span className="text-foreground font-black truncate">{game.name}</span>
+@@ -110,18 +111,28 @@ export default function GamePageView() {
+               )}
+             </div>
+ 
+-            <div className="space-y-2 bg-card border border-border rounded-lg p-4">
+-              <div className="flex items-center justify-between text-xs sm:text-sm">
+-                <span className="font-black text-muted-foreground">Avancement de la traduction</span>
+-                <span className="text-accent font-black font-mono">{game.status}</span>
+-              </div>
+-              <div className="w-full bg-secondary rounded-full h-2.5 overflow-hidden border border-border/50">
+-                <div
+-                  className="bg-accent h-full rounded-full"
+-                  style={{ width: `${Math.min(Math.max(statusPercent, 0), 100)}%` }}
+-                />
++            {statusPercent !== null ? (
++              <div className="space-y-2 bg-card border border-border rounded-lg p-4">
++                <div className="flex items-center justify-between text-xs sm:text-sm">
++                  <span className="font-black text-muted-foreground">Avancement</span>
++                  <span className="text-accent font-black font-mono">{game.status}</span>
++                </div>
++                <div className="w-full bg-secondary rounded-full h-2.5 overflow-hidden border border-border/50">
++                  <div
++                    className="bg-accent h-full rounded-full"
++                    style={{ width: `${statusPercent}%` }}
++                  />
++                </div>
+               </div>
+-            </div>
++            ) : (
++              game.status && (
++                <div>
++                  <Badge variant="outline" className="border-accent/40 bg-accent/10 text-accent font-black font-mono text-xs px-3 py-1">
++                    {game.status}
++                  </Badge>
++                </div>
++              )
++            )}
+ 
+             <p className="text-sm sm:text-base text-muted-foreground leading-relaxed whitespace-pre-line">
+               {game.description}

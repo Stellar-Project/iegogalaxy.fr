@@ -364,14 +364,16 @@ export default function GameAdmin() {
                   <div className="flex items-center gap-2 bg-secondary/70 border border-border px-2.5 py-1 rounded-lg text-xs">
                     <span className="text-foreground font-mono font-bold truncate max-w-50">{form.filePath}</span>
                     <span className="text-muted-foreground font-black font-mono">({form.fileSize || "Taille inconnue"})</span>
-                    <button
+                    <Button
                       type="button"
+                      size="icon"
+                      variant="ghost"
                       onClick={() => setForm((prev) => ({ ...prev, filePath: "", fileSize: "" }))}
-                      className="text-muted-foreground hover:text-destructive ml-1 cursor-pointer transition-colors"
+                      className="text-muted-foreground hover:text-destructive h-5 w-5 ml-1 cursor-pointer"
                       title="Retirer le fichier"
                     >
                       <X size={12} />
-                    </button>
+                    </Button>
                   </div>
                 )}
               </div>

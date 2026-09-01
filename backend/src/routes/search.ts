@@ -4,11 +4,11 @@ import { prisma } from "../lib/prisma.js";
 export default async function searchRoutes(fastify: FastifyInstance) {
   fastify.get("/api/search", async (request) => {
     const { q } = request.query as { q?: string };
-    if (!q || q.length < 2) return { pages: [], tools: [], posts: [] };
+    if (!q || q.length < 2) return { pages: [], tools: [], posts: [], games: [] };
 
     const query = q.trim();
 
-    const [pages, tools, posts] = await Promise.all([
+    const [pages, tools, posts, games] = await Promise.all([
       prisma.wikiPage.findMany({
         where: {
           published: true,
@@ -43,8 +43,19 @@ export default async function searchRoutes(fastify: FastifyInstance) {
         select: { id: true, slug: true, title: true, excerpt: true },
         take: 5,
       }),
+      prisma.game.findMany({
+        where: {
+          published: true,
+          OR: [
+            { name: { contains: query, mode: "insensitive" } },
+            { description: { contains: query, mode: "insensitive" } },
+          ],
+        },
+        select: { id: true, slug: true, name: true, description: true },
+        take: 5,
+      }),
     ]);
 
-    return { pages, tools, posts };
+    return { pages, tools, posts, games };
   });
 }
