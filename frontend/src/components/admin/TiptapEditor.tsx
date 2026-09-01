@@ -142,8 +142,8 @@ export default function TiptapEditor({ content, onChange, placeholder }: Props) 
   const isInTable = editor.isActive("table");
 
   return (
-    <div className="bg-card/80 border border-border rounded-xl overflow-hidden shadow-xs backdrop-blur-md">
-      <div className="flex flex-wrap items-center gap-0.5 p-2 border-b border-border bg-secondary/40 backdrop-blur-md sticky top-0 z-10">
+    <div className="bg-card border border-border rounded-lg overflow-hidden">
+      <div className="flex flex-wrap items-center gap-0.5 p-2 border-b border-border bg-secondary/40 sticky top-0 z-10">
         <ToolBtn onClick={() => editor.chain().focus().undo().run()} label="Annuler">
           <Undo2 size={16} />
         </ToolBtn>

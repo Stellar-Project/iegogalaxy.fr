@@ -1,6 +1,5 @@
 import { useEffect, useState, useMemo } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
 import { api } from "@/api/client";
 import type { WikiTool } from "@/api/types";
 import { Card, CardContent } from "@/components/ui/card";
@@ -84,17 +83,8 @@ export default function Wiki() {
 
   return (
     <div className="relative min-h-screen text-foreground bg-background px-4 py-16 sm:py-24">
-      <div className="fixed inset-0 z-0 pointer-events-none">
-        <div className="absolute inset-0 bg-linear-to-b from-background via-background/95 to-background" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,var(--color-primary)/0.03,transparent_70%)]" />
-      </div>
-
-      <div className="relative z-10 max-w-6xl mx-auto w-full space-y-8 sm:space-y-10">
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="text-center space-y-4"
+            <div className="relative z-10 max-w-6xl mx-auto w-full space-y-8 sm:space-y-10">
+        <div className="text-center space-y-4"
         >
           <div className="flex items-center justify-center gap-2 text-muted-foreground text-xs sm:text-sm">
             <Link to="/" className="hover:text-primary transition-colors">
@@ -111,7 +101,7 @@ export default function Wiki() {
             Ressources, guides détaillés et documentation pour le projet de
             traduction française d'Inazuma Eleven GO Galaxy.
           </p>
-        </motion.div>
+        </div>
 
         <div className="max-w-xl mx-auto">
           <div className="relative">
@@ -124,7 +114,7 @@ export default function Wiki() {
               placeholder="Rechercher un outil, un guide, un tag..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full bg-card/80 border border-border rounded-2xl pl-11 pr-4 py-3 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary/50 focus:ring-2 focus:ring-primary/20 transition-all shadow-xs"
+              className="w-full bg-card border border-border rounded-lg pl-11 pr-4 py-3 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary/50 focus:ring-2 focus:ring-primary/20 cursor-pointer"
             />
           </div>
         </div>
@@ -233,18 +223,13 @@ export default function Wiki() {
           </div>
         ) : view === "grid" ? (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
-            {filtered.map((tool, i) => {
+            {filtered.map((tool) => {
               const hasPages = Boolean(tool.pages && tool.pages.length > 0);
               return (
-                <motion.div
-                  key={tool.id}
-                  initial={{ opacity: 0, y: 15 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: i * 0.04 }}
-                >
+                <div key={tool.id}>
                   <Card
                     onClick={() => hasPages && handleToolClick(tool)}
-                    className={`bg-card/70 border-border transition-all duration-200 h-full group shadow-xs ${
+                    className={`bg-card border-border transition-colors duration-200 h-full group ${
                       hasPages
                         ? "hover:border-primary/40 hover:bg-card/90 cursor-pointer"
                         : "opacity-90 cursor-default"
@@ -307,24 +292,19 @@ export default function Wiki() {
                       </div>
                     </CardContent>
                   </Card>
-                </motion.div>
+                </div>
               );
             })}
           </div>
         ) : (
           <div className="space-y-2.5">
-            {filtered.map((tool, i) => {
+            {filtered.map((tool) => {
               const hasPages = Boolean(tool.pages && tool.pages.length > 0);
               return (
-                <motion.div
-                  key={tool.id}
-                  initial={{ opacity: 0, x: -8 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: i * 0.02 }}
-                >
+                <div key={tool.id}>
                   <Card
                     onClick={() => hasPages && handleToolClick(tool)}
-                    className={`bg-card/70 border-border transition-all duration-200 shadow-xs ${
+                    className={`bg-card border-border transition-colors duration-200 ${
                       hasPages
                         ? "hover:border-primary/40 hover:bg-card/90 cursor-pointer"
                         : "opacity-90 cursor-default"
@@ -381,7 +361,7 @@ export default function Wiki() {
                       </div>
                     </CardContent>
                   </Card>
-                </motion.div>
+                </div>
               );
             })}
           </div>

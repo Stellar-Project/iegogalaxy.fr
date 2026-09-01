@@ -82,7 +82,7 @@ export default function Footer() {
                 <img
                   src="/assets/pages/home/SN_BB_Logo_HD.png"
                   alt="Inazuma Eleven GO Galaxy"
-                  className="h-20 sm:h-24 w-auto object-contain opacity-95 hover:opacity-100 transition-opacity"
+                  className="h-20 sm:h-24 w-auto object-contain transition-opacity hover:opacity-90"
                 />
               </Link>
               <p className="leading-relaxed text-muted-foreground text-xs sm:text-sm">
@@ -122,7 +122,7 @@ export default function Footer() {
                     key={index}
                     variant="outline"
                     size="icon"
-                    className={`h-9 w-9 bg-card border-border text-foreground transition-all duration-300 cursor-pointer shadow-xs ${social.colorClass}`}
+                    className={`h-9 w-9 bg-card border-border text-foreground transition-colors duration-300 cursor-pointer ${social.colorClass}`}
                     asChild
                   >
                     <a
@@ -150,7 +150,7 @@ export default function Footer() {
             <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-6">
               <div className="flex items-center gap-1.5 text-muted-foreground font-medium">
                 <span>Fait avec</span>
-                <Heart size={13} className="text-destructive fill-destructive animate-pulse" />
+                <Heart size={13} className="text-destructive fill-destructive" />
                 <span>par la communauté</span>
               </div>
 

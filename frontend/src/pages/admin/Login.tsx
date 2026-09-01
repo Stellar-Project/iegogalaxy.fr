@@ -4,7 +4,6 @@ import { useAuth } from "@/api/useAuth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { motion } from "framer-motion";
 import { Eye, EyeOff, Loader2, ArrowLeft, Lock } from "lucide-react";
 
 export default function Login() {
@@ -40,17 +39,17 @@ export default function Login() {
       <div className="hidden lg:flex relative w-1/2 items-center justify-center overflow-hidden border-r border-border">
         <div className="absolute inset-0">
           <img src="/assets/global/bg/mainVisual_01.png" alt="" className="w-full h-full object-cover opacity-60" />
-          <div className="absolute inset-0 bg-linear-to-r from-background via-background/60 to-transparent" />
+          <div className="absolute inset-0 bg-background/40" />
           <div
             className="absolute inset-0"
             style={{ backgroundImage: "url('/assets/global/bg/bg_repeat.png')", backgroundRepeat: "repeat", opacity: 0.1 }}
           />
         </div>
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="relative z-10 text-center px-12">
-          <img src="/assets/global/logo.png" alt="Inazuma Eleven GO Galaxy" className="h-16 mx-auto mb-6 drop-shadow-md" />
+        <div className="relative z-10 text-center px-12">
+          <img src="/assets/global/logo.png" alt="Inazuma Eleven GO Galaxy" className="h-16 mx-auto mb-6" />
           <h1 className="text-4xl font-black text-foreground mb-2 tracking-tight">Espace Administration</h1>
           <p className="text-muted-foreground text-lg font-bold">Stellar Project</p>
-        </motion.div>
+        </div>
       </div>
 
       <div className="w-full lg:w-1/2 flex flex-col items-center justify-center p-6 sm:p-12 relative overflow-hidden">
@@ -60,10 +59,10 @@ export default function Login() {
             className="absolute inset-0"
             style={{ backgroundImage: "url('/assets/global/bg/bg_repeat.png')", backgroundRepeat: "repeat", opacity: 0.05 }}
           />
-          <div className="absolute inset-0 bg-background/80 backdrop-blur-xs" />
+          <div className="absolute inset-0 bg-background/80" />
         </div>
 
-        <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="relative z-10 w-full max-w-md space-y-6">
+        <div className="relative z-10 w-full max-w-md space-y-6">
           <div className="flex items-center justify-between">
             <Button variant="ghost" size="sm" asChild className="text-muted-foreground hover:text-foreground font-black cursor-pointer -ml-2">
               <Link to="/">
@@ -77,7 +76,7 @@ export default function Login() {
             <h1 className="text-2xl font-black text-foreground tracking-tight">Administration</h1>
           </div>
 
-          <div className="bg-card border border-border rounded-xl p-8 shadow-lg">
+          <div className="bg-card border border-border rounded-lg p-8">
             <div className="flex items-center gap-2.5 mb-1">
               <div className="p-2 rounded-lg bg-primary/10 text-primary">
                 <Lock size={18} />
@@ -156,7 +155,7 @@ export default function Login() {
           <p className="text-center text-xs text-muted-foreground font-medium">
             Stellar Project &copy; {new Date().getFullYear()} — Tous droits réservés
           </p>
-        </motion.div>
+        </div>
       </div>
     </div>
   );

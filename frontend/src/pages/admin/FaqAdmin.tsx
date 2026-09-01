@@ -44,7 +44,7 @@ export default function FaqAdmin() {
         const isExpanded = expandedId === item.id;
 
         return (
-          <Card key={item.id} className="bg-card/70 border-border hover:border-primary/40 transition-colors backdrop-blur-md shadow-xs">
+          <Card key={item.id} className="bg-card border-border hover:border-primary/40 transition-colors">
             <CardContent className="p-4 space-y-2">
               <div className="flex items-start justify-between gap-3">
                 <div className="flex-1 min-w-0">

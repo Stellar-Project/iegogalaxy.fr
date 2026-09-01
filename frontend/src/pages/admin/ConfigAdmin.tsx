@@ -95,7 +95,7 @@ export default function ConfigAdmin() {
       </div>
 
       <div className="space-y-4">
-        <Card className="bg-card/70 border-border backdrop-blur-md shadow-xs">
+        <Card className="bg-card border-border">
           <CardHeader>
             <div className="flex items-center gap-2">
               <Download size={20} className="text-primary" />

@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
 import { Sparkles, CheckCircle2, AlertCircle, Calendar } from "lucide-react";
 import { api } from "@/api/client";
 import type { PatchVersion } from "@/api/types";
@@ -42,22 +41,12 @@ export function CurrentChangelog() {
   if (changelogItems.length === 0) return null;
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.5, delay: 0.1 }}
-      className="w-full max-w-4xl mx-auto mt-12 mb-8 px-4"
-    >
-      <div className="bg-card/70 backdrop-blur-md border border-border rounded-2xl overflow-hidden relative group hover:border-primary/40 transition-all duration-300 shadow-xs">
-        <div className="absolute top-0 left-0 w-full h-0.5 bg-linear-to-r from-transparent via-primary/50 to-transparent opacity-60" />
-
-        <div className="absolute -left-12 -top-12 w-36 h-36 bg-primary/10 blur-3xl rounded-full pointer-events-none" />
-
+    <div className="w-full max-w-4xl mx-auto mt-12 mb-8 px-4">
+      <div className="bg-card border border-border rounded-lg overflow-hidden">
         <div className="p-6 sm:p-8">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6 pb-4 border-b border-border/60">
             <div className="flex items-center gap-3">
-              <div className="bg-primary/10 border border-primary/20 p-2.5 rounded-xl text-primary shrink-0">
+              <div className="bg-primary/10 border border-primary/20 p-2.5 rounded-lg text-primary shrink-0">
                 <Sparkles size={20} />
               </div>
               <div>
@@ -81,22 +70,18 @@ export function CurrentChangelog() {
 
           <div className="grid gap-3">
             {changelogItems.map((change: string, idx: number) => (
-              <motion.div
+              <div
                 key={idx}
-                initial={{ opacity: 0, x: -8 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.3, delay: 0.15 + idx * 0.05 }}
-                className="flex items-start gap-3 group/item p-2 rounded-lg hover:bg-secondary/30 transition-colors"
+                className="flex items-start gap-3 p-2 rounded-lg hover:bg-secondary/40 transition-colors"
               >
                 <CheckCircle2
                   size={18}
-                  className="text-primary mt-0.5 shrink-0 group-hover/item:scale-110 transition-transform"
+                  className="text-primary mt-0.5 shrink-0"
                 />
-                <span className="text-muted-foreground text-sm leading-relaxed group-hover/item:text-foreground transition-colors font-medium">
+                <span className="text-muted-foreground text-sm leading-relaxed hover:text-foreground transition-colors font-medium">
                   {change}
                 </span>
-              </motion.div>
+              </div>
             ))}
           </div>
 
@@ -108,6 +93,6 @@ export function CurrentChangelog() {
           </div>
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 }

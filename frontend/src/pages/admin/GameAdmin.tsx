@@ -210,7 +210,7 @@ export default function GameAdmin() {
       </div>
 
       {editing && (
-        <Card className="bg-card/90 border-border shadow-lg backdrop-blur-md">
+        <Card className="bg-card border-border">
           <CardContent className="p-6 space-y-4">
             <h3 className="text-lg font-black text-foreground tracking-tight">
               {editing === "new" ? "Ajouter un jeu ou mod" : "Modifier le jeu ou mod"}
@@ -403,7 +403,7 @@ export default function GameAdmin() {
 
       <div className="space-y-2">
         {games.map((g) => (
-          <Card key={g.id} className="bg-card/70 border-border hover:border-primary/40 transition-colors backdrop-blur-md shadow-xs">
+          <Card key={g.id} className="bg-card border-border hover:border-primary/40 transition-colors">
             <CardContent className="p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div className="flex items-center gap-3.5 flex-1 min-w-0">
                 {g.imageUrl ? (

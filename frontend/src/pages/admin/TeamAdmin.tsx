@@ -58,7 +58,7 @@ export default function TeamAdmin() {
         const initial = m.name?.trim() ? m.name.trim()[0].toUpperCase() : "?";
 
         return (
-          <Card key={m.id} className="bg-card/70 border-border hover:border-primary/40 transition-colors backdrop-blur-md shadow-xs">
+          <Card key={m.id} className="bg-card border-border hover:border-primary/40 transition-colors">
             <CardContent className="p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div className="flex items-center gap-3.5 min-w-0">
                 <div className="w-10 h-10 rounded-full bg-secondary border border-border flex items-center justify-center shrink-0 overflow-hidden font-black text-foreground shadow-xs">

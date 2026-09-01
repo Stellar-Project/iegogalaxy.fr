@@ -86,21 +86,21 @@ export function ScreenshotCarousel({ onSelect }: ScreenshotCarouselProps) {
   return (
     <section className="relative z-10 py-20 px-4 sm:px-6 overflow-hidden">
       <div className="max-w-5xl mx-auto space-y-10">
-        <div className="text-center space-y-2">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-semibold uppercase tracking-wider">
+        <div className="border-l-4 border-supernova pl-4 space-y-1">
+          <div className="flex items-center gap-1.5 text-supernova text-xs font-black uppercase tracking-wider">
             <ImageIcon size={13} />
             Galerie Visuelle
           </div>
           <h2 className="text-3xl sm:text-4xl font-extrabold text-foreground tracking-tight">
             Aperçu In-Game
           </h2>
-          <p className="text-sm text-muted-foreground max-w-xl mx-auto">
+          <p className="text-sm text-muted-foreground max-w-xl">
             Découvrez la traduction française en action directement sur les dialogues, menus et cinématiques.
           </p>
         </div>
 
         <div
-          className="relative w-full aspect-video md:aspect-video max-w-4xl mx-auto bg-card/70 backdrop-blur-md rounded-2xl overflow-hidden border border-border shadow-lg group"
+          className="relative w-full aspect-video md:aspect-video max-w-4xl mx-auto bg-background rounded-lg overflow-hidden border border-border group"
           onMouseEnter={() => setIsPaused(true)}
           onMouseLeave={() => setIsPaused(false)}
         >
@@ -114,7 +114,7 @@ export function ScreenshotCarousel({ onSelect }: ScreenshotCarouselProps) {
               animate="center"
               exit="exit"
               transition={{
-                x: { type: "spring", stiffness: 300, damping: 30 },
+                x: { duration: 0.4, ease: "easeInOut" },
                 opacity: { duration: 0.25 },
               }}
               drag="x"
@@ -141,7 +141,7 @@ export function ScreenshotCarousel({ onSelect }: ScreenshotCarouselProps) {
           <div className="absolute inset-0 pointer-events-none flex items-center justify-between px-3 sm:px-5 z-10">
             <button
               type="button"
-              className="pointer-events-auto bg-secondary/80 hover:bg-secondary text-foreground rounded-full p-2.5 sm:p-3 border border-border/80 backdrop-blur-md transition-all hover:scale-105 shadow-md cursor-pointer"
+              className="pointer-events-auto bg-secondary hover:bg-primary hover:text-primary-foreground text-foreground rounded-full p-2.5 sm:p-3 border border-border transition-colors cursor-pointer"
               onClick={() => paginate(-1)}
               aria-label="Image précédente"
             >
@@ -149,7 +149,7 @@ export function ScreenshotCarousel({ onSelect }: ScreenshotCarouselProps) {
             </button>
             <button
               type="button"
-              className="pointer-events-auto bg-secondary/80 hover:bg-secondary text-foreground rounded-full p-2.5 sm:p-3 border border-border/80 backdrop-blur-md transition-all hover:scale-105 shadow-md cursor-pointer"
+              className="pointer-events-auto bg-secondary hover:bg-primary hover:text-primary-foreground text-foreground rounded-full p-2.5 sm:p-3 border border-border transition-colors cursor-pointer"
               onClick={() => paginate(1)}
               aria-label="Image suivante"
             >
@@ -158,7 +158,7 @@ export function ScreenshotCarousel({ onSelect }: ScreenshotCarouselProps) {
           </div>
 
           <div className="absolute top-4 right-4 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity z-10">
-            <div className="bg-background/80 backdrop-blur-md border border-border px-3 py-1.5 rounded-full text-xs text-foreground font-medium flex items-center gap-1.5 shadow-sm">
+            <div className="bg-background border border-border px-3 py-1.5 rounded-full text-xs text-foreground font-medium flex items-center gap-1.5">
               <ZoomIn size={14} className="text-primary" /> Cliquer pour agrandir
             </div>
           </div>

@@ -92,7 +92,7 @@ export const Navbar = () => {
   return (
     <>
       <header className="w-full z-50 flex flex-col sticky top-0">
-        <div className="bg-card/90 backdrop-blur-md text-foreground border-b border-border/80">
+        <div className="bg-card text-foreground border-b border-border/80">
           <div className="max-w-7xl mx-auto h-9 sm:h-10 flex items-center justify-between px-4 sm:px-6 lg:px-8 text-xs sm:text-sm">
             <div className="shrink-0 flex items-center gap-2">
               <span className="text-primary font-mono font-black tracking-tight">STELLAR</span>
@@ -150,7 +150,7 @@ export const Navbar = () => {
           </div>
         </div>
 
-        <nav className="relative w-full border-b border-border/80 bg-background/95 backdrop-blur-md overflow-hidden">
+        <nav className="relative w-full border-b border-border/80 bg-background overflow-hidden">
           <div className="absolute inset-0 z-0 pointer-events-none">
             <div
               className="absolute inset-0 opacity-20"
@@ -216,7 +216,7 @@ export const Navbar = () => {
                   </SheetTrigger>
                   <SheetContent
                     side="right"
-                    className="bg-card/95 backdrop-blur-md border-l border-border text-foreground w-70 p-6"
+                    className="bg-card border-l border-border text-foreground w-70 p-6"
                   >
                     <SheetTitle className="text-base font-black text-foreground mb-6">
                       Navigation

@@ -63,9 +63,9 @@ function ToolItem({ tool, onEdit, onDelete }: ToolItemProps) {
     <Card
       ref={setNodeRef}
       style={style}
-      className={`bg-card/70 border-border backdrop-blur-md transition-colors shadow-xs ${
+      className={`bg-card border-border transition-colors ${
         isDragging
-          ? "opacity-60 ring-2 ring-primary shadow-xl z-20"
+          ? "opacity-60 ring-2 ring-primary"
           : "hover:border-primary/40"
       }`}
     >
@@ -315,7 +315,7 @@ export default function ToolList({
       </div>
 
       {editingId && (
-        <Card className="bg-card/90 border-border shadow-lg backdrop-blur-md">
+        <Card className="bg-card border-border">
           <CardHeader className="pb-3 border-b border-border">
             <CardTitle className="text-lg font-black text-foreground tracking-tight">
               {editingId === "new" ? "Ajouter un outil wiki" : "Modifier l'outil"}

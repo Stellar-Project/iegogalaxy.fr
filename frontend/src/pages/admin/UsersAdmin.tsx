@@ -159,7 +159,7 @@ export default function UsersAdmin() {
       </div>
 
       {editing && (
-        <Card className="bg-card/90 border-border shadow-lg backdrop-blur-md">
+        <Card className="bg-card border-border">
           <CardHeader className="pb-3 border-b border-border">
             <CardTitle className="text-lg font-black text-foreground tracking-tight">
               Modifier le compte utilisateur
@@ -242,7 +242,7 @@ export default function UsersAdmin() {
           const initial = (u.name?.trim() || u.email?.trim() || "?")[0].toUpperCase();
 
           return (
-            <Card key={u.id} className="bg-card/70 border-border hover:border-primary/40 transition-colors backdrop-blur-md shadow-xs">
+            <Card key={u.id} className="bg-card border-border hover:border-primary/40 transition-colors">
               <CardContent className="p-4">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                   <div className="flex items-center gap-3.5 min-w-0">

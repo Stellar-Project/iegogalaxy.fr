@@ -77,32 +77,28 @@ export function HeroSection() {
         className="text-center space-y-6 max-w-4xl relative z-20"
       >
         {latestPatch && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full border border-accent/40 bg-accent/15 backdrop-blur-md text-accent text-xs sm:text-sm font-black tracking-wide shadow-xs"
-          >
+          <div className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full border border-accent/40 bg-accent text-accent-foreground text-xs sm:text-sm font-black tracking-wide">
             <Sparkles size={14} />
             <span>Patch Version {latestPatch.version} Disponible</span>
-          </motion.div>
+          </div>
         )}
 
         <div className="space-y-2">
           <h1 className="text-4xl sm:text-6xl md:text-7xl font-black tracking-tighter leading-none drop-shadow-[0_4px_16px_rgba(0,0,0,0.9)]">
-            <span className="block text-accent drop-shadow-[0_0_25px_var(--color-accent)]">
+            <span className="block text-accent">
               INAZUMA ELEVEN
             </span>
-            <span className="block text-primary drop-shadow-[0_0_25px_var(--color-primary)] mt-1">
+            <span className="block text-primary mt-1">
               GO GALAXY
             </span>
           </h1>
 
           <div className="pt-2 text-xl sm:text-3xl md:text-4xl font-black tracking-tight">
-            <span className="text-bigbang drop-shadow-[0_0_15px_var(--color-bigbang)]">
+            <span className="text-bigbang">
               BIG BANG
             </span>
             <span className="text-muted-foreground mx-2.5 font-light">/</span>
-            <span className="text-supernova drop-shadow-[0_0_15px_var(--color-supernova)]">
+            <span className="text-supernova">
               SUPERNOVA
             </span>
             <span className="block text-base sm:text-xl md:text-2xl text-foreground/90 font-black mt-2 uppercase tracking-wide">
@@ -111,7 +107,7 @@ export function HeroSection() {
           </div>
         </div>
 
-        <p className="text-sm sm:text-base md:text-lg text-foreground/90 font-bold max-w-xl mx-auto leading-relaxed drop-shadow-sm">
+        <p className="text-sm sm:text-base md:text-lg text-foreground/90 font-bold max-w-xl mx-auto leading-relaxed">
           L'aventure ultime traduite par la team{" "}
           <strong className="text-primary font-black">Stellar Project</strong>.
           <br className="hidden sm:inline" />
@@ -124,7 +120,7 @@ export function HeroSection() {
           <Button
             asChild
             size="lg"
-            className="w-full sm:w-auto h-12 sm:h-13 px-8 text-sm sm:text-base font-black rounded-xl bg-primary text-primary-foreground hover:bg-primary/90 shadow-[0_0_25px_var(--color-primary)] transition-all hover:scale-105 cursor-pointer"
+            className="w-full sm:w-auto h-12 sm:h-13 px-8 text-sm sm:text-base font-black rounded-xl bg-primary text-primary-foreground hover:bg-primary/90 transition-colors cursor-pointer"
           >
             <Link to="/telechargement">
               <Download className="mr-2 h-5 w-5" /> Télécharger le Patch
@@ -135,7 +131,7 @@ export function HeroSection() {
             asChild
             size="lg"
             variant="outline"
-            className="w-full sm:w-auto h-12 sm:h-13 px-8 text-sm sm:text-base font-black rounded-xl border-border bg-card/70 hover:bg-secondary text-foreground backdrop-blur-md transition-all hover:scale-105 cursor-pointer shadow-xs"
+            className="w-full sm:w-auto h-12 sm:h-13 px-8 text-sm sm:text-base font-black rounded-xl border-border bg-card hover:bg-secondary text-foreground transition-colors cursor-pointer"
           >
             <Link to="/tutoriel">
               <Info className="mr-2 h-5 w-5 text-accent" /> Guide d'installation

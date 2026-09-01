@@ -23,7 +23,6 @@ import {
   Gamepad2,
   ExternalLink,
 } from "lucide-react";
-import { motion } from "framer-motion";
 import { toast } from "sonner";
 
 export default function Dashboard() {
@@ -167,7 +166,7 @@ export default function Dashboard() {
 
   return (
     <div className="space-y-6">
-      <div className="relative overflow-hidden rounded-2xl bg-card/80 border border-border p-6 backdrop-blur-md shadow-xs">
+      <div className="relative overflow-hidden rounded-lg bg-card border border-border p-6">
         <div className="absolute top-0 right-0 w-64 h-64 opacity-5 pointer-events-none">
           <img src="/assets/global/bg/mainVisual_02.png" alt="" className="w-full h-full object-cover" />
         </div>
@@ -177,12 +176,12 @@ export default function Dashboard() {
             <p className="text-muted-foreground text-sm mt-1 font-medium">Vue d'ensemble et contrôle de Stellar Project</p>
           </div>
           <div className="flex items-center gap-3">
-            <div className="flex items-center gap-2 bg-secondary/50 border border-border px-3 py-1.5 rounded-xl text-xs font-black">
-              <span className="h-2 w-2 rounded-full bg-accent animate-pulse shadow-[0_0_8px_var(--color-accent)]" />
+            <div className="flex items-center gap-2 bg-secondary/50 border border-border px-3 py-1.5 rounded-lg text-xs font-black">
+              <span className="h-2 w-2 rounded-full bg-accent" />
               <span className="text-foreground">API opérationnelle</span>
               {apiLatency !== null && <span className="text-muted-foreground font-mono">({apiLatency} ms)</span>}
             </div>
-            <Button size="sm" variant="outline" asChild className="border-border hover:bg-secondary text-foreground font-black cursor-pointer shadow-xs">
+            <Button size="sm" variant="outline" asChild className="border-border hover:bg-secondary text-foreground font-black cursor-pointer">
               <Link to="/" target="_blank">
                 <ExternalLink size={14} className="mr-1.5" /> Voir le site
               </Link>
@@ -192,22 +191,22 @@ export default function Dashboard() {
       </div>
 
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        <Button asChild variant="outline" className="justify-start h-11 bg-card/70 hover:bg-secondary border-border font-black cursor-pointer shadow-xs">
+        <Button asChild variant="outline" className="justify-start h-11 bg-card hover:bg-secondary border-border font-black cursor-pointer">
           <Link to="/admin/blog">
             <PlusCircle size={16} className="text-primary mr-2 shrink-0" /> Nouvel article
           </Link>
         </Button>
-        <Button asChild variant="outline" className="justify-start h-11 bg-card/70 hover:bg-secondary border-border font-black cursor-pointer shadow-xs">
+        <Button asChild variant="outline" className="justify-start h-11 bg-card hover:bg-secondary border-border font-black cursor-pointer">
           <Link to="/admin/patches">
             <PlusCircle size={16} className="text-accent mr-2 shrink-0" /> Nouveau patch
           </Link>
         </Button>
-        <Button asChild variant="outline" className="justify-start h-11 bg-card/70 hover:bg-secondary border-border font-black cursor-pointer shadow-xs">
+        <Button asChild variant="outline" className="justify-start h-11 bg-card hover:bg-secondary border-border font-black cursor-pointer">
           <Link to="/admin/jeux">
             <PlusCircle size={16} className="text-primary mr-2 shrink-0" /> Nouveau jeu/mod
           </Link>
         </Button>
-        <Button asChild variant="outline" className="justify-start h-11 bg-card/70 hover:bg-secondary border-border font-black cursor-pointer shadow-xs">
+        <Button asChild variant="outline" className="justify-start h-11 bg-card hover:bg-secondary border-border font-black cursor-pointer">
           <Link to="/admin/wiki">
             <PlusCircle size={16} className="text-accent mr-2 shrink-0" /> Outil wiki
           </Link>
@@ -215,28 +214,26 @@ export default function Dashboard() {
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-        {items.map((item, i) => (
-          <motion.div key={item.label} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.04 }}>
-            <Link to={item.link} className="block group cursor-pointer h-full">
-              <Card className="hover:border-primary/50 bg-card/70 backdrop-blur-md transition-all h-full shadow-xs">
-                <CardHeader className="flex flex-row items-center justify-between pb-2">
-                  <CardTitle className="text-xs font-black uppercase tracking-wider text-muted-foreground">{item.label}</CardTitle>
-                  <div className="p-1.5 rounded-lg bg-secondary text-foreground group-hover:text-primary transition-colors">
-                    <item.icon size={16} />
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-2xl font-black text-foreground group-hover:text-primary transition-colors font-mono">{item.value}</p>
-                </CardContent>
-              </Card>
-            </Link>
-          </motion.div>
+        {items.map((item) => (
+          <Link key={item.label} to={item.link} className="block group cursor-pointer h-full">
+            <Card className="hover:border-primary/50 bg-card border-border transition-colors h-full">
+              <CardHeader className="flex flex-row items-center justify-between pb-2">
+                <CardTitle className="text-xs font-black uppercase tracking-wider text-muted-foreground">{item.label}</CardTitle>
+                <div className="p-1.5 rounded-lg bg-secondary text-foreground group-hover:text-primary transition-colors">
+                  <item.icon size={16} />
+                </div>
+              </CardHeader>
+              <CardContent>
+                <p className="text-2xl font-black text-foreground group-hover:text-primary transition-colors font-mono">{item.value}</p>
+              </CardContent>
+            </Card>
+          </Link>
         ))}
       </div>
 
       {analytics && (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-          <Card className="bg-card/70 backdrop-blur-md shadow-xs">
+          <Card className="bg-card">
             <CardHeader className="flex flex-row items-center gap-3 pb-2">
               <div className="p-2 rounded-lg bg-secondary text-primary"><Eye size={18} /></div>
               <CardTitle className="text-xs text-muted-foreground font-black uppercase tracking-wider">Vues aujourd'hui</CardTitle>
@@ -245,7 +242,7 @@ export default function Dashboard() {
               <p className="text-2xl font-black text-foreground font-mono">{analytics.todayViews}</p>
             </CardContent>
           </Card>
-          <Card className="bg-card/70 backdrop-blur-md shadow-xs">
+          <Card className="bg-card">
             <CardHeader className="flex flex-row items-center gap-3 pb-2">
               <div className="p-2 rounded-lg bg-secondary text-accent"><TrendingUp size={18} /></div>
               <CardTitle className="text-xs text-muted-foreground font-black uppercase tracking-wider">Vues totales</CardTitle>
@@ -254,7 +251,7 @@ export default function Dashboard() {
               <p className="text-2xl font-black text-foreground font-mono">{analytics.totalViews}</p>
             </CardContent>
           </Card>
-          <Card className="bg-card/70 backdrop-blur-md shadow-xs">
+          <Card className="bg-card">
             <CardHeader className="flex flex-row items-center gap-3 pb-2">
               <div className="p-2 rounded-lg bg-secondary text-primary"><Users size={18} /></div>
               <CardTitle className="text-xs text-muted-foreground font-black uppercase tracking-wider">Visiteurs uniques</CardTitle>
@@ -263,7 +260,7 @@ export default function Dashboard() {
               <p className="text-2xl font-black text-foreground font-mono">{analytics.uniqueVisitors}</p>
             </CardContent>
           </Card>
-          <Card className="bg-card/70 backdrop-blur-md shadow-xs">
+          <Card className="bg-card">
             <CardHeader className="flex flex-row items-center gap-3 pb-2">
               <div className="p-2 rounded-lg bg-secondary text-accent"><DownloadCloud size={18} /></div>
               <CardTitle className="text-xs text-muted-foreground font-black uppercase tracking-wider">Téléchargements</CardTitle>
@@ -272,7 +269,7 @@ export default function Dashboard() {
               <p className="text-2xl font-black text-foreground font-mono">{analytics.totalDownloads}</p>
             </CardContent>
           </Card>
-          <Card className="bg-card/70 backdrop-blur-md shadow-xs">
+          <Card className="bg-card">
             <CardHeader className="flex flex-row items-center gap-3 pb-2">
               <div className="p-2 rounded-lg bg-secondary text-foreground"><Percent size={18} /></div>
               <CardTitle className="text-xs text-muted-foreground font-black uppercase tracking-wider">Conversion DL</CardTitle>
@@ -289,14 +286,14 @@ export default function Dashboard() {
           <h3 className="text-lg font-black text-foreground flex items-center gap-2 tracking-tight">
             <Activity size={18} className="text-primary" /> Évolution de l'activité
           </h3>
-          <div className="flex items-center bg-card/70 border border-border rounded-xl p-0.5 text-xs font-black shadow-xs">
+          <div className="flex items-center bg-card border border-border rounded-lg p-0.5 text-xs font-black">
             {([7, 14, 30] as const).map((d) => (
               <button
                 key={d}
                 type="button"
                 onClick={() => setPeriod(d)}
                 className={`px-3 py-1 rounded-lg transition-colors cursor-pointer ${
-                  period === d ? "bg-primary text-primary-foreground font-black shadow-xs" : "text-muted-foreground hover:text-foreground font-bold"
+                  period === d ? "bg-primary text-primary-foreground font-black" : "text-muted-foreground hover:text-foreground font-bold"
                 }`}
               >
                 {d}j
@@ -307,7 +304,7 @@ export default function Dashboard() {
 
         <div className="grid md:grid-cols-2 gap-4">
           {analytics && filteredViewsByDay.length > 0 && (
-            <Card className="bg-card/70 backdrop-blur-md shadow-xs">
+            <Card className="bg-card">
               <CardHeader className="pb-3">
                 <CardTitle className="text-base text-foreground font-black tracking-tight flex items-center gap-2">
                   <BarChart3 size={16} className="text-primary" /> Vues ({period} derniers jours)
@@ -320,7 +317,7 @@ export default function Dashboard() {
           )}
 
           {analytics && filteredDownloadsByDay.length > 0 && (
-            <Card className="bg-card/70 backdrop-blur-md shadow-xs">
+            <Card className="bg-card">
               <CardHeader className="pb-3">
                 <CardTitle className="text-base text-foreground font-black tracking-tight flex items-center gap-2">
                   <DownloadCloud size={16} className="text-accent" /> Téléchargements ({period} derniers jours)
@@ -336,7 +333,7 @@ export default function Dashboard() {
 
       <div className="grid md:grid-cols-2 gap-4">
         {analytics && analytics.viewsByPage.length > 0 && (
-          <Card className="bg-card/70 backdrop-blur-md shadow-xs">
+          <Card className="bg-card">
             <CardHeader>
               <CardTitle className="text-base text-foreground font-black tracking-tight flex items-center gap-2">
                 <ArrowUpRight size={16} className="text-primary" /> Pages les plus vues
@@ -356,7 +353,7 @@ export default function Dashboard() {
         )}
 
         {analytics && analytics.downloadsByFile.length > 0 && (
-          <Card className="bg-card/70 backdrop-blur-md shadow-xs">
+          <Card className="bg-card">
             <CardHeader>
               <CardTitle className="text-base text-foreground font-black tracking-tight flex items-center gap-2">
                 <Download size={16} className="text-accent" /> Fichiers les plus téléchargés
@@ -377,7 +374,7 @@ export default function Dashboard() {
       </div>
 
       {analytics && analytics.topReferrers.length > 0 && (
-        <Card className="bg-card/70 backdrop-blur-md shadow-xs">
+        <Card className="bg-card">
           <CardHeader>
             <CardTitle className="text-base text-foreground font-black tracking-tight flex items-center gap-2">
               <Globe size={16} className="text-primary" /> Provenance du trafic (référents)
@@ -397,37 +394,37 @@ export default function Dashboard() {
       )}
 
       <div className="grid md:grid-cols-3 gap-4">
-        <Card className="bg-card/70 backdrop-blur-md shadow-xs">
+        <Card className="bg-card">
           <CardContent className="p-4 flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="p-2 rounded-lg bg-secondary text-foreground"><Database size={18} /></div>
               <span className="text-sm font-bold text-foreground">Sauvegarde globale (JSON)</span>
             </div>
-            <Button size="sm" onClick={doExport} disabled={exporting} className="font-black cursor-pointer shadow-xs">
+            <Button size="sm" onClick={doExport} disabled={exporting} className="font-black cursor-pointer">
               {exporting ? "Export..." : "Exporter"}
             </Button>
           </CardContent>
         </Card>
 
-        <Card className="bg-card/70 backdrop-blur-md shadow-xs">
+        <Card className="bg-card">
           <CardContent className="p-4 flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="p-2 rounded-lg bg-secondary text-foreground"><Database size={18} /></div>
               <span className="text-sm font-bold text-foreground">Rapport complet (CSV)</span>
             </div>
-            <Button size="sm" variant="secondary" onClick={exportCSV} disabled={csvExporting || !analytics} className="font-black cursor-pointer shadow-xs">
+            <Button size="sm" variant="secondary" onClick={exportCSV} disabled={csvExporting || !analytics} className="font-black cursor-pointer">
               {csvExporting ? "Export..." : "CSV"}
             </Button>
           </CardContent>
         </Card>
 
-        <Card className="border-destructive/30 bg-card/70 backdrop-blur-md shadow-xs">
+        <Card className="border-destructive/30 bg-card">
           <CardContent className="p-4 flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="p-2 rounded-lg bg-destructive/10 text-destructive"><Database size={18} /></div>
               <span className="text-sm font-bold text-foreground">Purger les statistiques</span>
             </div>
-            <Button size="sm" variant="destructive" onClick={handleResetAnalytics} className="font-black cursor-pointer shadow-xs">
+            <Button size="sm" variant="destructive" onClick={handleResetAnalytics} className="font-black cursor-pointer">
               Reset
             </Button>
           </CardContent>
@@ -446,7 +443,7 @@ function BarChart({
   max: number;
   variant: "primary" | "accent";
 }) {
-  const barColor = variant === "primary" ? "bg-primary shadow-[0_0_8px_var(--color-primary)]" : "bg-accent shadow-[0_0_8px_var(--color-accent)]";
+  const barColor = variant === "primary" ? "bg-primary" : "bg-accent";
 
   return (
     <div className="space-y-1.5 max-h-65 overflow-y-auto pr-1">

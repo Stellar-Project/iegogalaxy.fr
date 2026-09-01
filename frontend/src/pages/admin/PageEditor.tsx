@@ -235,7 +235,7 @@ export default function PageEditor({ tools, pages, onRefreshPages }: PageEditorP
       </div>
 
       {editingPageId && (
-        <Card className="bg-card/90 border-border shadow-lg backdrop-blur-md">
+        <Card className="bg-card border-border">
           <CardHeader className="flex flex-row items-center justify-between pb-3 border-b border-border">
             <CardTitle className="text-lg font-black text-foreground tracking-tight">
               {mode === "create" ? "Nouvelle page wiki" : "Modifier la page"}
@@ -340,7 +340,7 @@ export default function PageEditor({ tools, pages, onRefreshPages }: PageEditorP
           </div>
         ) : (
           toolPages.map((p, idx) => (
-            <Card key={p.id} className="bg-card/70 border-border hover:border-primary/40 transition-colors backdrop-blur-md shadow-xs">
+            <Card key={p.id} className="bg-card border-border hover:border-primary/40 transition-colors">
               <CardContent className="p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 mb-1">

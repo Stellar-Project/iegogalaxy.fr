@@ -161,7 +161,7 @@ export default function CreditsAdmin() {
       </div>
 
       {editing && (
-        <Card className="bg-card/90 border-border shadow-lg backdrop-blur-md">
+        <Card className="bg-card border-border">
           <CardContent className="p-6 space-y-4">
             <h3 className="text-lg font-black text-foreground tracking-tight">
               {editing === "new" ? "Ajouter un crédit" : "Modifier le crédit"}
@@ -260,7 +260,7 @@ export default function CreditsAdmin() {
               ) : (
                 <div className="space-y-2">
                   {items.map((c, idx) => (
-                    <Card key={c.id} className="bg-card/70 border-border hover:border-border/80 transition-colors backdrop-blur-md shadow-xs">
+                    <Card key={c.id} className="bg-card border-border hover:border-border/80 transition-colors">
                       <CardContent className="p-3.5 flex items-center justify-between gap-3">
                         <div className="flex items-center gap-3 min-w-0">
                           <div className="flex flex-col gap-0.5">

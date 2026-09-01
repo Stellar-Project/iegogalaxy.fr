@@ -2,7 +2,6 @@ import { useEffect, useMemo, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { api } from "@/api/client";
 import type { WikiPage } from "@/api/types";
-import { motion } from "framer-motion";
 import { ChevronRight, Clock, ArrowLeft, Wrench, BookOpen } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import Loading from "@/components/Loading";
@@ -125,12 +124,7 @@ export default function WikiPageView() {
 
   return (
     <div className="relative min-h-screen text-foreground bg-background px-4 sm:px-6 py-16 sm:py-24">
-      <div className="fixed inset-0 z-0 pointer-events-none">
-        <div className="absolute inset-0 bg-linear-to-b from-background via-background/95 to-background" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,var(--color-primary)/0.03,transparent_70%)]" />
-      </div>
-
-      <div className="relative z-10 max-w-6xl mx-auto space-y-8">
+            <div className="relative z-10 max-w-6xl mx-auto space-y-8">
         <nav className="flex items-center gap-2 text-xs sm:text-sm text-muted-foreground flex-wrap">
           <Link to="/" className="hover:text-primary transition-colors cursor-pointer">
             Accueil
@@ -147,11 +141,7 @@ export default function WikiPageView() {
 
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_240px] gap-10 lg:gap-12">
           <article className="min-w-0 space-y-8">
-            <motion.div
-              initial={{ opacity: 0, y: -15 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4 }}
-              className="space-y-3 border-b border-border pb-6"
+            <div className="space-y-3 border-b border-border pb-6"
             >
               <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-foreground tracking-tight">
                 {page.title}
@@ -170,21 +160,17 @@ export default function WikiPageView() {
                   <Clock size={13} /> {mins} min de lecture
                 </span>
               </div>
-            </motion.div>
+            </div>
 
-            <motion.div
-              initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1, duration: 0.4 }}
-              className="wiki-content prose prose-invert max-w-none
+            <div className="wiki-content prose prose-invert max-w-none
                 [&_h2]:text-accent [&_h2]:text-2xl [&_h2]:font-black [&_h2]:tracking-tight [&_h2]:mt-10 [&_h2]:mb-4 [&_h2]:scroll-mt-28 [&_h2]:border-b [&_h2]:border-border/60 [&_h2]:pb-2
                 [&_h3]:text-foreground [&_h3]:text-xl [&_h3]:font-black [&_h3]:tracking-tight [&_h3]:mt-8 [&_h3]:mb-3 [&_h3]:scroll-mt-28
                 [&_p]:text-muted-foreground [&_p]:text-sm [&_p]:sm:text-base [&_p]:leading-relaxed [&_p]:my-4
                 [&_a]:text-primary [&_a]:underline [&_a]:underline-offset-2 hover:[&_a]:text-primary/80
                 [&_code]:bg-secondary [&_code]:text-foreground [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:rounded-md [&_code]:text-xs [&_code]:font-mono [&_code]:border [&_code]:border-border
-                [&_pre]:bg-card [&_pre]:border [&_pre]:border-border [&_pre]:rounded-2xl [&_pre]:p-4 [&_pre]:overflow-x-auto [&_pre]:text-xs [&_pre]:font-mono
+                [&_pre]:bg-card [&_pre]:border [&_pre]:border-border [&_pre]:rounded-lg [&_pre]:p-4 [&_pre]:overflow-x-auto [&_pre]:text-xs [&_pre]:font-mono
                 [&_pre_code]:bg-transparent [&_pre_code]:p-0 [&_pre_code]:border-0
-                [&_img]:rounded-xl [&_img]:max-w-full [&_img]:mx-auto [&_img]:my-6 [&_img]:border [&_img]:border-border [&_img]:shadow-md
+                [&_img]:rounded-lg [&_img]:max-w-full [&_img]:mx-auto [&_img]:my-6 [&_img]:border [&_img]:border-border
                 [&_blockquote]:border-l-4 [&_blockquote]:border-accent [&_blockquote]:bg-secondary/30 [&_blockquote]:py-2.5 [&_blockquote]:pl-4 [&_blockquote]:pr-3 [&_blockquote]:rounded-r-xl [&_blockquote]:text-muted-foreground [&_blockquote]:italic
                 [&_table]:w-full [&_table]:border-collapse [&_table]:my-6 [&_table]:text-xs [&_table]:sm:text-sm
                 [&_th]:text-left [&_th]:text-accent [&_th]:border-b [&_th]:border-border [&_th]:p-3 [&_th]:bg-secondary/50 [&_th]:font-black
@@ -204,7 +190,7 @@ export default function WikiPageView() {
                 <Badge
                   variant="outline"
                   asChild
-                  className="bg-card/70 border-border hover:border-primary/40 text-foreground px-3 py-1 text-xs gap-1.5 cursor-pointer shadow-xs transition-colors font-black"
+                  className="bg-card border-border hover:border-primary/40 text-foreground px-3 py-1 text-xs gap-1.5 cursor-pointer transition-colors font-black"
                 >
                   <Link to="/wiki">
                     <Wrench size={12} className="text-accent" />
@@ -217,7 +203,7 @@ export default function WikiPageView() {
 
           {tocList.length > 0 && (
             <aside className="hidden lg:block">
-              <div className="sticky top-24 bg-card/70 backdrop-blur-md border border-border rounded-2xl p-4 space-y-3 shadow-xs">
+              <div className="sticky top-24 bg-card border border-border rounded-lg p-4 space-y-3">
                 <h4 className="text-xs font-black uppercase tracking-wider text-muted-foreground">
                   Sur cette page
                 </h4>

@@ -22,13 +22,13 @@ export default function ScreenshotsAdmin() {
       update={(id, data) => api.updateScreenshot(id, data)}
       remove={(id) => api.deleteScreenshot(id)}
       renderItem={(s, ctx) => (
-        <Card key={s.id} className="bg-card/70 border-border overflow-hidden group hover:border-primary/40 transition-colors backdrop-blur-md shadow-xs">
+        <Card key={s.id} className="bg-card border-border overflow-hidden group hover:border-primary/40 transition-colors">
           <div className="aspect-video bg-secondary/40 relative overflow-hidden flex items-center justify-center">
             {s.imageUrl ? (
               <img
                 src={s.imageUrl}
                 alt="Capture de jeu"
-                className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                className="w-full h-full object-cover"
               />
             ) : (
               <div className="flex items-center justify-center text-muted-foreground">
@@ -38,7 +38,7 @@ export default function ScreenshotsAdmin() {
 
             <Badge
               variant="outline"
-              className="absolute top-2.5 left-2.5 bg-background/80 backdrop-blur-xs border-border text-foreground font-mono font-black text-[11px] shadow-xs"
+              className="absolute top-2.5 left-2.5 bg-background/80 border-border text-foreground font-mono font-black text-[11px]"
             >
               #{s.sortOrder + 1}
             </Badge>
@@ -49,7 +49,7 @@ export default function ScreenshotsAdmin() {
                   size="icon"
                   variant="ghost"
                   asChild
-                  className="h-8 w-8 bg-background/80 backdrop-blur-xs text-foreground hover:bg-background cursor-pointer shadow-xs"
+                  className="h-8 w-8 bg-background/80 text-foreground hover:bg-background cursor-pointer"
                 >
                   <a href={s.imageUrl} target="_blank" rel="noopener noreferrer" title="Voir l'image originale">
                     <ExternalLink size={14} />
@@ -59,7 +59,7 @@ export default function ScreenshotsAdmin() {
               <Button
                 size="icon"
                 variant="ghost"
-                className="h-8 w-8 bg-background/80 backdrop-blur-xs text-foreground hover:bg-background cursor-pointer shadow-xs"
+                className="h-8 w-8 bg-background/80 text-foreground hover:bg-background cursor-pointer"
                 onClick={() => ctx.edit(s)}
                 title="Modifier"
               >
@@ -68,7 +68,7 @@ export default function ScreenshotsAdmin() {
               <Button
                 size="icon"
                 variant="ghost"
-                className="h-8 w-8 bg-background/80 backdrop-blur-xs text-destructive hover:bg-destructive/10 cursor-pointer shadow-xs"
+                className="h-8 w-8 bg-background/80 text-destructive hover:bg-destructive/10 cursor-pointer"
                 onClick={() => {
                   if (window.confirm("Êtes-vous sûr de vouloir supprimer cette capture d'écran ?")) {
                     ctx.remove(s.id);

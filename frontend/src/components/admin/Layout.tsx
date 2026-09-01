@@ -58,7 +58,7 @@ export default function AdminLayout() {
     <div className="min-h-screen bg-background text-foreground flex">
       {mobileOpen && (
         <div
-          className="fixed inset-0 z-40 bg-background/80 backdrop-blur-xs lg:hidden"
+          className="fixed inset-0 z-40 bg-background/80 lg:hidden"
           onClick={() => setMobileOpen(false)}
           aria-hidden="true"
         />
@@ -129,7 +129,7 @@ export default function AdminLayout() {
           {!collapsed && (
             <div className="flex items-center justify-between gap-2 mb-2 px-1">
               <div className="flex items-center gap-2 min-w-0">
-                <div className="w-2 h-2 rounded-full bg-accent shrink-0 animate-pulse" />
+                <div className="w-2 h-2 rounded-full bg-accent shrink-0" />
                 <span className="text-xs font-black text-foreground truncate">{user?.name || "Administrateur"}</span>
               </div>
             </div>
@@ -164,7 +164,7 @@ export default function AdminLayout() {
       </aside>
 
       <div className="flex-1 flex flex-col min-h-screen min-w-0">
-        <header className="sticky top-0 z-30 bg-background/80 backdrop-blur-md border-b border-border px-4 sm:px-6 h-14 flex items-center justify-between gap-4">
+        <header className="sticky top-0 z-30 bg-background border-b border-border px-4 sm:px-6 h-14 flex items-center justify-between gap-4">
           <div className="flex items-center gap-3 min-w-0">
             <Button
               variant="ghost"

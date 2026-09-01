@@ -1,4 +1,3 @@
-import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { useMeta } from "@/lib/useMeta";
 import {
@@ -59,19 +58,9 @@ export default function Tutorial() {
   });
 
   return (
-    <div className="relative min-h-screen flex flex-col items-center text-foreground bg-background overflow-hidden px-4 py-16 sm:py-24">
-      <div className="absolute inset-0 z-0 select-none pointer-events-none">
-        <div className="absolute inset-0 bg-linear-to-b from-background via-background/95 to-background" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,var(--color-primary)/0.03,transparent_70%)]" />
-      </div>
-
+    <div className="relative min-h-screen flex flex-col items-center text-foreground bg-background px-4 py-16 sm:py-24">
       <div className="relative z-10 max-w-4xl mx-auto space-y-16 w-full">
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="text-center space-y-4"
-        >
+        <div className="text-center space-y-4">
           <div className="flex items-center justify-center gap-2 text-muted-foreground text-xs sm:text-sm">
             <Button
               variant="link"
@@ -92,7 +81,7 @@ export default function Tutorial() {
             français sur console Nintendo 3DS (Luma3DS) ou sur émulateurs
             (Citra, Azahar).
           </p>
-        </motion.div>
+        </div>
 
         <div className="flex justify-center items-center gap-3 sm:gap-8 text-xs font-black">
           {[
@@ -126,23 +115,17 @@ export default function Tutorial() {
           ))}
         </div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.15, duration: 0.5 }}
-        >
-          <Alert className="bg-primary/10 border-primary/30 text-foreground">
-            <Info className="h-4 w-4 text-primary shrink-0" />
-            <AlertTitle className="text-primary font-black mb-1">
-              À propos du patch français
-            </AlertTitle>
-            <AlertDescription className="text-muted-foreground leading-relaxed text-xs sm:text-sm font-medium">
-              Ce patch traduit les dialogues, l'histoire principale, les noms de
-              techniques, les talents et les interfaces pour vous offrir une
-              immersion complète en français.
-            </AlertDescription>
-          </Alert>
-        </motion.div>
+        <Alert className="bg-primary/10 border-primary/30 text-foreground">
+          <Info className="h-4 w-4 text-primary shrink-0" />
+          <AlertTitle className="text-primary font-black mb-1">
+            À propos du patch français
+          </AlertTitle>
+          <AlertDescription className="text-muted-foreground leading-relaxed text-xs sm:text-sm font-medium">
+            Ce patch traduit les dialogues, l'histoire principale, les noms de
+            techniques, les talents et les interfaces pour vous offrir une
+            immersion complète en français.
+          </AlertDescription>
+        </Alert>
 
         <div className="space-y-6">
           <div className="flex items-center gap-3">
@@ -173,7 +156,7 @@ export default function Tutorial() {
           </Alert>
 
           <div className="grid md:grid-cols-2 gap-6">
-            <Card className="bg-card/70 border-border backdrop-blur-md flex flex-col shadow-xs">
+            <Card className="bg-card border-border flex flex-col">
               <CardHeader className="pb-3">
                 <CardTitle className="flex items-center gap-2.5 text-base sm:text-lg text-accent font-black tracking-tight">
                   <Gamepad2 className="h-5 w-5" />
@@ -219,7 +202,7 @@ export default function Tutorial() {
               </CardContent>
             </Card>
 
-            <Card className="bg-card/70 border-border backdrop-blur-md flex flex-col shadow-xs">
+            <Card className="bg-card border-border flex flex-col">
               <CardHeader className="pb-3">
                 <CardTitle className="flex items-center gap-2.5 text-base sm:text-lg text-primary font-black tracking-tight">
                   <MonitorPlay className="h-5 w-5" />
@@ -306,7 +289,7 @@ export default function Tutorial() {
           </Alert>
 
           <div className="grid md:grid-cols-2 gap-6">
-            <Card className="bg-card/70 border-border backdrop-blur-md shadow-xs">
+            <Card className="bg-card border-border">
               <CardHeader className="pb-3">
                 <CardTitle className="flex items-center gap-2 text-base sm:text-lg text-foreground font-black tracking-tight">
                   <HardDrive className="text-accent h-5 w-5" />
@@ -344,7 +327,7 @@ export default function Tutorial() {
               </CardContent>
             </Card>
 
-            <Card className="bg-card/70 border-border backdrop-blur-md shadow-xs">
+            <Card className="bg-card border-border">
               <CardHeader className="pb-3">
                 <CardTitle className="flex items-center gap-2 text-base sm:text-lg text-foreground font-black tracking-tight">
                   <MonitorPlay className="text-primary h-5 w-5" />
@@ -404,7 +387,7 @@ export default function Tutorial() {
           >
             <AccordionItem
               value="console-3ds"
-              className="border border-border bg-card/70 rounded-2xl px-4 sm:px-6 shadow-xs overflow-hidden"
+              className="border border-border bg-card px-4 sm:px-6 overflow-hidden"
             >
               <AccordionTrigger className="hover:text-accent text-foreground py-4 cursor-pointer">
                 <div className="flex items-center gap-3">
@@ -528,7 +511,7 @@ export default function Tutorial() {
 
             <AccordionItem
               value="emulator"
-              className="border border-border bg-card/70 rounded-2xl px-4 sm:px-6 shadow-xs overflow-hidden"
+              className="border border-border bg-card px-4 sm:px-6 overflow-hidden"
             >
               <AccordionTrigger className="hover:text-primary text-foreground py-4 cursor-pointer">
                 <div className="flex items-center gap-3">

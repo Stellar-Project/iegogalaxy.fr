@@ -30,7 +30,7 @@ export default function TimelineAdmin() {
       update={(id, data) => api.updateTimelineEvent(id, data)}
       remove={(id) => api.deleteTimelineEvent(id)}
       renderItem={(e, ctx) => (
-        <Card key={e.id} className="bg-card/70 border-border hover:border-primary/40 transition-colors backdrop-blur-md shadow-xs">
+        <Card key={e.id} className="bg-card border-border hover:border-primary/40 transition-colors">
           <CardContent className="p-4 flex flex-col sm:flex-row sm:items-start justify-between gap-4">
             <div className="flex items-start gap-3.5 min-w-0">
               <div className="p-2 rounded-xl bg-secondary text-accent border border-border shrink-0 mt-0.5 shadow-xs">

@@ -49,18 +49,8 @@ export default function Faq() {
 
   return (
     <div className="relative min-h-screen text-foreground bg-background px-4 py-16 sm:py-24">
-      <div className="fixed inset-0 z-0 pointer-events-none">
-        <div className="absolute inset-0 bg-linear-to-b from-background via-background/95 to-background" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,var(--color-primary)/0.03,transparent_70%)]" />
-      </div>
-
       <div className="relative z-10 max-w-3xl mx-auto space-y-8 sm:space-y-10">
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="text-center space-y-4"
-        >
+        <div className="space-y-4">
           <nav className="flex items-center justify-center gap-2 text-xs sm:text-sm text-muted-foreground mb-4">
             <Link to="/" className="hover:text-primary transition-colors cursor-pointer">
               Accueil
@@ -69,13 +59,13 @@ export default function Faq() {
             <span className="text-primary font-black">FAQ</span>
           </nav>
 
-          <h1 className="text-4xl sm:text-5xl font-black text-foreground tracking-tight">
+          <h1 className="text-4xl sm:text-5xl font-black text-foreground tracking-tight text-center">
             Foire Aux <span className="text-accent">Questions</span>
           </h1>
-          <p className="text-muted-foreground text-sm sm:text-base max-w-xl mx-auto leading-relaxed">
+          <p className="text-muted-foreground text-sm sm:text-base max-w-xl mx-auto text-center leading-relaxed">
             Trouvez rapidement des réponses aux interrogations les plus fréquentes concernant l'installation, les compatibilités et l'avancement du patch.
           </p>
-        </motion.div>
+        </div>
 
         {categories.length > 0 && (
           <CategoryFilter
@@ -95,7 +85,7 @@ export default function Faq() {
               return (
                 <div
                   key={item.id}
-                  className="border border-border bg-card/70 backdrop-blur-md rounded-2xl overflow-hidden transition-all shadow-xs"
+                  className="border border-border bg-card rounded-lg overflow-hidden"
                 >
                   <button
                     type="button"

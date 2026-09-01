@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
 import { Calendar } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { GameCard } from "@/components/GameCard";
@@ -59,40 +58,20 @@ export default function Download() {
 
   return (
     <div className="relative min-h-screen flex flex-col items-center justify-center text-foreground bg-background overflow-hidden px-4 py-16 sm:py-24">
-      <div className="absolute inset-0 z-0 select-none pointer-events-none">
-        <div className="absolute inset-0 bg-linear-to-b from-background via-background/95 to-background" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,var(--color-primary)/0.03,transparent_70%)]" />
-      </div>
-
       <div className="relative z-10 max-w-6xl mx-auto space-y-16 sm:space-y-20 w-full">
         <div className="space-y-10 sm:space-y-12">
           <div className="text-center space-y-4 sm:space-y-6">
-            <motion.h1
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7 }}
-              className="text-4xl sm:text-6xl md:text-7xl font-black text-foreground tracking-tight"
-            >
+            <h1 className="text-4xl sm:text-6xl md:text-7xl font-black text-foreground tracking-tight">
               Télécharge le <span className="text-accent">Jeu</span>
-            </motion.h1>
+            </h1>
 
-            <motion.p
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2, duration: 0.5 }}
-              className="text-muted-foreground text-base sm:text-lg md:text-xl max-w-2xl mx-auto leading-relaxed"
-            >
+            <p className="text-muted-foreground text-base sm:text-lg md:text-xl max-w-2xl mx-auto leading-relaxed">
               Redécouvrez Inazuma Eleven GO Galaxy en français intégral. Choisissez votre version :{" "}
               <span className="text-supernova font-black">Supernova</span>{" "}
               ou <span className="text-bigbang font-black">Big Bang</span>.
-            </motion.p>
+            </p>
 
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.35, duration: 0.5 }}
-              className="flex flex-wrap justify-center gap-2.5 pt-2"
-            >
+            <div className="flex flex-wrap justify-center gap-2.5 pt-2">
               <Badge
                 variant="outline"
                 className="px-3.5 py-1.5 border-border bg-secondary/50 text-foreground text-xs gap-1.5 shadow-xs font-mono font-black"
@@ -109,7 +88,7 @@ export default function Download() {
                 <Calendar size={13} className="text-accent" />
                 <span>Publié le {releaseDate}</span>
               </Badge>
-            </motion.div>
+            </div>
           </div>
 
           <div className="grid md:grid-cols-2 gap-8 lg:gap-12 px-2 sm:px-4">
@@ -123,7 +102,6 @@ export default function Download() {
               romSize={supernovaRomSize}
               showPatch={showPatch}
               showRom={showRom}
-              delay={0}
             />
             <GameCard
               title="Big Bang"
@@ -135,7 +113,6 @@ export default function Download() {
               romSize={bigbangRomSize}
               showPatch={showPatch}
               showRom={showRom}
-              delay={0.15}
             />
           </div>
         </div>

@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { motion } from "framer-motion";
 import { ChevronRight, Gamepad2, Calendar, Download, ExternalLink, ArrowLeft } from "lucide-react";
 import { api } from "@/api/client";
 import type { Game } from "@/api/types";
@@ -68,12 +67,7 @@ export default function GamePageView() {
 
   return (
     <div className="relative min-h-screen text-foreground bg-background px-4 sm:px-6 py-16 sm:py-24">
-      <div className="fixed inset-0 z-0 pointer-events-none">
-        <div className="absolute inset-0 bg-linear-to-b from-background via-background/95 to-background" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,var(--color-primary)/0.03,transparent_70%)]" />
-      </div>
-
-      <div className="relative z-10 max-w-4xl mx-auto space-y-8">
+            <div className="relative z-10 max-w-4xl mx-auto space-y-8">
         <nav className="flex items-center gap-2 text-xs sm:text-sm text-muted-foreground flex-wrap">
           <Link to="/" className="hover:text-primary transition-colors cursor-pointer">
             Accueil
@@ -86,21 +80,17 @@ export default function GamePageView() {
           <span className="text-foreground font-black truncate">{game.name}</span>
         </nav>
 
-        <motion.div
-          initial={{ opacity: 0, y: -15 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4 }}
-          className="grid md:grid-cols-[280px_1fr] lg:grid-cols-[320px_1fr] gap-8 items-start"
+        <div className="grid md:grid-cols-[280px_1fr] lg:grid-cols-[320px_1fr] gap-8 items-start"
         >
           <div className="w-full">
             {game.imageUrl ? (
               <img
                 src={game.imageUrl}
                 alt={game.name}
-                className="w-full rounded-2xl border border-border shadow-md object-cover bg-card/70"
+                className="w-full rounded-lg border border-border object-cover bg-card"
               />
             ) : (
-              <div className="w-full aspect-3/4 rounded-2xl bg-secondary/60 border border-border flex items-center justify-center">
+              <div className="w-full aspect-3/4 rounded-lg bg-secondary/60 border border-border flex items-center justify-center">
                 <Gamepad2 size={64} className="text-muted-foreground/40" />
               </div>
             )}
@@ -120,14 +110,14 @@ export default function GamePageView() {
               )}
             </div>
 
-            <div className="space-y-2 bg-card/70 border border-border rounded-2xl p-4 shadow-xs">
+            <div className="space-y-2 bg-card border border-border rounded-lg p-4">
               <div className="flex items-center justify-between text-xs sm:text-sm">
                 <span className="font-black text-muted-foreground">Avancement de la traduction</span>
                 <span className="text-accent font-black font-mono">{game.status}</span>
               </div>
               <div className="w-full bg-secondary rounded-full h-2.5 overflow-hidden border border-border/50">
                 <div
-                  className="bg-linear-to-r from-accent/80 to-accent h-full rounded-full transition-all duration-500"
+                  className="bg-accent h-full rounded-full"
                   style={{ width: `${Math.min(Math.max(statusPercent, 0), 100)}%` }}
                 />
               </div>
@@ -143,7 +133,7 @@ export default function GamePageView() {
                   href={downloadUrl}
                   target={game.downloadUrl ? "_blank" : undefined}
                   rel={game.downloadUrl ? "noopener noreferrer" : undefined}
-                  className="inline-flex items-center gap-2 bg-accent text-accent-foreground hover:bg-accent/90 px-6 py-3 rounded-xl font-black text-sm shadow-md transition-all hover:scale-105 cursor-pointer"
+                  className="inline-flex items-center gap-2 bg-accent text-accent-foreground hover:bg-accent/90 px-6 py-3 rounded-lg font-black text-sm cursor-pointer"
                 >
                   {game.downloadUrl ? <ExternalLink size={16} /> : <Download size={16} />}
                   <span>{game.downloadUrl ? "Accéder au lien externe" : "Télécharger le jeu"}</span>
@@ -160,7 +150,7 @@ export default function GamePageView() {
               </p>
             )}
           </div>
-        </motion.div>
+        </div>
       </div>
     </div>
   );

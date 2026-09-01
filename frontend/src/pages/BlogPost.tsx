@@ -60,12 +60,7 @@ export default function BlogPost() {
 
   return (
     <div className="relative min-h-screen bg-background text-foreground py-16 sm:py-24 px-4 sm:px-6">
-      <div className="fixed inset-0 z-0 pointer-events-none">
-        <div className="absolute inset-0 bg-linear-to-b from-background via-background/95 to-background" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,var(--color-primary)/0.03,transparent_70%)]" />
-      </div>
-
-      <div className="relative z-10 max-w-3xl mx-auto space-y-8">
+            <div className="relative z-10 max-w-3xl mx-auto space-y-8">
         <Link
           to="/"
           className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-black text-muted-foreground hover:text-primary transition-colors group cursor-pointer"
@@ -116,11 +111,11 @@ export default function BlogPost() {
             [&_ol]:list-decimal [&_ol]:pl-6 [&_ol]:space-y-1.5 [&_ol]:mb-4
             [&_li]:text-muted-foreground [&_li]:text-sm [&_li]:sm:text-base
             [&_a]:text-primary [&_a]:underline [&_a]:underline-offset-2 hover:[&_a]:text-primary/80
-            [&_blockquote]:border-l-4 [&_blockquote]:border-accent [&_blockquote]:pl-4 [&_blockquote]:italic [&_blockquote]:text-muted-foreground [&_blockquote]:bg-secondary/30 [&_blockquote]:py-2 [&_blockquote]:rounded-r-lg
-            [&_pre]:bg-card [&_pre]:border [&_pre]:border-border [&_pre]:rounded-xl [&_pre]:p-4 [&_pre]:text-xs [&_pre]:font-mono [&_pre]:overflow-x-auto
+            [&_blockquote]:border-l-4 [&_blockquote]:border-accent [&_blockquote]:pl-4 [&_blockquote]:italic [&_blockquote]:text-muted-foreground [&_blockquote]:bg-secondary/30 [&_blockquote]:py-2
+            [&_pre]:bg-card [&_pre]:border [&_pre]:border-border [&_pre]:rounded-lg [&_pre]:p-4 [&_pre]:text-xs [&_pre]:font-mono [&_pre]:overflow-x-auto
             [&_code]:bg-secondary [&_code]:text-foreground [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:rounded-md [&_code]:text-xs [&_code]:font-mono [&_code]:border [&_code]:border-border
             [&_pre_code]:bg-transparent [&_pre_code]:p-0 [&_pre_code]:border-0
-            [&_img]:max-w-full [&_img]:rounded-xl [&_img]:my-6 [&_img]:border [&_img]:border-border [&_img]:shadow-md
+            [&_img]:max-w-full [&_img]:rounded-lg [&_img]:my-6 [&_img]:border [&_img]:border-border
             [&_hr]:border-border [&_hr]:my-8
             [&_table]:w-full [&_table]:border-collapse [&_table]:my-6 [&_table]:text-xs [&_table]:sm:text-sm
             [&_th]:border [&_th]:border-border [&_th]:p-2.5 [&_th]:bg-secondary/50 [&_th]:text-left [&_th]:font-black [&_th]:text-accent

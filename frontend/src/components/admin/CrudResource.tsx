@@ -279,7 +279,7 @@ export default function CrudResource<T extends { id: string }>({
       </div>
 
       {editing && (
-        <Card className="bg-card/90 border-border shadow-lg backdrop-blur-md">
+        <Card className="bg-card border-border">
           <CardHeader className="pb-3 border-b border-border">
             <CardTitle className="text-lg text-foreground font-black tracking-tight">
               {editing === "new" ? `Ajouter : ${title}` : `Modifier : ${title}`}

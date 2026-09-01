@@ -73,11 +73,11 @@ const getRoleIcon = (category: string) => {
 const getStatusColor = (status?: string) => {
   switch (status) {
     case "online":
-      return "bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.6)]";
+      return "bg-emerald-500";
     case "idle":
-      return "bg-amber-500 shadow-[0_0_8px_rgba(245,158,11,0.6)]";
+      return "bg-amber-500";
     case "dnd":
-      return "bg-destructive shadow-[0_0_8px_rgba(239,68,68,0.6)]";
+      return "bg-destructive";
     default:
       return "bg-muted-foreground/60";
   }
@@ -159,7 +159,7 @@ export function DiscordMemberCard({ member }: { member: TeamMember }) {
   const customStatus = lanyardData?.activities.find((a) => a.type === 4);
 
   return (
-    <Card className="bg-card/70 border-border hover:border-primary/40 hover:bg-card/90 transition-all duration-300 group overflow-hidden h-full flex flex-col shadow-xs">
+    <Card className="bg-card border-border hover:border-primary/50 hover:bg-card transition-colors duration-300 overflow-hidden h-full flex flex-col">
       <div className="h-28 w-full relative bg-secondary/60">
         {bannerUrl ? (
           <img
@@ -170,12 +170,12 @@ export function DiscordMemberCard({ member }: { member: TeamMember }) {
         ) : (
           <div className="w-full h-full bg-linear-to-tr from-secondary via-secondary/70 to-primary/10 opacity-70" />
         )}
-        <div className="absolute inset-0 bg-linear-to-t from-card via-transparent to-transparent" />
+        <div  className="w-full h-full bg-linear-to-t from-card via-transparent to-transparent" />
       </div>
 
       <CardContent className="flex flex-col items-start px-5 sm:px-6 -mt-14 relative z-10 grow pb-6 w-full">
         <div className="relative">
-          <Avatar className="h-24 w-24 border-4 border-card shadow-xl group-hover:border-card/80 transition-colors bg-secondary">
+          <Avatar className="h-24 w-24 border-4 border-card bg-secondary">
             <AvatarImage
               src={avatarUrl}
               alt={displayName}
@@ -193,11 +193,11 @@ export function DiscordMemberCard({ member }: { member: TeamMember }) {
           <TooltipProvider delayDuration={100}>
             <Tooltip>
               <TooltipTrigger asChild>
-                <div
-                  className={`absolute bottom-1 right-1 h-5 w-5 rounded-full border-2 border-card ${getStatusColor(
-                    status
-                  )} transition-colors cursor-pointer`}
-                />
+<div
+                    className={`absolute bottom-1 right-1 h-5 w-5 rounded-full border-2 border-card ${getStatusColor(
+                      status
+                    )} transition-colors cursor-pointer`}
+                  />
               </TooltipTrigger>
               <TooltipContent className="bg-popover border-border text-popover-foreground text-xs shadow-md font-black">
                 <p>{getStatusLabel(status)}</p>

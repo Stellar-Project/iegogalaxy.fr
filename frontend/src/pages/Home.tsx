@@ -21,10 +21,8 @@ import CategoryFilter from "@/components/CategoryFilter";
 
 function SectionDivider() {
   return (
-    <div className="relative z-10 flex items-center justify-center gap-4 py-6">
-      <span className="h-px w-16 bg-accent/30" />
-      <span className="h-1.5 w-1.5 rotate-45 bg-accent/80" />
-      <span className="h-px w-16 bg-accent/30" />
+    <div className="relative z-10 flex items-center justify-center py-6">
+      <span className="h-px w-24 bg-accent/40" />
     </div>
   );
 }
@@ -63,19 +61,14 @@ function NewsSection() {
   return (
     <section className="relative z-10 py-16 sm:py-20 px-4 sm:px-6 border-t border-border">
       <div className="max-w-6xl mx-auto space-y-10">
-        <motion.div
-          initial={{ opacity: 0, y: -10 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="text-center space-y-2"
-        >
+        <div className="border-l-4 border-primary pl-4 space-y-1">
           <h2 className="text-3xl sm:text-4xl font-black text-foreground tracking-tight">
             Dernières Nouvelles
           </h2>
-          <p className="text-sm text-muted-foreground max-w-xl mx-auto">
+          <p className="text-sm text-muted-foreground">
             Suivez l'avancement des patchs, événements et sorties de la team Stellar Project.
           </p>
-        </motion.div>
+        </div>
 
         <CategoryFilter
           categories={cats}
@@ -86,13 +79,9 @@ function NewsSection() {
 
         <div className="space-y-6">
           {featured && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-            >
+            <div>
               <Link to={`/actualites/${featured.slug}`} className="block group">
-                <div className="bg-card border border-border hover:border-primary/40 rounded-2xl p-6 sm:p-8 transition-all duration-300">
+                <div className="bg-card border border-border hover:border-primary/50 rounded-lg p-6 sm:p-8 transition-colors duration-300">
                   <div className="flex flex-wrap items-center gap-2.5 text-xs text-muted-foreground mb-3">
                     {featured.category && (
                       <Badge
@@ -124,7 +113,7 @@ function NewsSection() {
                   </span>
                 </div>
               </Link>
-            </motion.div>
+            </div>
           )}
 
           {rest.length > 0 && (
@@ -135,7 +124,7 @@ function NewsSection() {
                   to={`/actualites/${post.slug}`}
                   className="block group h-full"
                 >
-                  <Card className="bg-card border-border hover:border-primary/40 transition-all duration-300 h-full">
+                  <Card className="bg-card border-border hover:border-primary/50 transition-colors duration-300 h-full">
                     <CardContent className="p-6 flex flex-col h-full">
                       <div className="flex flex-wrap items-center gap-2.5 text-xs text-muted-foreground mb-3">
                         {post.category && (
@@ -222,19 +211,14 @@ function ResourcesSection() {
   return (
     <section className="relative z-10 py-16 sm:py-20 px-4 sm:px-6 border-t border-border">
       <div className="max-w-5xl mx-auto space-y-10">
-        <motion.div
-          initial={{ opacity: 0, y: -10 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="text-center space-y-2"
-        >
+        <div className="border-l-4 border-accent pl-4 space-y-1">
           <h2 className="text-3xl sm:text-4xl font-black text-foreground tracking-tight">
             Ressources & Outils
           </h2>
           <p className="text-sm text-muted-foreground">
             Tout le nécessaire pour installer, configurer et maîtriser le jeu.
           </p>
-        </motion.div>
+        </div>
 
         <div className="grid md:grid-cols-2 gap-8">
           <div className="space-y-3.5">
@@ -242,10 +226,10 @@ function ResourcesSection() {
               <Link
                 key={link.href}
                 to={link.href}
-                className="flex items-center gap-4 p-4 bg-card border border-border rounded-2xl hover:border-primary/40 transition-all duration-200 group"
+                className="flex items-center gap-4 p-4 bg-card border border-border hover:border-primary/50 rounded-lg transition-colors duration-200 group"
               >
                 <div
-                  className={`w-11 h-11 rounded-xl ${link.bg} flex items-center justify-center shrink-0`}
+                  className={`w-11 h-11 rounded-lg ${link.bg} flex items-center justify-center shrink-0`}
                 >
                   <link.icon size={22} className={link.color} />
                 </div>

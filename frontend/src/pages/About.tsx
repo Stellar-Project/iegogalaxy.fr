@@ -1,5 +1,4 @@
 import { useEffect, useState, useMemo } from "react";
-import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import {
   ChevronRight,
@@ -83,18 +82,8 @@ export default function About() {
 
   return (
     <div className="relative min-h-screen flex flex-col items-center text-foreground bg-background px-4 py-16 sm:py-24">
-      <div className="fixed inset-0 z-0 pointer-events-none">
-        <div className="absolute inset-0 bg-linear-to-b from-background via-background/95 to-background" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,var(--color-primary)/0.03,transparent_70%)]" />
-      </div>
-
       <div className="relative z-10 max-w-6xl mx-auto space-y-16 sm:space-y-20 w-full">
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="text-center space-y-4"
-        >
+        <div className="text-center space-y-4">
           <div className="flex items-center justify-center gap-2 text-muted-foreground text-xs sm:text-sm mb-4">
             <Button
               variant="link"
@@ -115,39 +104,32 @@ export default function About() {
             Une équipe de passionnés réunis autour d'un but commun : rendre
             l'expérience Inazuma Eleven GO Galaxy accessible à l'ensemble de la communauté francophone.
           </p>
-        </motion.div>
+        </div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.15 }}
-        >
-          <Card className="bg-card/70 border-border backdrop-blur-md shadow-xs">
-            <CardContent className="p-6 md:p-10">
-              <div className="grid md:grid-cols-3 gap-8 text-center">
-                <div className="space-y-2">
-                  <h3 className="text-4xl font-black text-foreground">2+</h3>
-                  <p className="text-muted-foreground uppercase tracking-wider text-xs font-black">
-                    Années de travail
-                  </p>
-                </div>
-                <div className="space-y-2 border-y md:border-y-0 md:border-x border-border/80 py-6 md:py-0">
-                  <h3 className="text-4xl font-black text-accent">100%</h3>
-                  <p className="text-muted-foreground uppercase tracking-wider text-xs font-black">
-                    Bénévole & Fan-made
-                  </p>
-                </div>
-                <div className="space-y-2">
-                  <h3 className="text-4xl font-black text-primary">15k+</h3>
-                  <p className="text-muted-foreground uppercase tracking-wider text-xs font-black">
-                    Lignes de texte traduites
-                  </p>
-                </div>
+        <Card className="bg-card border-border">
+          <CardContent className="p-6 md:p-10">
+            <div className="grid md:grid-cols-3 gap-8 text-center">
+              <div className="space-y-2">
+                <h3 className="text-4xl font-black text-foreground">2+</h3>
+                <p className="text-muted-foreground uppercase tracking-wider text-xs font-black">
+                  Années de travail
+                </p>
               </div>
-            </CardContent>
-          </Card>
-        </motion.div>
+              <div className="space-y-2 border-y md:border-y-0 md:border-x border-border/80 py-6 md:py-0">
+                <h3 className="text-4xl font-black text-accent">100%</h3>
+                <p className="text-muted-foreground uppercase tracking-wider text-xs font-black">
+                  Bénévole & Fan-made
+                </p>
+              </div>
+              <div className="space-y-2">
+                <h3 className="text-4xl font-black text-primary">15k+</h3>
+                <p className="text-muted-foreground uppercase tracking-wider text-xs font-black">
+                  Lignes de texte traduites
+                </p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
 
         {timelineEvents.length > 0 && (
           <div className="space-y-8">
@@ -162,7 +144,7 @@ export default function About() {
             <div className="relative border-l border-border/80 ml-3 md:ml-6 space-y-12 py-4">
               {timelineEvents.map((event, index) => (
                 <div key={event.id || index} className="relative pl-8 md:pl-12">
-                  <div className="absolute -left-1.25 top-2 h-2.5 w-2.5 rounded-full bg-accent shadow-[0_0_10px_var(--color-accent)]" />
+                  <div className="absolute -left-1.25 top-2 h-2.5 w-2.5 rounded-full bg-accent" />
                   <div className="flex flex-col sm:flex-row sm:items-baseline gap-2 sm:gap-4">
                     <span className="text-2xl font-black text-accent font-mono">
                       {event.date}
@@ -192,16 +174,10 @@ export default function About() {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {members.map((member) => (
-                <motion.div
+                <DiscordMemberCard
                   key={member.id || member.name}
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  viewport={{ once: true }}
-                >
-                  <DiscordMemberCard
-                    member={member as unknown as CardTeamMember}
-                  />
-                </motion.div>
+                  member={member as unknown as CardTeamMember}
+                />
               ))}
             </div>
           </div>
@@ -218,59 +194,46 @@ export default function About() {
             <Separator className="bg-border/60" />
 
             <div className="grid md:grid-cols-3 gap-6">
-              {Object.entries(creditsByCategory).map(([category, items], index) => {
+              {Object.entries(creditsByCategory).map(([category, items]) => {
                 const Icon = iconMap[category] || Star;
                 const color = colorMap[category] || "text-accent";
                 return (
-                  <motion.div
-                    key={category}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: index * 0.08 }}
-                  >
-                    <Card className="bg-card/70 border-border h-full hover:border-primary/40 transition-colors shadow-xs">
-                      <CardHeader className="pb-3">
-                        <CardTitle className="flex items-center gap-2 text-base sm:text-lg text-foreground font-black tracking-tight">
-                          <Icon className={`h-5 w-5 ${color}`} />
-                          {category}
-                        </CardTitle>
-                      </CardHeader>
-                      <CardContent>
-                        <ul className="space-y-3">
-                          {items.map((item) => (
-                            <li
-                              key={item.id || item.personName}
-                              className="flex items-center justify-between gap-2 p-2 rounded-lg hover:bg-secondary/40 transition-colors group"
-                            >
-                              <div className="text-sm">
-                                <div className="font-black text-foreground">
-                                  {item.personName}
-                                </div>
-                                {item.task && (
-                                  <div className="text-muted-foreground text-xs font-medium">
-                                    {item.task}
-                                  </div>
-                                )}
+                  <Card key={category} className="bg-card border-border h-full hover:border-primary/50 transition-colors">
+                    <CardHeader className="pb-3">
+                      <CardTitle className="flex items-center gap-2 text-base sm:text-lg text-foreground font-black tracking-tight">
+                        <Icon className={`h-5 w-5 ${color}`} />
+                        {category}
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <ul className="space-y-3">
+                        {items.map((item) => (
+                          <li
+                            key={item.id || item.personName}
+                            className="flex items-center justify-between gap-2 p-2 rounded-lg hover:bg-secondary/40 transition-colors"
+                          >
+                            <div className="text-sm">
+                              <div className="font-black text-foreground">
+                                {item.personName}
                               </div>
-                            </li>
-                          ))}
-                        </ul>
-                      </CardContent>
-                    </Card>
-                  </motion.div>
+                              {item.task && (
+                                <div className="text-muted-foreground text-xs font-medium">
+                                  {item.task}
+                                </div>
+                              )}
+                            </div>
+                          </li>
+                        ))}
+                      </ul>
+                    </CardContent>
+                  </Card>
                 );
               })}
             </div>
           </div>
         )}
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="text-center pt-8 pb-8 space-y-6"
-        >
+        <div className="text-center pt-8 pb-8 space-y-6">
           <div className="inline-flex items-center justify-center p-3.5 bg-primary/10 rounded-full border border-primary/20 mb-2">
             <Rocket className="text-primary h-8 w-8" />
           </div>
@@ -283,7 +246,7 @@ export default function About() {
           </p>
           <Button
             size="lg"
-            className="bg-[#5865F2] hover:bg-[#4752C4] text-white font-black shadow-md rounded-full px-8 h-12 text-base transition-all hover:scale-105 cursor-pointer"
+            className="bg-[#5865F2] hover:bg-[#4752C4] text-white font-black rounded-full px-8 h-12 text-base transition-colors cursor-pointer"
             asChild
           >
             <a
@@ -294,7 +257,7 @@ export default function About() {
               Rejoindre le Discord
             </a>
           </Button>
-        </motion.div>
+        </div>
       </div>
     </div>
   );

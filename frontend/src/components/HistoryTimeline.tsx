@@ -47,13 +47,7 @@ export function HistoryTimeline() {
   if (loading || pastHistory.length === 0) return null;
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.5 }}
-      className="w-full max-w-3xl mx-auto pt-16 relative"
-    >
+    <div className="w-full max-w-3xl mx-auto pt-16 relative">
       <div className="flex items-center justify-center gap-3 mb-12 relative z-10">
         <div className="h-px w-12 bg-border" />
         <History className="text-muted-foreground h-5 w-5" />
@@ -76,7 +70,7 @@ export function HistoryTimeline() {
                 <GitCommit size={18} />
               </div>
 
-              <div className="bg-card/70 hover:bg-card rounded-2xl border border-border overflow-hidden transition-all duration-300 group hover:border-border/80 shadow-xs">
+              <div className="bg-card hover:bg-card rounded-lg border border-border overflow-hidden transition-colors duration-300 group hover:border-border/80">
                 <div className="p-5 grid md:grid-cols-[1fr_auto] gap-6 items-center">
                   <div>
                     <div className="flex items-center gap-3 mb-2">
@@ -177,11 +171,8 @@ export function HistoryTimeline() {
                           <div className="p-5 pt-3">
                             <ul className="space-y-2.5">
                               {changelog.map((change: string, idx: number) => (
-                                <motion.li
+                                <li
                                   key={idx}
-                                  initial={{ opacity: 0, x: -8 }}
-                                  animate={{ opacity: 1, x: 0 }}
-                                  transition={{ delay: idx * 0.05 }}
                                   className="flex items-start gap-2.5 text-muted-foreground text-xs sm:text-sm leading-relaxed font-medium"
                                 >
                                   <CheckCircle2
@@ -189,7 +180,7 @@ export function HistoryTimeline() {
                                     className="text-primary mt-0.5 shrink-0"
                                   />
                                   <span>{change}</span>
-                                </motion.li>
+                                </li>
                               ))}
                             </ul>
                           </div>
@@ -203,6 +194,6 @@ export function HistoryTimeline() {
           );
         })}
       </div>
-    </motion.div>
+    </div>
   );
 }

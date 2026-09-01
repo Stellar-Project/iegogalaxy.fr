@@ -1,4 +1,3 @@
-import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import {
   Shield,
@@ -23,16 +22,7 @@ export default function MentionsLegales() {
 
   return (
     <div className="relative min-h-screen bg-background text-foreground py-16 sm:py-24 px-4 sm:px-6 lg:px-8">
-      <div className="fixed inset-0 z-0 pointer-events-none">
-        <div className="absolute inset-0 bg-linear-to-b from-background via-background/95 to-background" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,var(--color-primary)/0.03,transparent_70%)]" />
-      </div>
-
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="relative z-10 max-w-4xl mx-auto space-y-8"
+            <div className="relative z-10 max-w-4xl mx-auto space-y-8"
       >
         <div className="text-center space-y-4 mb-10">
           <div className="flex items-center justify-center gap-2 text-muted-foreground text-xs sm:text-sm">
@@ -73,7 +63,7 @@ export default function MentionsLegales() {
           </AlertDescription>
         </Alert>
 
-        <Card className="bg-card/70 border-border backdrop-blur-md shadow-xs">
+        <Card className="bg-card border-border">
           <CardHeader className="pb-3">
             <CardTitle className="flex items-center gap-2.5 text-foreground text-lg sm:text-xl font-black">
               <Copyright className="text-primary h-5 w-5" /> Propriété Intellectuelle
@@ -92,7 +82,7 @@ export default function MentionsLegales() {
           </CardContent>
         </Card>
 
-        <Card className="bg-card/70 border-border backdrop-blur-md shadow-xs">
+        <Card className="bg-card border-border">
           <CardHeader className="pb-3">
             <CardTitle className="flex items-center gap-2.5 text-foreground text-lg sm:text-xl font-black">
               <Download className="text-accent h-5 w-5" /> Utilisation des Fichiers
@@ -114,7 +104,7 @@ export default function MentionsLegales() {
         </Card>
 
         <div className="grid md:grid-cols-2 gap-6">
-          <Card className="bg-card/70 border-border backdrop-blur-md shadow-xs">
+          <Card className="bg-card border-border">
             <CardHeader className="pb-3">
               <CardTitle className="flex items-center gap-2.5 text-foreground text-base sm:text-lg font-black">
                 <Shield className="text-accent h-5 w-5" /> L'Équipe
@@ -139,7 +129,7 @@ export default function MentionsLegales() {
             </CardContent>
           </Card>
 
-          <Card className="bg-card/70 border-border backdrop-blur-md shadow-xs">
+          <Card className="bg-card border-border">
             <CardHeader className="pb-3">
               <CardTitle className="flex items-center gap-2.5 text-foreground text-base sm:text-lg font-black">
                 <Server className="text-primary h-5 w-5" /> Hébergement
@@ -153,7 +143,7 @@ export default function MentionsLegales() {
           </Card>
         </div>
 
-        <Card className="bg-card/70 border-border backdrop-blur-md shadow-xs">
+        <Card className="bg-card border-border">
           <CardHeader className="pb-3">
             <CardTitle className="flex items-center gap-2.5 text-foreground text-lg sm:text-xl font-black">
               <FileText className="text-primary h-5 w-5" /> Confidentialité & Données Personnelles
@@ -206,7 +196,7 @@ export default function MentionsLegales() {
             </p>
           </CardContent>
         </Card>
-      </motion.div>
+      </div>
     </div>
   );
 }
